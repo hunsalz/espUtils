@@ -1,0 +1,22 @@
+{
+  "name":"esp8266utils",
+  "description":"Utility library for ESP8266",
+  "keywords":"ESP8266,utils",
+  "authors":
+  {
+    "name": "Markus Hunsalz",
+    "maintainer": true
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/hunsalz/esp8266utils.git"
+  },
+  "version": "0.0.1",
+  "license": "Apache License",
+  "frameworks": "arduino",
+  "platforms":"espressif",
+  "examples": [
+    "examples/*/*.ino"
+  ]
+}
