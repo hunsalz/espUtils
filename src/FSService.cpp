@@ -6,10 +6,6 @@ FSService::~FSService() {
   stop();
 }
 
-bool FSService::isRunning() {
-  return _running;
-}
-
 bool FSService::start() {
 
   if (!isRunning()) {
@@ -57,7 +53,7 @@ ArRequestHandlerFunction FSService::getInfoFunction() {
 }
 
 ArRequestHandlerFunction FSService::getListFunction() {
-  
+
   return [](AsyncWebServerRequest *request) {
 
     AsyncJsonResponse *response = new AsyncJsonResponse();

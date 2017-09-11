@@ -7,12 +7,19 @@ class Service {
 
 	public:
 
+		Service();
+		~Service();
+
 		// returns if this service is running
-		virtual bool isRunning();
+		bool isRunning();
 
 		// starts this service and returns true if service is running
-		virtual bool start();
+		virtual bool start() = 0;
 
     // stops this service and returns true if service is stopped
-    virtual bool stop();
+    virtual bool stop() = 0;
+
+	private:
+
+		bool _running = false;
 };

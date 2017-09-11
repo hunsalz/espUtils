@@ -14,8 +14,6 @@ class FSService : public Service {
 
     ~FSService();
 
-    bool isRunning();
-
     bool start();
 
     bool stop();
@@ -23,7 +21,7 @@ class FSService : public Service {
     ArRequestHandlerFunction getInfoFunction();
 
     ArRequestHandlerFunction getListFunction();
-    
+
     static String formatBytes(size_t bytes);
 
   private:

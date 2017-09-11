@@ -8,6 +8,7 @@ class Driver {
 	public:
 		// enabled: enables/disables this driver
 		Driver(bool enabled);
+		~Driver();
 
 		// use this method to know if this driver is enabled or not
 		bool isEnabled();
