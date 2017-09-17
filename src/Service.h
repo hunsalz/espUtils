@@ -1,8 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
-
 class Service {
 
 	public:
@@ -19,7 +16,6 @@ class Service {
     // stops this service and returns true if service is stopped
     virtual bool stop() = 0;
 
-	private:
-
-		bool _running = false;
+		// TODO remove running declaration
+		bool running = false;
 };

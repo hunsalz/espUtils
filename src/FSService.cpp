@@ -1,6 +1,7 @@
 #include "FSService.h"
 
-FSService::FSService() {}
+FSService::FSService() {
+}
 
 FSService::~FSService() {
   stop();
@@ -11,7 +12,7 @@ bool FSService::start() {
   if (!isRunning()) {
     if (SPIFFS.begin()) {
       Log.verbose(F("File system mounted." CR));
-      _running = true;
+      running = true;
     } else {
       Log.warning(F("Mounting file system failed." CR));
     }
@@ -24,54 +25,45 @@ bool FSService::stop() {
 
   if (isRunning()) {
     SPIFFS.end();
-    _running = false;
+    running = false;
   }
 
   return isRunning();
 }
 
-ArRequestHandlerFunction FSService::getInfoFunction() {
+JsonObject& FSService::getStorageDetails() {
 
-    return [](AsyncWebServerRequest *request) {
+  FSInfo fs_info;
+  SPIFFS.info(fs_info);
 
-    AsyncJsonResponse *response = new AsyncJsonResponse();
-    JsonObject& json = response->getRoot();
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  json[F("totalBytes")] = fs_info.totalBytes;
+  json[F("usedBytes")] = fs_info.usedBytes;
+  json[F("blockSize")] = fs_info.blockSize;
+  json[F("pageSize")] = fs_info.pageSize;
+  json[F("maxOpenFiles")] = fs_info.maxOpenFiles;
+  json[F("maxPathLength")] = fs_info.maxPathLength;
 
-    FSInfo fs_info;
-    SPIFFS.info(fs_info);
-
-    json[F("totalBytes")] = fs_info.totalBytes;
-    json[F("usedBytes")] = fs_info.usedBytes;
-    json[F("blockSize")] = fs_info.blockSize;
-    json[F("pageSize")] = fs_info.pageSize;
-    json[F("maxOpenFiles")] = fs_info.maxOpenFiles;
-    json[F("maxPathLength")] = fs_info.maxPathLength;
-
-    response->setLength();
-    request->send(response);
-  };
+  return json;
 }
 
-ArRequestHandlerFunction FSService::getListFunction() {
+JsonArray& FSService::getFileListing() {
 
-  return [](AsyncWebServerRequest *request) {
+  DynamicJsonBuffer jsonBuffer;
+  JsonArray& json = jsonBuffer.createArray();
+  // enumerate files
+  Dir dir = SPIFFS.openDir("/");
+  while (dir.next()) {
+    String name = String(dir.fileName());
+    String size = FSService::formatBytes(dir.fileSize());
+    JsonObject& entry = json.createNestedObject();
+    entry[F("name")] = name;
+    entry[F("size")] = size;
+    Log.verbose(F("Found file: name=%s, size=%s" CR), name.c_str(), size.c_str());
+  }
 
-    AsyncJsonResponse *response = new AsyncJsonResponse();
-    JsonObject& json = response->getRoot();
-    JsonArray& files = json.createNestedArray("files");
-    // enumerate files
-    Dir dir = SPIFFS.openDir("/");
-    while (dir.next()) {
-      String name = String(dir.fileName());
-      String size = FSService::formatBytes(dir.fileSize());
-      JsonObject& entry = files.createNestedObject();
-      entry[F("name")] = name;
-      entry[F("size")] = size;
-      Log.verbose(F("File: name=%s, size=%s" CR), name.c_str(), size.c_str());
-    }
-    response->setLength();
-    request->send(response);
-  };
+  return json;
 }
 
 String FSService::formatBytes(size_t bytes) {

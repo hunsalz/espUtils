@@ -1,8 +1,8 @@
 #pragma once
 
 #include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
-#include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
-#include <AsyncJson.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncJson.h
+#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 
@@ -18,13 +18,9 @@ class FSService : public Service {
 
     bool stop();
 
-    ArRequestHandlerFunction getInfoFunction();
+		JsonObject& getStorageDetails();
 
-    ArRequestHandlerFunction getListFunction();
+    JsonArray& getFileListing();
 
     static String formatBytes(size_t bytes);
-
-  private:
-
-    bool _running = false;
 };

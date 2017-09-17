@@ -1,8 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
-
 class Driver {
 
 	public:
@@ -18,5 +15,5 @@ class Driver {
 
 	private:
 
-		bool _enabled = false;
+		bool enabled = false;
 };

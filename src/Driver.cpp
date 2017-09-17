@@ -1,17 +1,17 @@
 #include "Driver.h"
 
 Driver::Driver(bool enabled) {
-	_enabled = enabled;
+	this->enabled = enabled;
 }
 
 Driver::~Driver() {
-	_enabled = false;
+	enabled = false;
 }
 
 bool Driver::isEnabled() {
-	return _enabled;
+	return enabled;
 }
 
 void Driver::setEnabled(bool enabled) {
-	_enabled = enabled;
+	this->enabled = enabled;
 }

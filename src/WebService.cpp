@@ -48,7 +48,7 @@ bool WebService::start() {
     });
     // start web server
     webServer.begin();
-    _running = true;
+    running = true;
   }
   Log.verbose("WebServer started.\n");
 
@@ -59,7 +59,10 @@ bool WebService::stop() {
 
   if (isRunning()) {
     webServer.reset();
-    _running = false;
+
+    // TODO stop webServer ?
+
+    running = false;
   }
 
   return isRunning();
@@ -67,4 +70,44 @@ bool WebService::stop() {
 
 AsyncWebServer* WebService::getWebServer() {
   return &webServer;
+}
+
+AsyncWebSocket* WebService::addWebSocket(const String &path, WSHandler* wsHandler) {
+
+  AsyncWebSocket* webSocket = new AsyncWebSocket(path);
+  webSocket->onEvent(std::bind(&WSHandler::onEvent, (WSHandler*)wsHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5, std::placeholders::_6));
+  webServer.addHandler(webSocket);
+
+  return webSocket;
+}
+
+AsyncCallbackWebHandler& WebService::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest) {
+
+  // TODO service registry
+
+
+
+  webServer.on(uri, method, onRequest);
+}
+
+// TODO merge send functions; problem no common base class exists between JsonObject and JsonArray
+
+void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
+
+  int length = json.measureLength() + 1;
+  char content[length];
+  json.printTo(content, length);
+  Log.verbose(F("Send response: %s." CR), content);
+
+  request->send(new AsyncBasicResponse(200, "text/json", String(content)));
+}
+
+void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
+
+  int length = json.measureLength() + 1;
+  char content[length];
+  json.printTo(content, length);
+  Log.verbose(F("Send response: %s." CR), content);
+
+  request->send(new AsyncBasicResponse(200, "text/json", String(content)));
 }

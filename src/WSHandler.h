@@ -1,8 +1,8 @@
 #pragma once
 
-#include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
-#include <AsyncJson.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncJson.h
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
+#include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 class WSHandler {
 
@@ -13,6 +13,8 @@ class WSHandler {
     virtual void processMessage(AsyncWebSocket *ws, AsyncWebSocketClient *client, JsonObject &json) = 0;
 
     virtual void notify(AsyncWebSocket *ws, AsyncWebSocketClient *client, String type, bool broadcast) = 0;
+
+    // TODO support JsonArray in send method
 
     void send(AsyncWebSocket *ws, AsyncWebSocketClient *client, JsonObject *json, bool broadcast);
 };
