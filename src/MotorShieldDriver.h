@@ -10,19 +10,15 @@ class MotorShieldDriver : public Driver {
 	public:
 
 		MotorShieldDriver(bool enabled,
-			unsigned int pinPWM_A,
-			unsigned int pinDirA,
-			unsigned int pinPWM_B,
-			unsigned int pinDirB,
-			unsigned int pwmRange);
+			uint8_t pinPWM_A,
+			uint8_t pinDirA,
+			uint8_t pinPWM_B,
+			uint8_t pinDirB,
+			uint16_t pwmRange = 1023);
 
 		int getSpeedA();
 
 		int getSpeedB();
-
-		int getDirectionA();
-
-		int getDirectionB();
 
 		void setSpeedA(int speed);
 
@@ -32,15 +28,21 @@ class MotorShieldDriver : public Driver {
 
 		void applySpeedB(int speed);
 
-		JsonObject& getConfig();
+		uint8_t getDirectionA();
+
+		uint8_t getDirectionB();
+
+		JsonObject& getDetails();
 
 	private:
 
-		unsigned int pinPWM_A;
-		unsigned int pinPWM_B;
-		unsigned int pinDirA;
-		unsigned int pinDirB;
-    unsigned int pwmRange;
+		uint8_t pinPWM_A;
+		uint8_t pinPWM_B;
+		uint8_t pinDirA;
+		uint8_t pinDirB;
+    uint16_t pwmRange;
+		int speedA;
+		int speedB;
 
-    void setSpeed(int speed, unsigned int pinPWM, unsigned int pinDir);
+    void setSpeed(int speed, uint8_t pinPWM, uint8_t pinDir);
 };

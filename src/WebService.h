@@ -6,17 +6,13 @@
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
-#include "WSHandler.h"
+#include "WebSocketListener.h"
 
 class WebService : public Service {
 
   public:
 
-    WebService(); // default http port 80
-
-    WebService(uint16_t port);
-
-    WebService(uint16_t port, const char *rootCtx);
+    WebService(uint16_t port = 80, const char *rootCtx = "index.html");
 
     ~WebService();
 
@@ -26,7 +22,7 @@ class WebService : public Service {
 
     AsyncWebServer* getWebServer();
 
-    AsyncWebSocket* addWebSocket(const String &path, WSHandler* wsHandler);
+    AsyncWebSocket* addWebSocket(const String &path, WebSocketListener* wsListener);
 
     AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
 
@@ -37,6 +33,4 @@ class WebService : public Service {
   private:
 
 		AsyncWebServer webServer;
-
-    const char *_rootCtx = "index.html";
 };

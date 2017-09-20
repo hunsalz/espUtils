@@ -1,11 +1,11 @@
 #include "MotorShieldDriver.h"
 
 MotorShieldDriver::MotorShieldDriver(bool enabled,
-	unsigned int pinPWM_A,
-	unsigned int pinDirA,
-	unsigned int pinPWM_B,
-	unsigned int pinDirB,
-	unsigned int pwmRange) : Driver(enabled) {
+	uint8_t pinPWM_A,
+	uint8_t pinDirA,
+	uint8_t pinPWM_B,
+	uint8_t pinDirB,
+	uint16_t pwmRange) : Driver(enabled) {
 
 	this->pinPWM_A = pinPWM_A;
 	this->pinDirA = pinDirA;
@@ -18,33 +18,24 @@ MotorShieldDriver::MotorShieldDriver(bool enabled,
 	pinMode(this->pinPWM_B, OUTPUT);
 	pinMode(this->pinDirB, OUTPUT);
 	analogWriteRange(this->pwmRange);
+	analogWriteFreq(1000);
 
   Log.verbose(F("Setup motor shield done : PWM(A) = %d with direction = %d, PWM(B) = %d with direction = %d" CR), pinPWM_A, pinDirA, pinPWM_B, pinDirB);
 }
 
 int MotorShieldDriver::getSpeedA() {
-	return analogRead(pinPWM_A);
+	return speedA;
 }
 
 int MotorShieldDriver::getSpeedB() {
-	return analogRead(pinPWM_B);
-}
-
-int MotorShieldDriver::getDirectionA() {
-	return digitalRead(pinDirA);
-}
-
-int MotorShieldDriver::getDirectionB() {
-	return digitalRead(pinDirB);
+	return speedB;
 }
 
 void MotorShieldDriver::setSpeedA(int speed) {
 
 	if (isEnabled()) {
-		setSpeed(speed, pinPWM_A, pinDirA);
-
-		// TODO verify log line
-
+		speedA = speed;
+		setSpeed(speedA, pinPWM_A, pinDirA);
 		Log.verbose(F("Applied speed of motor(A) to %d with direction to %d" CR), getSpeedA(), getDirectionA());
 	}
 }
@@ -52,10 +43,8 @@ void MotorShieldDriver::setSpeedA(int speed) {
 void MotorShieldDriver::setSpeedB(int speed) {
 
 	if (isEnabled()) {
-		setSpeed(speed, pinPWM_B, pinDirB);
-
-		// TODO verify log line
-
+		speedB = speed;
+		setSpeed(speedB, pinPWM_B, pinDirB);
 		Log.verbose(F("Applied speed of motor(B) to %d with direction to %d" CR), getSpeedB(), getDirectionB());
 	}
 }
@@ -68,20 +57,15 @@ void MotorShieldDriver::applySpeedB(int speed) {
   setSpeedB(getSpeedB() + speed);
 }
 
-void MotorShieldDriver::setSpeed(int speed, unsigned int pinPWM, unsigned int pinDir) {
-
-  // limit speed to max. PWM
-  int _speed = abs(speed);
-  if (_speed > pwmRange) {
-    _speed = pwmRange;
-  }
-  // write speed to PWM
-  analogWrite(pinPWM, _speed);
-  // change direction accordingly to original signed speed to HIGH or LOW
-  digitalWrite(pinDir, speed > 0 ? HIGH : LOW);
+uint8_t MotorShieldDriver::getDirectionA() {
+	return digitalRead(pinDirA);
 }
 
-JsonObject& MotorShieldDriver::getConfig() {
+uint8_t MotorShieldDriver::getDirectionB() {
+	return digitalRead(pinDirB);
+}
+
+JsonObject& MotorShieldDriver::getDetails() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -96,4 +80,17 @@ JsonObject& MotorShieldDriver::getConfig() {
   json[F("dirB")] = getDirectionB();
 
   return json;
+}
+
+void MotorShieldDriver::setSpeed(int speed, uint8_t pinPWM, uint8_t pinDir) {
+
+  // limit speed to max. PWM
+  int _speed = abs(speed);
+  if (_speed > pwmRange) {
+    _speed = pwmRange;
+  }
+  // write speed to PWM
+  analogWrite(pinPWM, _speed);
+  // change direction accordingly to original signed speed to HIGH or LOW
+  digitalWrite(pinDir, speed > 0 ? HIGH : LOW);
 }

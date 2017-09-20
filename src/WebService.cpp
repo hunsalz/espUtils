@@ -1,16 +1,10 @@
 #include "WebService.h"
 
-WebService::WebService() :
-  webServer(80) {
-}
-
-WebService::WebService(uint16_t port) :
-  webServer(port) {
-}
-
 WebService::WebService(uint16_t port, const char *rootCtx) :
   webServer(port) {
-  _rootCtx = rootCtx;
+
+  // rewrite root context
+  webServer.rewrite("/", rootCtx);
 }
 
 WebService::~WebService() {
@@ -20,8 +14,6 @@ WebService::~WebService() {
 bool WebService::start() {
 
   if (!isRunning()) {
-    // rewrite root context
-    webServer.rewrite("/", _rootCtx);
     // handle static web resources
     webServer.serveStatic("/", SPIFFS, "/www/", "max-age:600"); // cache-control 600 seconds
     // handle 404
@@ -72,10 +64,10 @@ AsyncWebServer* WebService::getWebServer() {
   return &webServer;
 }
 
-AsyncWebSocket* WebService::addWebSocket(const String &path, WSHandler* wsHandler) {
+AsyncWebSocket* WebService::addWebSocket(const String &path, WebSocketListener* wsListener) {
 
   AsyncWebSocket* webSocket = new AsyncWebSocket(path);
-  webSocket->onEvent(std::bind(&WSHandler::onEvent, (WSHandler*)wsHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5, std::placeholders::_6));
+  webSocket->onEvent(std::bind(&WebSocketListener::onEvent, (WebSocketListener*)wsListener, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5, std::placeholders::_6));
   webServer.addHandler(webSocket);
 
   return webSocket;

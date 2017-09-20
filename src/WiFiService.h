@@ -1,5 +1,11 @@
 #pragma once
 
+#ifdef ESP8266
+extern "C" {
+  #include "user_interface.h" // Expressif ESP8266 Non-OS API
+}
+#endif
+
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ESP8266WiFi.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 #include <ESP8266WiFiMulti.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
@@ -7,13 +13,13 @@
 
 #include "Service.h"
 
-class WiFiStaService : public Service {
+class WiFiService : public Service {
 
 	public:
 
-    WiFiStaService();
+    WiFiService();
 
-    ~WiFiStaService();
+    ~WiFiService();
 
     bool isRunning();
 
@@ -25,11 +31,15 @@ class WiFiStaService : public Service {
 
 		ESP8266WiFiMulti *getWiFiMulti();
 
-		JsonObject& getWiFiDetails();
+		bool addAP(const char* ssid, const char *passphrase);
+
+		void setupWiFi(uint8_t retries = 20, bool autoConnect = true, bool persistent = false);
+
+		JsonObject& getDetails();
 
   private:
 
 		ESP8266WiFiMulti wifiMulti;
 
-    WiFiEventHandler connectedEventHandler, disconnectedEventHandler, authModeChangedEventHandler, gotIpEventHandler;
+		byte retries = 0;
 };
