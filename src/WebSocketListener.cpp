@@ -2,118 +2,117 @@
 
 void WebSocketListener::onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
 
-  AwsFrameInfo *info = (AwsFrameInfo*)arg;
   switch (type) {
     case WS_EVT_CONNECT:
-      handleConnectEvent(ws, client, type, arg, data, len);
+      handleConnectEvent(ws, client, type, (AwsFrameInfo*)arg, data, len);
       break;
     case WS_EVT_DISCONNECT:
-      handleDisconnectEvent(ws, client, type, arg, data, len);
+      handleDisconnectEvent(ws, client, type, (AwsFrameInfo*)arg, data, len);
       break;
     case WS_EVT_ERROR:
-      handleErrorEvent(ws, client, type, arg, data, len);
+      handleErrorEvent(ws, client, type, (uint16_t*)arg, data, len);
       break;
     case WS_EVT_PONG:
-      handlePongEvent(ws, client, type, arg, data, len);
+      handlePongEvent(ws, client, type, (AwsFrameInfo*)arg, data, len);
       break;
     case WS_EVT_DATA:
-      // process data if it's a single frame and all payload is available and data contains only text
-      if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
-
-        handleMessageEvent(ws, client, type, arg, data, len);
-
-        // convert data into char array
-        char message[info->len + 1];
-        strncpy(message, (char*)data, info->len);
-        // make certain that the message ends with a \0 terminator
-        message[info->len] = '\0';
-
-        // TODO: workaround - replace by Log.verbose(...)
-        Serial.printf("V: ws[%s][%u] received : %s\n", ws->url(), client->id(), String(message).c_str());
-
-        // try to interpret message as JSON
-        DynamicJsonBuffer jsonBuffer;
-        JsonObject &json = jsonBuffer.parseObject(message);
-        // interrupt if message contains no valid JSON
-        if (json.success()) {
-          process(ws, client, json);
-
+      {
+        AwsFrameInfo *info = (AwsFrameInfo*)arg;
+        // process data if it's a single frame and all payload is available
+        if (info->final && info->index == 0 && info->len == len) {
+          if (info->opcode == WS_TEXT) {
+            data[len] = '\0';
+            handleTextMessageEvent(ws, client, type, info, data, len);
+          } else {
+            handleBinaryMessageEvent(ws, client, type, info, data, len);
+          }
         } else {
-          Log.error(F("Parsing message into JSON failed." CR));
+          // TODO implementation for multiple frames or the frame is split into multiple packets
         }
-      } else {
-        // TODO send a response to the client
       }
       break;
     default:
-      Log.verbose(F("ws[%s][%u] frame[%u] %s[%llu - %llu]" CR), ws->url(), client->id(), info->num, (info->message_opcode == WS_TEXT)?"text":"binary", info->index, info->index + len);
-      // TODO send a response to the client
+      Log.error(F("ws[%s][%u] - Unexpected type definition" CR), ws->url(), client->id());
+      // TODO send an error response to the client
       break;
     }
 }
 
-void WebSocketListener::onConnect(EventHandler handler) {
-  connectEventHandler = handler;
+void WebSocketListener::onConnect(WSEventHandler handler) {
+  connectWSEventHandler = handler;
 }
 
-void WebSocketListener::onDisconnect(EventHandler handler) {
-  disconnectEventHandler = handler;
+void WebSocketListener::onDisconnect(WSEventHandler handler) {
+  disconnectWSEventHandler = handler;
 }
 
-void WebSocketListener::onError(EventHandler handler) {
-  errorEventHandler = handler;
+void WebSocketListener::onError(WSErrorHandler handler) {
+  errorWSEventHandler = handler;
 }
 
-void WebSocketListener::onPong(EventHandler handler) {
-  pongEventHandler = handler;
+void WebSocketListener::onPong(WSEventHandler handler) {
+  pongWSEventHandler = handler;
 }
 
-void WebSocketListener::onMessage(EventHandler handler) {
-  messageEventHandler = handler;
+void WebSocketListener::onTextMessage(WSEventHandler handler) {
+  textWSEventHandler = handler;
 }
 
-void WebSocketListener::handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+void WebSocketListener::onBinaryMessage(WSEventHandler handler) {
+  binaryWSEventHandler = handler;
+}
 
-  if (connectEventHandler != NULL) {
-    connectEventHandler(ws, client, type, arg, data, len);
+void WebSocketListener::handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
+
+  if (connectWSEventHandler != NULL) {
+    connectWSEventHandler(ws, client, type, info, data, len);
   } else {
     Log.verbose(F("ws[%s][%u] connected" CR), ws->url(), client->id());
   }
 }
 
-void WebSocketListener::handleDisconnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+void WebSocketListener::handleDisconnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
-  if (disconnectEventHandler != NULL) {
-    disconnectEventHandler(ws, client, type, arg, data, len);
+  if (disconnectWSEventHandler != NULL) {
+    disconnectWSEventHandler(ws, client, type, info, data, len);
   } else {
     Log.verbose(F("ws[%s][%u] disconnected: %u" CR), ws->url(), client->id());
   }
 }
 
-void WebSocketListener::handleErrorEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+void WebSocketListener::handleErrorEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, uint16_t *arg, uint8_t *data, size_t len) {
 
-  if (errorEventHandler != NULL) {
-    errorEventHandler(ws, client, type, arg, data, len);
+  if (errorWSEventHandler != NULL) {
+    errorWSEventHandler(ws, client, type, arg, data, len);
   } else {
-    Log.error(F("ws[%s][%u] error(%u): %s" CR), ws->url(), client->id(), *((uint16_t*)arg), (char*)data);
+    Log.error(F("ws[%s][%u] error(%u): %s" CR), ws->url(), client->id(), arg, (char*)data);
   }
 }
 
-void WebSocketListener::handlePongEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+void WebSocketListener::handlePongEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
-  if (pongEventHandler != NULL) {
-    pongEventHandler(ws, client, type, arg, data, len);
+  if (pongWSEventHandler != NULL) {
+    pongWSEventHandler(ws, client, type, info, data, len);
   } else {
     Log.verbose(F("ws[%s][%u] pong[%u]: %s" CR), ws->url(), client->id(), len, (len)?(char*)data:"");
   }
 }
 
-void WebSocketListener::handleMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+void WebSocketListener::handleTextMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
-  if (messageEventHandler != NULL) {
-    messageEventHandler(ws, client, type, arg, data, len);
+  if (textWSEventHandler != NULL) {
+    textWSEventHandler(ws, client, type, info, data, len);
   } else {
-    // TODO: workaround - replace by Log.verbose(...)
-    //Serial.printf("V: ws[%s][%u] received : %s\n", ws->url(), client->id(), String(message).c_str());
+    Serial.printf("V: ws[%s][%u] received : %s\n", ws->url(), client->id(), (char*)data);
+    // TODO Log.verbose(F("ws[%s][%u] received : %s\n" CR), ws->url(), client->id(), (char*)data); results in fatal error
+  }
+}
+
+void WebSocketListener::handleBinaryMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
+
+  if (binaryWSEventHandler != NULL) {
+    binaryWSEventHandler(ws, client, type, info, data, len);
+  } else {
+    Log.verbose(F("ws[%s][%u] received : %d bytes\n" CR), ws->url(), client->id(), len);
   }
 }

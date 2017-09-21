@@ -34,18 +34,24 @@ int MotorShieldDriver::getSpeedB() {
 void MotorShieldDriver::setSpeedA(int speed) {
 
 	if (isEnabled()) {
-		speedA = speed;
-		setSpeed(speedA, pinPWM_A, pinDirA);
-		Log.verbose(F("Applied speed of motor(A) to %d with direction to %d" CR), getSpeedA(), getDirectionA());
+		// update only if something changes
+		if (speed != speedA) {
+			speedA = speed;
+			setSpeed(speedA, pinPWM_A, pinDirA);
+			Log.verbose(F("Applied speed of motor(A) to %d with direction to %d" CR), getSpeedA(), getDirectionA());
+		}
 	}
 }
 
 void MotorShieldDriver::setSpeedB(int speed) {
 
 	if (isEnabled()) {
-		speedB = speed;
-		setSpeed(speedB, pinPWM_B, pinDirB);
-		Log.verbose(F("Applied speed of motor(B) to %d with direction to %d" CR), getSpeedB(), getDirectionB());
+		// update only if something changes
+		if (speed != speedB) {
+			speedB = speed;
+			setSpeed(speedB, pinPWM_B, pinDirB);
+			Log.verbose(F("Applied speed of motor(B) to %d with direction to %d" CR), getSpeedB(), getDirectionB());
+		}
 	}
 }
 

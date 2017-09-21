@@ -4,33 +4,36 @@
 #include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
-class WebSocketListener {
+typedef std::function<void(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len)> WSEventHandler;
+typedef std::function<void(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, uint16_t *arg, uint8_t *data, size_t len)> WSErrorHandler;
 
-  typedef std::function<void(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len)> EventHandler;
+
+class WebSocketListener {
 
   public:
 
     void onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
 
-    virtual void process(AsyncWebSocket *ws, AsyncWebSocketClient *client, JsonObject &json) = 0;
-
-    void onConnect(EventHandler handler);
-    void onDisconnect(EventHandler handler);
-    void onError(EventHandler handler);
-    void onPong(EventHandler handler);
-    void onMessage(EventHandler handler);
+    void onConnect(WSEventHandler handler);
+    void onDisconnect(WSEventHandler handler);
+    void onError(WSErrorHandler handler);
+    void onPong(WSEventHandler handler);
+    void onTextMessage(WSEventHandler handler);
+    void onBinaryMessage(WSEventHandler handler);
 
   private:
 
-    EventHandler connectEventHandler;
-    EventHandler disconnectEventHandler;
-    EventHandler errorEventHandler;
-    EventHandler pongEventHandler;
-    EventHandler messageEventHandler;
+    WSEventHandler connectWSEventHandler;
+    WSEventHandler disconnectWSEventHandler;
+    WSErrorHandler errorWSEventHandler;
+    WSEventHandler pongWSEventHandler;
+    WSEventHandler textWSEventHandler;
+    WSEventHandler binaryWSEventHandler;
 
-    void handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
-    void handleDisconnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
-    void handleErrorEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
-    void handlePongEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
-    void handleMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
+    void handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len);
+    void handleDisconnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len);
+    void handleErrorEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, uint16_t *arg, uint8_t *data, size_t len);
+    void handlePongEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len);
+    void handleTextMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len);
+    void handleBinaryMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len);
 };
