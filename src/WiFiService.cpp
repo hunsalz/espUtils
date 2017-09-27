@@ -20,7 +20,7 @@ bool WiFiService::start() {
       Serial.println();
       // log WiFi connection result
       if (retries > 0) {
-        Log.notice(F("WiFi successful connected to IP: %s" CR), WiFi.localIP().toString().c_str());
+        Log.notice(F("WiFi successful connected with IP: %s" CR), WiFi.localIP().toString().c_str());
       } else {
         Log.error(F("Failed to setup a WiFi connection. Please check your WiFi availability / accessibility and retry." CR));
       }
