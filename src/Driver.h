@@ -4,7 +4,7 @@ class Driver {
 
 	public:
 		// enabled: enables/disables this driver
-		Driver(bool enabled);
+		Driver(bool enabled = false);
 		~Driver();
 
 		// use this method to know if this driver is enabled or not
@@ -15,5 +15,5 @@ class Driver {
 
 	private:
 
-		bool enabled = false;
+		bool enabled;
 };
