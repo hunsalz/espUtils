@@ -22,8 +22,6 @@ class WebService : public Service {
 
     AsyncWebServer* getWebServer();
 
-    AsyncWebSocket* addWebSocket(const String &path, WebSocketListener* wsListener);
-
     AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
 
     void send(AsyncWebServerRequest *request, JsonObject &json);
