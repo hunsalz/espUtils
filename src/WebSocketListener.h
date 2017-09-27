@@ -7,12 +7,9 @@
 typedef std::function<void(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len)> WSEventHandler;
 typedef std::function<void(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, uint16_t *arg, uint8_t *data, size_t len)> WSErrorHandler;
 
-
 class WebSocketListener {
 
   public:
-
-    void onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
 
     void onConnect(WSEventHandler handler);
     void onDisconnect(WSEventHandler handler);
@@ -20,6 +17,8 @@ class WebSocketListener {
     void onPong(WSEventHandler handler);
     void onTextMessage(WSEventHandler handler);
     void onBinaryMessage(WSEventHandler handler);
+
+    void onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
 
   private:
 

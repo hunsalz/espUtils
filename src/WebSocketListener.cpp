@@ -1,5 +1,29 @@
 #include "WebSocketListener.h"
 
+void WebSocketListener::onConnect(WSEventHandler handler) {
+  connectWSEventHandler = handler;
+}
+
+void WebSocketListener::onDisconnect(WSEventHandler handler) {
+  disconnectWSEventHandler = handler;
+}
+
+void WebSocketListener::onError(WSErrorHandler handler) {
+  errorWSEventHandler = handler;
+}
+
+void WebSocketListener::onPong(WSEventHandler handler) {
+  pongWSEventHandler = handler;
+}
+
+void WebSocketListener::onTextMessage(WSEventHandler handler) {
+  textWSEventHandler = handler;
+}
+
+void WebSocketListener::onBinaryMessage(WSEventHandler handler) {
+  binaryWSEventHandler = handler;
+}
+
 void WebSocketListener::onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
 
   switch (type) {
@@ -36,30 +60,6 @@ void WebSocketListener::onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client
       // TODO send an error response to the client
       break;
     }
-}
-
-void WebSocketListener::onConnect(WSEventHandler handler) {
-  connectWSEventHandler = handler;
-}
-
-void WebSocketListener::onDisconnect(WSEventHandler handler) {
-  disconnectWSEventHandler = handler;
-}
-
-void WebSocketListener::onError(WSErrorHandler handler) {
-  errorWSEventHandler = handler;
-}
-
-void WebSocketListener::onPong(WSEventHandler handler) {
-  pongWSEventHandler = handler;
-}
-
-void WebSocketListener::onTextMessage(WSEventHandler handler) {
-  textWSEventHandler = handler;
-}
-
-void WebSocketListener::onBinaryMessage(WSEventHandler handler) {
-  binaryWSEventHandler = handler;
 }
 
 void WebSocketListener::handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
@@ -113,6 +113,6 @@ void WebSocketListener::handleBinaryMessageEvent(AsyncWebSocket *ws, AsyncWebSoc
   if (binaryWSEventHandler != NULL) {
     binaryWSEventHandler(ws, client, type, info, data, len);
   } else {
-    Log.verbose(F("ws[%s][%u] received : %d bytes\n" CR), ws->url(), client->id(), len);
+    Log.verbose(F("ws[%s][%u] received : %d bytes" CR), ws->url(), client->id(), len);
   }
 }
