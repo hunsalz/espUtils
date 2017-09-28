@@ -38,6 +38,10 @@ bool WebService::start() {
 
       request->send(404, F("Page not found."));
     });
+    // add generic services resource
+    on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      send(request, getDetails());
+    });
     // start web server
     webServer.begin();
     running = true;
@@ -64,26 +68,10 @@ AsyncWebServer* WebService::getWebServer() {
   return &webServer;
 }
 
-//AsyncWebSocket* WebService::addWebSocket(const String &path, WebSocketListener* wsListener) {
-
-  //AsyncWebSocket* webSocket = new AsyncWebSocket(path);
-
-  //AwsEventHandler awsEventHandler = [wsListener](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
-    //Log.verbose(F("LALA ............ ws[%s][%u] received : %d bytes\n" CR), ws->url(), client->id(), len);
-  //  wsListener->process(ws, client, type, arg, data, len);
-  //};
-
-  //webSocket->onEvent(awsEventHandler);
-
-  //webSocket->onEvent(std::bind(&WebSocketListener::onEvent, (WebSocketListener*)wsListener, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5, std::placeholders::_6));
-  //webServer.addHandler(webSocket);
-
-  //return webSocket;
-//}
-
 AsyncCallbackWebHandler& WebService::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest) {
 
-  // TODO service registry
+  // add uri to service listing
+  services.push_back(String(uri));
 
   webServer.on(uri, method, onRequest);
 }
@@ -108,4 +96,15 @@ void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
   Log.verbose(F("Send response: %s." CR), content);
 
   request->send(new AsyncBasicResponse(200, "text/json", String(content)));
+}
+
+JsonArray& WebService::getDetails() {
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonArray& json = jsonBuffer.createArray();
+  for(std::vector<String>::iterator i = services.begin(); i != services.end(); ++i) {
+    json.add(*i);
+  }
+
+  return json;
 }
