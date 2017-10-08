@@ -1,21 +1,24 @@
 #pragma once
 
-class Service {
+namespace esp8266util {
 
-	public:
+	class Service {
 
-		Service();
-		~Service();
+		public:
 
-		// returns if this service is running
-		bool isRunning();
+			Service();
+			~Service();
 
-		// starts this service and returns true if service is running
-		virtual bool start() = 0;
+			// returns if this service is running
+			bool isRunning();
 
-    // stops this service and returns true if service is stopped
-    virtual bool stop() = 0;
+			// starts this service and returns true if service is running
+			virtual bool start() = 0;
 
-		// TODO remove running declaration
-		bool running = false;
-};
+	    // stops this service and returns true if service is stopped
+	    virtual bool stop() = 0;
+
+			// TODO remove running declaration
+			bool running = false;
+	};
+}

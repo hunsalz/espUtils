@@ -11,17 +11,20 @@ extern "C" {
 
 #include "Service.h"
 
-class EspService : public Service {
+namespace esp8266util {
 
-	public:
+	class EspService : public Service {
 
-    EspService();
+		public:
 
-    ~EspService();
+	    EspService();
 
-    bool start();
+	    ~EspService();
 
-    bool stop();
+	    bool start();
 
-		JsonObject& getDetails();
-};
+	    bool stop();
+
+			JsonObject& getDetails();
+	};
+}

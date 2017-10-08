@@ -6,21 +6,24 @@
 
 #include "Service.h"
 
-class FSService : public Service {
+namespace esp8266util {
 
-	public:
+	class FSService : public Service {
 
-    FSService();
+		public:
 
-    ~FSService();
+	    FSService();
 
-    bool start();
+	    ~FSService();
 
-    bool stop();
+	    bool start();
 
-		JsonObject& getStorageDetails();
+	    bool stop();
 
-    JsonArray& getFileListing();
+			JsonObject& getStorageDetails();
 
-    static String formatBytes(size_t bytes);
-};
+	    JsonArray& getFileListing();
+
+	    static String formatBytes(size_t bytes);
+	};
+}

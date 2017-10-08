@@ -15,30 +15,33 @@
 #include "Service.h"
 #include "WebSocketListener.h"
 
-class WebService : public Service {
+namespace esp8266util {
 
-  public:
+  class WebService : public Service {
 
-    WebService(uint16_t port = 80, const char *rootCtx = "index.html");
+    public:
 
-    ~WebService();
+      WebService(uint16_t port = 80, const char *rootCtx = "index.html");
 
-    bool start();
+      ~WebService();
 
-    bool stop();
+      bool start();
 
-    AsyncWebServer* getWebServer();
+      bool stop();
 
-    AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
+      AsyncWebServer* getWebServer();
 
-    void send(AsyncWebServerRequest *request, JsonObject &json);
+      AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
 
-    void send(AsyncWebServerRequest *request, JsonArray &json);
+      void send(AsyncWebServerRequest *request, JsonObject &json);
 
-    JsonArray& getDetails();
+      void send(AsyncWebServerRequest *request, JsonArray &json);
 
-  private:
+      JsonArray& getDetails();
 
-		AsyncWebServer webServer;
-    std::vector<String> services;
-};
+    private:
+
+  		AsyncWebServer webServer;
+      std::vector<String> services;
+  };
+}

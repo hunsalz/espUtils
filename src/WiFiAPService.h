@@ -13,33 +13,36 @@ extern "C" {
 
 #include "Service.h"
 
-class WiFiAPService : public Service {
+namespace esp8266util {
 
-	public:
+	class WiFiAPService : public Service {
 
-    WiFiAPService();
+		public:
 
-    ~WiFiAPService();
+	    WiFiAPService();
 
-    bool isRunning();
+	    ~WiFiAPService();
 
-    bool start();
+	    bool isRunning();
 
-    bool stop();
+	    bool start();
 
-		ESP8266WiFiClass *getWiFi();
+	    bool stop();
 
-		void setup(const char* ssid, const char* passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
+			ESP8266WiFiClass *getWiFi();
 
-		bool enableMDNS(const char* hostName, unsigned int port = 80, uint32_t ttl = 120);
+			void setup(const char* ssid, const char* passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
 
-		JsonObject& getDetails();
+			bool enableMDNS(const char* hostName, unsigned int port = 80, uint32_t ttl = 120);
 
-	private:
+			JsonObject& getDetails();
 
-		const char* ssid;
-		const char* passphrase;
-		int channel  = 1;
-		int ssid_hidden = 0;
-		int max_connection = 4;
-};
+		private:
+
+			const char* ssid;
+			const char* passphrase;
+			int channel  = 1;
+			int ssid_hidden = 0;
+			int max_connection = 4;
+	};
+}

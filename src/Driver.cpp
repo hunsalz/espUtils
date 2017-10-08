@@ -1,17 +1,20 @@
 #include "Driver.h"
 
-Driver::Driver(bool enabled) {
-	this->enabled = enabled;
-}
+namespace esp8266util {
 
-Driver::~Driver() {
-	enabled = false;
-}
+	Driver::Driver(bool enabled) {
+		this->enabled = enabled;
+	}
 
-bool Driver::isEnabled() {
-	return enabled;
-}
+	Driver::~Driver() {
+		enabled = false;
+	}
 
-void Driver::setEnabled(bool enabled) {
-	this->enabled = enabled;
+	bool Driver::isEnabled() {
+		return enabled;
+	}
+
+	void Driver::setEnabled(bool enabled) {
+		this->enabled = enabled;
+	}
 }

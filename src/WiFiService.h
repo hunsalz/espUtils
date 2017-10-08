@@ -13,33 +13,36 @@ extern "C" {
 
 #include "Service.h"
 
-class WiFiService : public Service {
+namespace esp8266util {
 
-	public:
+	class WiFiService : public Service {
 
-    WiFiService();
+		public:
 
-    ~WiFiService();
+	    WiFiService();
 
-    bool isRunning();
+	    ~WiFiService();
 
-    bool start();
+	    bool isRunning();
 
-    bool stop();
+	    bool start();
 
-		ESP8266WiFiClass *getWiFi();
+	    bool stop();
 
-		ESP8266WiFiMulti *getWiFiMulti();
+			ESP8266WiFiClass *getWiFi();
 
-		bool addAP(const char* ssid, const char *passphrase);
+			ESP8266WiFiMulti *getWiFiMulti();
 
-		void setupWiFi(uint8_t retries = 20, bool autoConnect = true, bool persistent = false);
+			bool addAP(const char* ssid, const char *passphrase);
 
-		JsonObject& getDetails();
+			void setupWiFi(uint8_t retries = 20, bool autoConnect = true, bool persistent = false);
 
-  private:
+			JsonObject& getDetails();
 
-		ESP8266WiFiMulti wifiMulti;
+	  private:
 
-		byte retries = 0;
-};
+			ESP8266WiFiMulti wifiMulti;
+
+			byte retries = 0;
+	};
+}

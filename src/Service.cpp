@@ -1,13 +1,16 @@
 #include <Service.h>
 
-Service::Service() {
-}
+namespace esp8266util {
 
-Service::~Service() {
-	running = false;
-}
+	Service::Service() {
+	}
 
-// returns if this service is running
-bool Service::isRunning() {
-	return running;
+	Service::~Service() {
+		running = false;
+	}
+
+	// returns if this service is running
+	bool Service::isRunning() {
+		return running;
+	}
 }

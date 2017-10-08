@@ -1,19 +1,22 @@
 #pragma once
 
-class Driver {
+namespace esp8266util {
 
-	public:
-		// enabled: enables/disables this driver
-		Driver(bool enabled = false);
-		~Driver();
+	class Driver {
 
-		// use this method to know if this driver is enabled or not
-		bool isEnabled();
+		public:
+			// enabled: enables/disables this driver
+			Driver(bool enabled = false);
+			~Driver();
 
-		// enables/disables this driver
-		void setEnabled(bool enabled);
+			// use this method to know if this driver is enabled or not
+			bool isEnabled();
 
-	private:
+			// enables/disables this driver
+			void setEnabled(bool enabled);
 
-		bool enabled;
-};
+		private:
+
+			bool enabled;
+	};
+}

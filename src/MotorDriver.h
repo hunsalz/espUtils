@@ -5,31 +5,34 @@
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
-class MotorDriver : public Driver {
+namespace esp8266util {
 
-	public:
+	class MotorDriver : public Driver {
 
-		MotorDriver(bool _enabled,
-			uint8_t _pinPWM,
-			uint8_t _pinDir,
-			int _pwmRange = 1023);
+		public:
 
-		int getSpeed();
+			MotorDriver(bool _enabled,
+				uint8_t _pinPWM,
+				uint8_t _pinDir,
+				int _pwmRange = 1023);
 
-		uint8_t getDirection();
+			int getSpeed();
 
-		int getPWMRange();
+			uint8_t getDirection();
 
-		void setSpeed(int speed);
+			int getPWMRange();
 
-    void applySpeed(int speed);
+			void setSpeed(int speed);
 
-		JsonObject& getDetails();
+	    void applySpeed(int speed);
 
-	private:
+			JsonObject& getDetails();
 
-		uint8_t pinPWM;
-		uint8_t pinDir;
-    int pwmRange;
-		int speed;
-};
+		private:
+
+			uint8_t pinPWM;
+			uint8_t pinDir;
+	    int pwmRange;
+			int speed;
+	};
+}
