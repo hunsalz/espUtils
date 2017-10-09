@@ -40,11 +40,6 @@ namespace esp8266util {
 			speed = -getPWMRange();
 		}
 		Log.verbose(F("Write speed = %d" CR), speed);
-
-		Log.verbose(F("Write speed = %d to pin %d" CR), abs(speed), pinPWM);
-
-		Log.verbose(F("Write dir = %d to pin %d" CR), getDirection(), pinDir);
-
 	  // write speed to PWM
 	  analogWrite(pinPWM, abs(speed));
 	  // change direction accordingly to original signed speed to HIGH or LOW

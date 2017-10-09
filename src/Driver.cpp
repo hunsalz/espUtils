@@ -6,6 +6,7 @@ namespace esp8266util {
 		return pwmRange;
 	}
 
+	// TODO "singleton" 
 	void Driver::setPWMRange(uint16_t pwmRange) {
 
 		if (this->pwmRange != pwmRange) {
