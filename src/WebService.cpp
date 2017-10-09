@@ -13,11 +13,20 @@ namespace esp8266util {
     stop();
   }
 
+  bool WebService::isRunning() {
+    return running;
+  }
+
   bool WebService::start() {
 
     if (!isRunning()) {
       // handle static web resources
       webServer.serveStatic("/", SPIFFS, "/www/", "max-age:600"); // cache-control 600 seconds
+
+      // TODO make TLS available
+      // webServer.onSslFileRequest(...)
+      // example: https://github.com/me-no-dev/ESPAsyncWebServer/issues/75
+      // example cer: https://github.com/me-no-dev/ESPAsyncTCP/tree/master/ssl
       // handle 404
       webServer.onNotFound([](AsyncWebServerRequest *request) {
         String method = F("UNKNOWN");
@@ -46,21 +55,19 @@ namespace esp8266util {
       });
       // start web server
       webServer.begin();
-      running = true;
     }
+
+    running = true;
+
     Log.verbose("WebServer started.\n");
 
-    return true;
+    return isRunning();
   }
 
   bool WebService::stop() {
 
     if (isRunning()) {
       webServer.reset();
-
-      // TODO stop webServer ?
-
-      running = false;
     }
 
     return isRunning();

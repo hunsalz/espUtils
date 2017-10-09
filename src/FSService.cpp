@@ -9,12 +9,15 @@ namespace esp8266util {
     stop();
   }
 
+  bool FSService::isRunning() {
+    return running;
+  }
+
   bool FSService::start() {
 
     if (!isRunning()) {
       if (SPIFFS.begin()) {
         Log.verbose(F("File system mounted." CR));
-        running = true;
       } else {
         Log.warning(F("Mounting file system failed." CR));
       }

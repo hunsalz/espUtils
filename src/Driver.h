@@ -1,22 +1,25 @@
 #pragma once
 
+#include <Arduino.h>
+#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
+
 namespace esp8266util {
 
 	class Driver {
 
 		public:
-			// enabled: enables/disables this driver
-			Driver(bool enabled = false);
-			~Driver();
 
-			// use this method to know if this driver is enabled or not
-			bool isEnabled();
+			// use this method to know if this driver is setup or not
+			virtual bool isSetup() = 0;
 
-			// enables/disables this driver
-			void setEnabled(bool enabled);
+			uint16_t getPWMRange();
+
+			void setPWMRange(uint16_t pwmRange = 1023);
+
+			// TODO add analogWriteFreq analog to pwm range
 
 		private:
 
-			bool enabled;
+			uint16_t pwmRange;
 	};
 }

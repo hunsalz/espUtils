@@ -9,21 +9,20 @@ namespace esp8266util {
     stop();
   }
 
+  bool EspService::isRunning() {
+    return true;
+  }
+
   bool EspService::start() {
 
     if (!isRunning()) {
-      // ...
+      // nothing to do
     }
 
     return isRunning();
   }
 
   bool EspService::stop() {
-
-    if (isRunning()) {
-      running = false;
-    }
-
     return isRunning();
   }
 

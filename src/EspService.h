@@ -21,6 +21,8 @@ namespace esp8266util {
 
 	    ~EspService();
 
+			bool isRunning();
+
 	    bool start();
 
 	    bool stop();

@@ -9,6 +9,10 @@ namespace esp8266util {
     stop();
   }
 
+  bool WiFiService::isRunning() {
+    return WiFi.isConnected();
+  }
+
   bool WiFiService::start() {
 
     if (retries > 0) {
@@ -39,10 +43,6 @@ namespace esp8266util {
     WiFi.disconnect();
 
     return isRunning();
-  }
-
-  bool WiFiService::isRunning() {
-    return WiFi.isConnected();
   }
 
   bool WiFiService::addAP(const char* ssid, const char *passphrase) {

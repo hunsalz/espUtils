@@ -2,19 +2,16 @@
 
 namespace esp8266util {
 
-	Driver::Driver(bool enabled) {
-		this->enabled = enabled;
+	uint16_t Driver::getPWMRange() {
+		return pwmRange;
 	}
 
-	Driver::~Driver() {
-		enabled = false;
-	}
+	void Driver::setPWMRange(uint16_t pwmRange) {
 
-	bool Driver::isEnabled() {
-		return enabled;
-	}
-
-	void Driver::setEnabled(bool enabled) {
-		this->enabled = enabled;
+		if (this->pwmRange != pwmRange) {
+			this->pwmRange = pwmRange;
+			analogWriteRange(pwmRange);
+			Log.verbose(F("Set PWM range to %d" CR), this->pwmRange);
+		}
 	}
 }

@@ -25,6 +25,8 @@ namespace esp8266util {
 
       ~WebService();
 
+      bool isRunning();
+
       bool start();
 
       bool stop();
@@ -43,5 +45,7 @@ namespace esp8266util {
 
   		AsyncWebServer webServer;
       std::vector<String> services;
+
+      bool running = false;
   };
 }

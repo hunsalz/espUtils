@@ -9,6 +9,10 @@ namespace esp8266util {
     stop();
   }
 
+  bool WiFiAPService::isRunning() {
+    return WiFi.status();
+  }
+
   bool WiFiAPService::start() {
 
     WiFi.softAPdisconnect();
@@ -27,10 +31,6 @@ namespace esp8266util {
     WiFi.softAPdisconnect();
 
     return isRunning();
-  }
-
-  bool WiFiAPService::isRunning() {
-    return WiFi.status();
   }
 
   ESP8266WiFiClass* WiFiAPService::getWiFi() {

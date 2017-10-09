@@ -11,16 +11,13 @@ namespace esp8266util {
 
 		public:
 
-			MotorDriver(bool _enabled,
-				uint8_t _pinPWM,
-				uint8_t _pinDir,
-				int _pwmRange = 1023);
+			bool isSetup();
+
+			bool setup(uint8_t pinPWM, uint8_t pinDir, uint16_t pwmRange = 1023);
 
 			int getSpeed();
 
 			uint8_t getDirection();
-
-			int getPWMRange();
 
 			void setSpeed(int speed);
 
@@ -32,7 +29,7 @@ namespace esp8266util {
 
 			uint8_t pinPWM;
 			uint8_t pinDir;
-	    int pwmRange;
 			int speed;
+			bool setupDone = false;
 	};
 }

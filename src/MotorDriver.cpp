@@ -2,24 +2,23 @@
 
 namespace esp8266util {
 
-	MotorDriver::MotorDriver(bool _enabled,
-		uint8_t _pinPWM,
-		uint8_t _pinDir,
-		int _pwmRange) : Driver(_enabled) {
+	bool MotorDriver::isSetup() {
+		return setupDone;
+	}
 
-		pinPWM = _pinPWM;
-		pinDir = _pinDir;
-		pwmRange = _pwmRange;
+	bool MotorDriver::setup(uint8_t pinPWM, uint8_t pinDir, uint16_t pwmRange) {
 
-		// TODO make an init method for pin assignments ?
-
+		this->pinPWM = pinPWM;
 		pinMode(pinPWM, OUTPUT);
+		this->pinDir = pinDir;
 		pinMode(pinDir, OUTPUT);
-		// set PWM only once
-		analogWriteRange(pwmRange);
-		analogWriteFreq(1000);
+		setPWMRange(pwmRange);
 
-	  Log.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d" CR), pinPWM, pinDir);
+		Log.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d" CR), pinPWM, pinDir);
+
+		setupDone = true;
+
+		return isSetup();
 	}
 
 	int MotorDriver::getSpeed() {
@@ -28,10 +27,6 @@ namespace esp8266util {
 
 	uint8_t MotorDriver::getDirection() {
 		return getSpeed() > 0 ? 1 : 0;
-	}
-
-	int MotorDriver::getPWMRange() {
-		return pwmRange;
 	}
 
 	void MotorDriver::setSpeed(int _speed) {
@@ -46,10 +41,16 @@ namespace esp8266util {
 		}
 		Log.verbose(F("Write speed = %d" CR), speed);
 
+		Log.verbose(F("Write speed = %d to pin %d" CR), abs(speed), pinPWM);
+
+		Log.verbose(F("Write dir = %d to pin %d" CR), getDirection(), pinDir);
+
 	  // write speed to PWM
 	  analogWrite(pinPWM, abs(speed));
 	  // change direction accordingly to original signed speed to HIGH or LOW
 	  digitalWrite(pinDir, getDirection());
+
+		Log.verbose(F("Write speed = %d - DONE" CR), speed);
 	}
 
 	void MotorDriver::applySpeed(int speed) {

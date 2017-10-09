@@ -104,7 +104,7 @@ namespace esp8266util {
 
     if (textWSEventHandler != NULL) {
       data[len] = 0;
-      // TODO
+      // TODO get Log.verbose(...) running
       //Log.verbose(F("ws[%s][%u] received : %s\n" CR), ws->url(), client->id(), (char*)data);
 
       textWSEventHandler(ws, client, type, info, data, len);

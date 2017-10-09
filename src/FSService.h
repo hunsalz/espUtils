@@ -16,6 +16,8 @@ namespace esp8266util {
 
 	    ~FSService();
 
+			bool isRunning();
+
 	    bool start();
 
 	    bool stop();
@@ -25,5 +27,9 @@ namespace esp8266util {
 	    JsonArray& getFileListing();
 
 	    static String formatBytes(size_t bytes);
+
+		private:
+
+			bool running = false;
 	};
 }
