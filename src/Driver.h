@@ -12,14 +12,11 @@ namespace esp8266util {
 			// use this method to know if this driver is setup or not
 			virtual bool isSetup() = 0;
 
-			uint16_t getPWMRange();
+			static uint16_t getPWMRange();
 
-			void setPWMRange(uint16_t pwmRange = 1023);
+			static void setPWMRange(uint16_t pwmRange = 1023);
 
 			// TODO add analogWriteFreq analog to pwm range
-
-		private:
-
-			uint16_t pwmRange;
+			
 	};
 }
