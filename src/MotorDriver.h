@@ -13,7 +13,7 @@ namespace esp8266util {
 
 			bool isSetup();
 
-			bool setup(uint8_t pinPWM, uint8_t pinDir, uint16_t pwmRange = 1023);
+			bool setup(uint8_t pinPWM, uint8_t pinDir);
 
 			int getSpeed();
 
@@ -30,6 +30,7 @@ namespace esp8266util {
 			uint8_t pinPWM;
 			uint8_t pinDir;
 			int speed;
+
 			bool setupDone = false;
 	};
 }

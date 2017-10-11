@@ -21,9 +21,11 @@ namespace esp8266util {
 
     public:
 
-      WebService(uint16_t port = 80, const char *rootCtx = "index.html");
+      WebService(uint16_t port = 80);
 
       ~WebService();
+
+      bool isSetup();
 
       bool isRunning();
 
@@ -44,6 +46,7 @@ namespace esp8266util {
     private:
 
   		AsyncWebServer webServer;
+
       std::vector<String> services;
 
       bool running = false;

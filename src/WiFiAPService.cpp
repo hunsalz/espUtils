@@ -2,12 +2,13 @@
 
 namespace esp8266util {
 
-  WiFiAPService::WiFiAPService() {
-  }
-
   WiFiAPService::~WiFiAPService() {
     stop();
   }
+
+  bool WiFiAPService::isSetup() {
+		return setupDone;
+	}
 
   bool WiFiAPService::isRunning() {
     return WiFi.status();
@@ -15,12 +16,16 @@ namespace esp8266util {
 
   bool WiFiAPService::start() {
 
-    WiFi.softAPdisconnect();
-    // TODO MDNS update
-    if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
-      Log.notice(F("Soft AP established successful. IP address of AP is: %s" CR), WiFi.softAPIP().toString().c_str());
+    if (isSetup()) {
+      WiFi.softAPdisconnect();
+      // TODO MDNS update
+      if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
+        Log.notice(F("Soft AP established successful. IP address of AP is: %s" CR), WiFi.softAPIP().toString().c_str());
+      } else {
+        Log.error(F("Couldn't establish a soft access point." CR));
+      }
     } else {
-      Log.error(F("Couldn't establish a soft access point." CR));
+      Log.error("Call setup() first.");
     }
 
     return isRunning();
@@ -37,7 +42,7 @@ namespace esp8266util {
     return &WiFi;
   }
 
-  void WiFiAPService::setup(const char* ssid, const char* passphrase, int channel, int ssid_hidden, int max_connection, bool autoConnect, bool persistent) {
+  bool WiFiAPService::setup(const char* ssid, const char* passphrase, int channel, int ssid_hidden, int max_connection, bool autoConnect, bool persistent) {
 
     this->ssid = ssid;
     this->passphrase = passphrase;
@@ -48,6 +53,10 @@ namespace esp8266util {
     WiFi.enableAP(true);
     WiFi.setAutoConnect(true);
     WiFi.persistent(false);
+
+    setupDone = true;
+
+    return isSetup();
   }
 
   bool WiFiAPService::enableMDNS(const char* hostName, unsigned int port, uint32_t ttl) {

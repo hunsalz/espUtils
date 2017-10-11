@@ -2,12 +2,13 @@
 
 namespace esp8266util {
 
-  FSService::FSService() {
-  }
-
   FSService::~FSService() {
     stop();
   }
+
+  bool FSService::isSetup() {
+		return true;
+	}
 
   bool FSService::isRunning() {
     return running;

@@ -6,13 +6,12 @@ namespace esp8266util {
 		return setupDone;
 	}
 
-	bool MotorDriver::setup(uint8_t pinPWM, uint8_t pinDir, uint16_t pwmRange) {
+	bool MotorDriver::setup(uint8_t pinPWM, uint8_t pinDir) {
 
 		this->pinPWM = pinPWM;
 		pinMode(pinPWM, OUTPUT);
 		this->pinDir = pinDir;
 		pinMode(pinDir, OUTPUT);
-		setPWMRange(pwmRange);
 
 		Log.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d" CR), pinPWM, pinDir);
 

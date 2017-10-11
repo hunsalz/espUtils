@@ -2,13 +2,20 @@
 
 namespace esp8266util {
 
-  // TODO check complete class 
+  NTPService::NTPService(const char* poolServerName, int timeOffset, int updateInterval) :
+    ntpClient(ntpUDP, poolServerName, timeOffset, updateInterval) {
 
-  NTPService::NTPService() :
-    ntpClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000) {}
+    this->poolServerName = poolServerName;
+    this->timeOffset = timeOffset;
+    this->updateInterval = updateInterval;
+  }
 
   NTPService::~NTPService() {
     stop();
+  }
+
+  bool NTPService::isSetup() {
+    return true;
   }
 
   bool NTPService::isRunning() {
@@ -21,9 +28,9 @@ namespace esp8266util {
       ntpClient.begin();
       running = ntpClient.forceUpdate();
       if (running) {
-        //Log.verbose(F("NTP established to [%s:%d]" CR), NTP_SERVER, NTP_DEFAULT_LOCAL_PORT);
+        Log.verbose(F("Connection to NTP server [%s] established." CR), getPoolServerName());
       } else {
-        //Log.error(F("NTP failed for [%s:%d]" CR), NTP_SERVER, NTP_DEFAULT_LOCAL_PORT);
+        Log.error(F("Connection to NTP server [%s] failed." CR), getPoolServerName());
       }
     }
 
@@ -43,11 +50,34 @@ namespace esp8266util {
   NTPClient NTPService::getNTPClient() {
 
     if (!ntpClient.update()) {
-      Log.error("Updating NTP failed.\n");
-
-      // TODO implement retry and/or recovery mechanisms
+      Log.error(F("Updating time with NTP server [%s] failed." CR), getPoolServerName());
     }
 
     return ntpClient;
+  }
+
+  const char* NTPService::getPoolServerName() {
+    return poolServerName;
+  }
+
+  int NTPService::getTimeOffset() {
+    return timeOffset;
+  }
+
+  int NTPService::getUpdateInterval() {
+    return updateInterval;
+  }
+
+  JsonObject& NTPService::getDetails() {
+
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject &json = jsonBuffer.createObject();
+    json[F("ntpServer")] = getPoolServerName();
+    json[F("UTCOffset")] = getTimeOffset();
+    json[F("updateInterval")] = getUpdateInterval();
+    json[F("time")] = getNTPClient().getFormattedTime();
+    json[F("timestamp")] = getNTPClient().getEpochTime();
+
+    return json;
   }
 }

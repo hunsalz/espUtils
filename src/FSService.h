@@ -12,9 +12,9 @@ namespace esp8266util {
 
 		public:
 
-	    FSService();
-
 	    ~FSService();
+
+			bool isSetup();
 
 			bool isRunning();
 

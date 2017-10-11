@@ -2,12 +2,13 @@
 
 namespace esp8266util {
 
-  WiFiService::WiFiService() {
-  }
-
   WiFiService::~WiFiService() {
     stop();
   }
+
+  bool WiFiService::isSetup() {
+		return setupDone;
+	}
 
   bool WiFiService::isRunning() {
     return WiFi.isConnected();
@@ -15,10 +16,10 @@ namespace esp8266util {
 
   bool WiFiService::start() {
 
-    if (retries > 0) {
+    if (isSetup()) {
       if (!isRunning()) {
         // try to connect
-        Log.verbose("Trying to connect WiFi ");
+        Log.verbose("Trying to connect to WiFi ");
         while (wifiMulti.run() != WL_CONNECTED && retries-- > 0) { // try to connect for given amount of retries
           Serial.print(F("."));
           delay(300);
@@ -32,7 +33,7 @@ namespace esp8266util {
         }
       }
     } else {
-      Log.error("Please provide appropriate wiFi settings.");
+      Log.error("Call setup() first.");
     }
 
     return isRunning();
@@ -45,10 +46,6 @@ namespace esp8266util {
     return isRunning();
   }
 
-  bool WiFiService::addAP(const char* ssid, const char *passphrase) {
-    return getWiFiMulti()->addAP(ssid, passphrase);
-  }
-
   ESP8266WiFiClass* WiFiService::getWiFi() {
     return &WiFi;
   }
@@ -57,13 +54,17 @@ namespace esp8266util {
     return &wifiMulti;
   }
 
-  void WiFiService::setupWiFi(uint8_t retries, bool autoConnect, bool persistent) {
+  bool WiFiService::setup(uint8_t retries, bool autoConnect, bool persistent) {
 
     this->retries = retries;
     // general settings
     WiFi.enableSTA(true);
     WiFi.setAutoConnect(true);
     WiFi.persistent(false);
+
+    setupDone = true;
+
+    return isSetup();
   }
 
   JsonObject& WiFiService::getDetails() {

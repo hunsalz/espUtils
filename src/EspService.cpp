@@ -2,12 +2,9 @@
 
 namespace esp8266util {
 
-  EspService::EspService() {
-  }
-
-  EspService::~EspService() {
-    stop();
-  }
+  bool EspService::isSetup() {
+		return true;
+	}
 
   bool EspService::isRunning() {
     return true;
@@ -15,9 +12,7 @@ namespace esp8266util {
 
   bool EspService::start() {
 
-    if (!isRunning()) {
-      // nothing to do
-    }
+    // nothing to do
 
     return isRunning();
   }
