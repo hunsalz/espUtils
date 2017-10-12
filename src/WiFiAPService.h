@@ -33,9 +33,6 @@ namespace esp8266util {
 
 			bool setup(const char* ssid, const char* passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
 
-			// TODO refactor MDNS (separate as single service?)
-			bool enableMDNS(const char* hostName, unsigned int port = 80, uint32_t ttl = 120);
-
 			JsonObject& getDetails();
 
 		private:

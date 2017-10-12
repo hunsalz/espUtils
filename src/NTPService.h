@@ -17,8 +17,6 @@ namespace esp8266util {
 
 	    ~NTPService();
 
-			bool isSetup();
-
 	    bool isRunning();
 
 	    bool start();

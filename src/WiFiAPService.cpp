@@ -18,7 +18,7 @@ namespace esp8266util {
 
     if (isSetup()) {
       WiFi.softAPdisconnect();
-      // TODO MDNS update
+      // TODO reflect changes to MDNS
       if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
         Log.notice(F("Soft AP established successful. IP address of AP is: %s" CR), WiFi.softAPIP().toString().c_str());
       } else {
@@ -57,24 +57,6 @@ namespace esp8266util {
     setupDone = true;
 
     return isSetup();
-  }
-
-  bool WiFiAPService::enableMDNS(const char* hostName, unsigned int port, uint32_t ttl) {
-
-    bool succeeded = false;
-    // add <domain name>.local (mDNS)
-    if (MDNS.begin(hostName, port, ttl)) {
-      // add service
-      MDNS.addService("http", "tcp", port);
-      succeeded = true;
-    }
-    if (succeeded) {
-      Log.notice(F("MDNS enabled to http://%s.local" CR), hostName);
-    } else {
-      Log.error(F("MDNS failed for http://%s.local" CR), hostName);
-    }
-
-    return succeeded;
   }
 
   JsonObject& WiFiAPService::getDetails() {

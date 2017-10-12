@@ -17,8 +17,6 @@ namespace esp8266util {
 
 		public:
 
-			bool isSetup();
-
 			bool isRunning();
 
 	    bool start();

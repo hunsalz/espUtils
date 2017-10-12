@@ -14,10 +14,6 @@ namespace esp8266util {
     stop();
   }
 
-  bool NTPService::isSetup() {
-    return true;
-  }
-
   bool NTPService::isRunning() {
     return running;
   }

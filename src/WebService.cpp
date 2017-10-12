@@ -10,10 +10,6 @@ namespace esp8266util {
     stop();
   }
 
-  bool WebService::isSetup() {
-    return true;
-  }
-
   bool WebService::isRunning() {
     return running;
   }

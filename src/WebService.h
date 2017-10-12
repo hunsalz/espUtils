@@ -25,8 +25,6 @@ namespace esp8266util {
 
       ~WebService();
 
-      bool isSetup();
-
       bool isRunning();
 
       bool start();

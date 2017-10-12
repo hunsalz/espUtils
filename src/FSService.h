@@ -14,8 +14,6 @@ namespace esp8266util {
 
 	    ~FSService();
 
-			bool isSetup();
-
 			bool isRunning();
 
 	    bool start();

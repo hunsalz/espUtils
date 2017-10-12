@@ -19,6 +19,7 @@ namespace esp8266util {
     if (isSetup()) {
       if (!isRunning()) {
         // try to connect
+        // TODO reflect changes to MDNS ?
         Log.verbose("Trying to connect to WiFi ");
         while (wifiMulti.run() != WL_CONNECTED && retries-- > 0) { // try to connect for given amount of retries
           Serial.print(F("."));
