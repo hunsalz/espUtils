@@ -23,7 +23,7 @@ namespace esp8266util {
 
       bool stop();
 
-      NTPClient getNTPClient();
+      NTPClient* getNTPClient();
 
       const char* getPoolServerName();
       int getTimeOffset();

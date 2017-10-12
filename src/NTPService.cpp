@@ -43,13 +43,13 @@ namespace esp8266util {
     return isRunning();
   }
 
-  NTPClient NTPService::getNTPClient() {
+  NTPClient* NTPService::getNTPClient() {
 
     if (!ntpClient.update()) {
       Log.error(F("Updating time with NTP server [%s] failed." CR), getPoolServerName());
     }
 
-    return ntpClient;
+    return &ntpClient;
   }
 
   const char* NTPService::getPoolServerName() {
@@ -71,8 +71,8 @@ namespace esp8266util {
     json[F("ntpServer")] = getPoolServerName();
     json[F("UTCOffset")] = getTimeOffset();
     json[F("updateInterval")] = getUpdateInterval();
-    json[F("time")] = getNTPClient().getFormattedTime();
-    json[F("timestamp")] = getNTPClient().getEpochTime();
+    json[F("time")] = getNTPClient()->getFormattedTime();
+    json[F("timestamp")] = getNTPClient()->getEpochTime();
 
     return json;
   }
