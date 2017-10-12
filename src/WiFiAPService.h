@@ -15,34 +15,34 @@ extern "C" {
 
 namespace esp8266util {
 
-	class WiFiAPService : public Service {
+  class WiFiAPService : public Service {
 
-		public:
+    public:
 
-	    ~WiFiAPService();
+      ~WiFiAPService();
 
-			bool isSetup();
+      bool isSetup();
 
-	    bool isRunning();
+      bool isRunning();
 
-	    bool start();
+      bool start();
 
-	    bool stop();
+      bool stop();
 
-			ESP8266WiFiClass *getWiFi();
+      ESP8266WiFiClass *getWiFi();
 
-			bool setup(const char* ssid, const char* passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
+      bool setup(const char* ssid, const char* passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
 
-			JsonObject& getDetails();
+      JsonObject& getDetails();
 
-		private:
+    private:
 
-			const char* ssid;
-			const char* passphrase;
-			int channel  = 1;
-			int ssid_hidden = 0;
-			int max_connection = 4;
+      const char* ssid;
+      const char* passphrase;
+      int channel  = 1;
+      int ssid_hidden = 0;
+      int max_connection = 4;
 
-			bool setupDone = false;
-	};
+      bool setupDone = false;
+  };
 }

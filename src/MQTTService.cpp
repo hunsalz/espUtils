@@ -7,8 +7,8 @@ namespace esp8266util {
   }
 
   bool MQTTService::isSetup() {
-		return setupDone;
-	}
+    return setupDone;
+  }
 
   bool MQTTService::isRunning() {
     return getMqttClient()->connected();

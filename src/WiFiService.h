@@ -9,34 +9,34 @@
 
 namespace esp8266util {
 
-	class WiFiService : public Service {
+  class WiFiService : public Service {
 
-		public:
+    public:
 
-	    ~WiFiService();
+      ~WiFiService();
 
-			bool isSetup();
+      bool isSetup();
 
-	    bool isRunning();
+      bool isRunning();
 
-	    bool start();
+      bool start();
 
-	    bool stop();
+      bool stop();
 
-			ESP8266WiFiClass* getWiFi();
+      ESP8266WiFiClass* getWiFi();
 
-			ESP8266WiFiMulti* getWiFiMulti();
+      ESP8266WiFiMulti* getWiFiMulti();
 
-			bool setup(uint8_t retries = 20, bool autoConnect = true, bool persistent = false);
+      bool setup(uint8_t retries = 20, bool autoConnect = true, bool persistent = false);
 
-			JsonObject& getDetails();
+      JsonObject& getDetails();
 
-	  private:
+    private:
 
-			ESP8266WiFiMulti wifiMulti;
+      ESP8266WiFiMulti wifiMulti;
 
-			byte retries = 0;
+      byte retries = 0;
 
-			bool setupDone = false;
-	};
+      bool setupDone = false;
+  };
 }

@@ -9,37 +9,37 @@
 
 namespace esp8266util {
 
-	class NTPService : public Service {
+  class NTPService : public Service {
 
-		public:
+    public:
 
-	    NTPService(const char* poolServerName, int timeOffset = 0, int updateInterval = 60000);
+      NTPService(const char* poolServerName, int timeOffset = 0, int updateInterval = 60000);
 
-	    ~NTPService();
+      ~NTPService();
 
-	    bool isRunning();
+      bool isRunning();
 
-	    bool start();
+      bool start();
 
-	    bool stop();
+      bool stop();
 
-	    NTPClient getNTPClient();
+      NTPClient getNTPClient();
 
-			const char* getPoolServerName();
-			int getTimeOffset();
-			int getUpdateInterval();
+      const char* getPoolServerName();
+      int getTimeOffset();
+      int getUpdateInterval();
 
-			JsonObject& getDetails();
+      JsonObject& getDetails();
 
-	  private:
+    private:
 
-	    WiFiUDP ntpUDP;
-	    NTPClient ntpClient;
+      WiFiUDP ntpUDP;
+      NTPClient ntpClient;
 
-			const char* poolServerName;
-			int timeOffset;
-			int updateInterval;
+      const char* poolServerName;
+      int timeOffset;
+      int updateInterval;
 
-	    bool running = false;
-	};
+      bool running = false;
+  };
 }

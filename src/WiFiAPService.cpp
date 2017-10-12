@@ -7,8 +7,8 @@ namespace esp8266util {
   }
 
   bool WiFiAPService::isSetup() {
-		return setupDone;
-	}
+    return setupDone;
+  }
 
   bool WiFiAPService::isRunning() {
     return WiFi.status();

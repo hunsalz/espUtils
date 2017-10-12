@@ -5,18 +5,18 @@
 
 namespace esp8266util {
 
-	class Driver {
+  class Driver {
 
-		public:
+    public:
 
-			// use this method to know if this driver is setup or not
-			virtual bool isSetup() = 0;
+      // use this method to know if this driver is setup or not
+      virtual bool isSetup() = 0;
 
-			static uint16_t getPWMRange();
+      static uint16_t getPWMRange();
 
-			static void setPWMRange(uint16_t pwmRange = 1023);
+      static void setPWMRange(uint16_t pwmRange = 1023);
 
-			// TODO add analogWriteFreq analog to pwm range
-			
-	};
+      // TODO add analogWriteFreq analog to pwm range
+
+  };
 }

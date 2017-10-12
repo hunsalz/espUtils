@@ -2,64 +2,64 @@
 
 namespace esp8266util {
 
-	bool MotorDriver::isSetup() {
-		return setupDone;
-	}
+  bool MotorDriver::isSetup() {
+    return setupDone;
+  }
 
-	bool MotorDriver::setup(uint8_t pinPWM, uint8_t pinDir) {
+  bool MotorDriver::setup(uint8_t pinPWM, uint8_t pinDir) {
 
-		this->pinPWM = pinPWM;
-		pinMode(pinPWM, OUTPUT);
-		this->pinDir = pinDir;
-		pinMode(pinDir, OUTPUT);
+    this->pinPWM = pinPWM;
+    pinMode(pinPWM, OUTPUT);
+    this->pinDir = pinDir;
+    pinMode(pinDir, OUTPUT);
 
-		Log.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d" CR), pinPWM, pinDir);
+    Log.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d" CR), pinPWM, pinDir);
 
-		setupDone = true;
+    setupDone = true;
 
-		return isSetup();
-	}
+    return isSetup();
+  }
 
-	int MotorDriver::getSpeed() {
-		return speed;
-	}
+  int MotorDriver::getSpeed() {
+    return speed;
+  }
 
-	uint8_t MotorDriver::getDirection() {
-		return getSpeed() > 0 ? 1 : 0;
-	}
+  uint8_t MotorDriver::getDirection() {
+    return getSpeed() > 0 ? 1 : 0;
+  }
 
-	void MotorDriver::setSpeed(int _speed) {
+  void MotorDriver::setSpeed(int _speed) {
 
-		speed = _speed;
+    speed = _speed;
 
-		// limit speed to max. PWM range +/-
-	  if (speed > getPWMRange()) {
-	    speed = getPWMRange();
-	  } else if (speed < -getPWMRange()) {
-			speed = -getPWMRange();
-		}
-		Log.verbose(F("Write speed = %d" CR), speed);
-	  // write speed to PWM
-	  analogWrite(pinPWM, abs(speed));
-	  // change direction accordingly to original signed speed to HIGH or LOW
-	  digitalWrite(pinDir, getDirection());
+    // limit speed to max. PWM range +/-
+    if (speed > getPWMRange()) {
+      speed = getPWMRange();
+    } else if (speed < -getPWMRange()) {
+      speed = -getPWMRange();
+    }
+    Log.verbose(F("Write speed = %d" CR), speed);
+    // write speed to PWM
+    analogWrite(pinPWM, abs(speed));
+    // change direction accordingly to original signed speed to HIGH or LOW
+    digitalWrite(pinDir, getDirection());
 
-		Log.verbose(F("Write speed = %d - DONE" CR), speed);
-	}
+    Log.verbose(F("Write speed = %d - DONE" CR), speed);
+  }
 
-	void MotorDriver::applySpeed(int speed) {
-	  setSpeed(getSpeed() + speed);
-	}
+  void MotorDriver::applySpeed(int speed) {
+    setSpeed(getSpeed() + speed);
+  }
 
-	JsonObject& MotorDriver::getDetails() {
+  JsonObject& MotorDriver::getDetails() {
 
-	  DynamicJsonBuffer jsonBuffer;
-	  JsonObject &json = jsonBuffer.createObject();
-	  json[F("pinPWM")] = pinPWM;
-	  json[F("pinDir")] = pinDir;
-	  json[F("pwmRange")] = getPWMRange();
-	  json[F("speed")] = getSpeed();
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject &json = jsonBuffer.createObject();
+    json[F("pinPWM")] = pinPWM;
+    json[F("pinDir")] = pinDir;
+    json[F("pwmRange")] = getPWMRange();
+    json[F("speed")] = getSpeed();
 
-	  return json;
-	}
+    return json;
+  }
 }

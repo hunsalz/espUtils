@@ -8,26 +8,26 @@
 
 namespace esp8266util {
 
-	class FSService : public Service {
+  class FSService : public Service {
 
-		public:
+    public:
 
-	    ~FSService();
+      ~FSService();
 
-			bool isRunning();
+      bool isRunning();
 
-	    bool start();
+      bool start();
 
-	    bool stop();
+      bool stop();
 
-			JsonObject& getStorageDetails();
+      JsonObject& getStorageDetails();
 
-	    JsonArray& getFileListing();
+      JsonArray& getFileListing();
 
-	    static String formatBytes(size_t bytes);
+      static String formatBytes(size_t bytes);
 
-		private:
+    private:
 
-			bool running = false;
-	};
+      bool running = false;
+  };
 }

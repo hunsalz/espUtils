@@ -7,8 +7,8 @@ namespace esp8266util {
   }
 
   bool MDNSService::isSetup() {
-		return setupDone;
-	}
+    return setupDone;
+  }
 
   bool MDNSService::isRunning() {
     return running;

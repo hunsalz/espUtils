@@ -7,30 +7,30 @@
 
 namespace esp8266util {
 
-	class MotorDriver : public Driver {
+  class MotorDriver : public Driver {
 
-		public:
+    public:
 
-			bool isSetup();
+      bool isSetup();
 
-			bool setup(uint8_t pinPWM, uint8_t pinDir);
+      bool setup(uint8_t pinPWM, uint8_t pinDir);
 
-			int getSpeed();
+      int getSpeed();
 
-			uint8_t getDirection();
+      uint8_t getDirection();
 
-			void setSpeed(int speed);
+      void setSpeed(int speed);
 
-	    void applySpeed(int speed);
+      void applySpeed(int speed);
 
-			JsonObject& getDetails();
+      JsonObject& getDetails();
 
-		private:
+    private:
 
-			uint8_t pinPWM;
-			uint8_t pinDir;
-			int speed;
+      uint8_t pinPWM;
+      uint8_t pinDir;
+      int speed;
 
-			bool setupDone = false;
-	};
+      bool setupDone = false;
+  };
 }

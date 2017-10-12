@@ -13,16 +13,16 @@ extern "C" {
 
 namespace esp8266util {
 
-	class EspService : public Service {
+  class EspService : public Service {
 
-		public:
+    public:
 
-			bool isRunning();
+      bool isRunning();
 
-	    bool start();
+      bool start();
 
-	    bool stop();
+      bool stop();
 
-			JsonObject& getDetails();
-	};
+      JsonObject& getDetails();
+  };
 }

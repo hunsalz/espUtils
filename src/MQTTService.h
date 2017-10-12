@@ -8,37 +8,37 @@
 
 namespace esp8266util {
 
-	class MQTTService : public Service {
+  class MQTTService : public Service {
 
-		public:
+    public:
 
-	    ~MQTTService();
+      ~MQTTService();
 
-			bool isSetup();
+      bool isSetup();
 
-	    bool isRunning();
+      bool isRunning();
 
-	    bool start();
+      bool start();
 
-	    bool stop();
+      bool stop();
 
-			AsyncMqttClient* getMqttClient();
+      AsyncMqttClient* getMqttClient();
 
-			bool setup(const char* server, uint16_t port);
+      bool setup(const char* server, uint16_t port);
 
-			const char* getHostName();
+      const char* getHostName();
 
-			uint16_t getPort();
+      uint16_t getPort();
 
-	    void publish(const char* topic, JsonObject& json);
+      void publish(const char* topic, JsonObject& json);
 
-	  private:
+    private:
 
-			AsyncMqttClient mqttClient;
+      AsyncMqttClient mqttClient;
 
-			const char* hostName;
-			uint16_t port;
+      const char* hostName;
+      uint16_t port;
 
-			bool setupDone = false;
-	};
+      bool setupDone = false;
+  };
 }
