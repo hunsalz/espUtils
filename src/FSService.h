@@ -20,6 +20,8 @@ namespace esp8266util {
 
       bool stop();
 
+      FS* getFS();
+
       JsonObject& getStorageDetails();
 
       JsonArray& getFileListing();

@@ -20,12 +20,13 @@ namespace esp8266util {
       // TODO make TLS available
       // webServer.onSslFileRequest(...)
       // example: https://github.com/me-no-dev/ESPAsyncWebServer/issues/75
-      // example cer: https://github.com/me-no-dev/ESPAsyncTCP/tree/master/ssl
+
 
       // add default 404 handler
       webServer.onNotFound([](AsyncWebServerRequest *request) {
         Log.verbose(F("HTTP 404 : [http://%s%s] not found." CR), request->host().c_str(), request->url().c_str());
-        request->send(404, F("Page not found."));
+        request->send(404, "text/plain", F("Page not found."));
+        // TODO retest
       });
       // add generic services resource
       on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) {
@@ -33,9 +34,31 @@ namespace esp8266util {
       });
       // start web server
       webServer.begin();
-    }
 
-    running = true;
+      // TODO SSL
+      // webServer.onSslFileRequest([](void * arg, const char *filename, uint8_t **buf) -> int {
+      //   File file = SPIFFS.open(filename, "r");
+      //   if (file) {
+      //     Serial.printf("SSL file found: %s\n", filename);
+      //     size_t size = file.size();
+      //     uint8_t * nbuf = (uint8_t*)malloc(size);
+      //     if (nbuf) {
+      //       size = file.read(nbuf, size);
+      //       file.close();
+      //       *buf = nbuf;
+      //       return size;
+      //     }
+      //     file.close();
+      //   } else {
+      //     Serial.printf("SSL file not found: %s\n", filename);
+      //   }
+      //   *buf = 0;
+      //   return 0;
+      // }, NULL);
+      // webServer.beginSecure("/server.cer", "/server.key", NULL);
+
+      running = true;
+    }
 
     Log.verbose("WebServer started.\n");
 

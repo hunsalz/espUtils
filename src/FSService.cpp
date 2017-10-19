@@ -15,6 +15,7 @@ namespace esp8266util {
     if (!isRunning()) {
       if (SPIFFS.begin()) {
         Log.verbose(F("File system mounted." CR));
+        running = true;
       } else {
         Log.warning(F("Mounting file system failed." CR));
       }
@@ -31,6 +32,10 @@ namespace esp8266util {
     }
 
     return isRunning();
+  }
+
+  FS* getFS() {
+    return &SPIFFS;
   }
 
   JsonObject& FSService::getStorageDetails() {
