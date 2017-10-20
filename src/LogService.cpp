@@ -65,24 +65,26 @@ namespace esp8266util {
   File LogService::getFile() {
 
     if (!file) {
-      if (SPIFFS.exists(path)) {
-        file = SPIFFS.open(path, "r+");
-        if (file) {
-          Log.verbose(F("Open file [%s] successful." CR), path.c_str());
-        } else {
-          Log.error(F("Open file [%s] failed." CR), path.c_str());
-        }
-      } else {
+      // if (SPIFFS.exists(path)) {
+      //   file = SPIFFS.open(path, "r+");
+      //   if (file) {
+      //     Log.verbose(F("Open file [%s] successful." CR), path.c_str());
+      //   } else {
+      //     Log.error(F("Open file [%s] failed." CR), path.c_str());
+      //   }
+      // } else {
         Log.verbose(F("Creating file [%s] ..." CR), path.c_str());
         file = SPIFFS.open(path, "w+");
         if (file) {
+          offset = new uint16_t;
           *offset = INITIAL_OFFSET;
+          Log.error(F("Write initial offset %d"), *offset);
           writeOffset();
           Log.error(F("Creating file [%s] successful." CR), path.c_str());
         } else {
           Log.error(F("Creating file [%s] failed." CR), path.c_str());
         }
-      }
+      //}
     }
 
     return file;
