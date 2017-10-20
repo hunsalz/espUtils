@@ -14,7 +14,7 @@ namespace esp8266util {
 
       String getPath();
 
-      int getOffset();
+      uint16_t getOffset();
 
       uint16_t getMaxBytes();
 
@@ -26,12 +26,14 @@ namespace esp8266util {
 
       String path;
       File file;
-      uint16_t* offset = NULL; // undefined by default
+      uint16_t offset;
       uint16_t maxBytes = 128; // default size 4KBytes
 
       const static int INITIAL_OFFSET = 11; // 10 digits and CR
 
-      void writeOffset();
+      uint16_t readOffset();
+
+      void writeOffset(uint16_t offset);
 
       File getFile();
   };

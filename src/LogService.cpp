@@ -14,22 +14,14 @@ namespace esp8266util {
     return path;
   }
 
-  int LogService::getOffset() {
+  uint16_t LogService::getOffset() {
 
-    // read offset from file if not set before (is null)
-    if (!offset) {
-      file.seek(0, SeekSet);
-      String line = file.readStringUntil('\n');
-      offset = new uint16_t;
-      *offset = line.toInt();
-      Log.verbose(F("Offset from file is [%d]." CR), *offset);
-    }
-    // if limit of max bytes reached, then rollover and override entries from beginning
-    if (*offset > getMaxBytes()) {
-      *offset = INITIAL_OFFSET;
+    // if limit of max bytes is reached, then rollover and override entries from beginning
+    if (offset > getMaxBytes()) {
+      offset = INITIAL_OFFSET;
     }
 
-    return *offset;
+    return offset;
   }
 
   uint16_t LogService::getMaxBytes() {
@@ -44,47 +36,60 @@ namespace esp8266util {
 
     File file = getFile();
     if (file) {
-      Log.verbose(F("Write log entry :: %s" CR), buffer);
+      Log.verbose(F("Write log entry: %s" CR), buffer);
       file.seek(getOffset(), SeekSet);
       file.printf(buffer);
-      *offset = *offset + strlen(buffer);
-      writeOffset();
+      writeOffset(offset + strlen(buffer));
     }
   }
 
-  void LogService::writeOffset() {
+  uint16_t LogService::readOffset() {
+
+    File file = getFile();
+    if (file) {
+      file.seek(0, SeekSet);
+      String line = file.readStringUntil('\n');
+      offset = line.toInt();
+      if (offset == 0) {
+        Log.error(F("File [%s] doesn't contain a valid offset value." CR), path.c_str());
+      } else {
+        Log.verbose(F("Offset from file is [%d]." CR), offset);
+      }
+    }
+  }
+
+  void LogService::writeOffset(uint16_t offset) {
 
     file.seek(0, SeekSet);
     char digits[10]; // 10 digits
-    sprintf(digits, "%-10d", *offset);
+    sprintf(digits, "%-10d", offset);
     Log.verbose(F("Write offset [%s]" CR), digits);
     file.printf("%s\n", digits);
     file.flush();
+    this->offset = offset;
   }
 
   File LogService::getFile() {
 
     if (!file) {
-      // if (SPIFFS.exists(path)) {
-      //   file = SPIFFS.open(path, "r+");
-      //   if (file) {
-      //     Log.verbose(F("Open file [%s] successful." CR), path.c_str());
-      //   } else {
-      //     Log.error(F("Open file [%s] failed." CR), path.c_str());
-      //   }
-      // } else {
+      if (SPIFFS.exists(path)) {
+        file = SPIFFS.open(path, "r+");
+        if (file) {
+          Log.verbose(F("Open file [%s] successful." CR), path.c_str());
+          readOffset();
+        } else {
+          Log.error(F("Open file [%s] failed." CR), path.c_str());
+        }
+      } else {
         Log.verbose(F("Creating file [%s] ..." CR), path.c_str());
         file = SPIFFS.open(path, "w+");
         if (file) {
-          offset = new uint16_t;
-          *offset = INITIAL_OFFSET;
-          Log.error(F("Write initial offset %d"), *offset);
-          writeOffset();
-          Log.error(F("Creating file [%s] successful." CR), path.c_str());
+          Log.error(F("Creating new file [%s] successful." CR), path.c_str());
+          writeOffset(INITIAL_OFFSET);
         } else {
-          Log.error(F("Creating file [%s] failed." CR), path.c_str());
+          Log.error(F("Creating new file [%s] failed." CR), path.c_str());
         }
-      //}
+      }
     }
 
     return file;
