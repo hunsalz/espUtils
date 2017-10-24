@@ -1,5 +1,9 @@
 /*
-  LogService enables a rolling log file.
+  LogService enables a rolling log file that's limited by file size in bytes.
+
+  File constraints:
+  - 1st line determines offset value of current log line. If not set DEFAULT_OFFSET is assumed
+  - 2nd line determines line length of each log entry. LogService support only one sector, so that every line claims the same amount of characters.
 */
 
 #pragma once
@@ -21,13 +25,15 @@ namespace esp8266util {
 
       uint16_t getOffset();
 
-      uint16_t getMaxBytes();
+      uint16_t getLineLength();
 
-      void setMaxBytes(uint16_t maxBytes);
+      uint16_t getMaxFileSize();
 
-      void write(char* buffer);
+      void setMaxFileSize(uint16_t bytes);
 
-      void write(String str);
+      void write(char* buffer, bool verbose = false);
+
+      void write(String str, bool verbose = false);
 
       StreamString getLog();
 
@@ -36,14 +42,19 @@ namespace esp8266util {
       String path;
       File file;
       uint16_t offset;
+      uint16_t lineLength;
       uint16_t maxBytes = 512; // default size 4KBytes
 
-      const static int INITIAL_OFFSET = 11; // 10 digits and CR
+      const static int DEFAULT_OFFSET = 11; // 10 digits and CR as default value
 
       uint16_t readOffset();
 
       void writeOffset(uint16_t offset);
 
+      uint16_t readLineLength();
+
       File getFile();
+
+      void init();
   };
 }
