@@ -51,23 +51,30 @@ namespace esp8266util {
     File file = getFile();
     if (file) {
       // ensure that every line has the same length
-      uint16_t lineLength = getLineLength();
+      lineLength = getLineLength();
+      // if lineLength is undefined (<= 0) determine lineLength by length of char buffer + CR
+      if (lineLength <= 0) {
+        lineLength = strlen(buffer) + 1;
+      }
+      // create a character entry with a fixed line length
       char entry[lineLength];
-      // pad entry with spaces if buffer is smaller then line length -1 (one character reserved for CR)
+      // copy buffer into the fixed entry, so that ...
+      // ... a smaller buffer is filled up by padding empty spaces and keep one character for CR
       if (strlen(buffer) < lineLength) {
         sprintf(entry, "%-*s", lineLength - 1, buffer);
-      // otherwise truncate buffer to expected line length -1 (one character reserved for CR)
+      // ... a bigger buffer is truncated to fit and keep one character for CR
       } else {
         sprintf(entry, "%.*s", lineLength - 1, buffer);
       }
-      // write log entry at specific position
-      file.seek(getOffset(), SeekSet);
+      // write log entry at next offset position
+      uint16_t offset = getOffset() + 1;
+      file.seek(offset, SeekSet);
       file.println(entry);
-      // persist new offset position
-      writeOffset(getOffset() + strlen(entry) + 1);
+      // persist new offset position in file
+      writeOffset(offset + lineLength);
       // write to serial output in verbose mode
       if (verbose) {
-        Log.verbose(F("[%s][length=%d]" CR), entry, (strlen(entry) + 1));
+        Log.verbose(F("[%s][length=%d]" CR), entry, lineLength);
       }
     }
   }
@@ -124,7 +131,7 @@ namespace esp8266util {
     file.seek(0, SeekSet);
     char digits[10]; // max offset value consists of 10 digits
     sprintf(digits, "%-10d", offset);
-    file.printf("%s\n", digits);
+    file.println(digits);
     file.flush();
     this->offset = offset;
   }
@@ -134,9 +141,9 @@ namespace esp8266util {
     uint16_t lineLength = 0;
     File file = getFile();
     if (file) {
-      file.seek(getOffset(), SeekSet);
+      file.seek(DEFAULT_OFFSET, SeekSet);
       String line = file.readStringUntil('\n');
-      lineLength = line.length() + 1;
+      lineLength = line.length();
     }
 
     return lineLength;
@@ -171,11 +178,11 @@ namespace esp8266util {
         if (file) {
           Log.error(F("Creating new file [%s] successful." CR), path.c_str());
           writeOffset(DEFAULT_OFFSET);
-          lineLength = 0; // default unset
+          lineLength = 0; // unset by default
         } else {
           Log.error(F("Creating new file [%s] failed." CR), path.c_str());
         }
-      }
+      //}
     }
   }
 }

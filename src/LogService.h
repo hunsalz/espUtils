@@ -25,6 +25,9 @@ namespace esp8266util {
 
       uint16_t getOffset();
 
+      /*
+        Returns fixed line length. Returns 0 if no log entry is available.
+       */
       uint16_t getLineLength();
 
       uint16_t getMaxFileSize();
