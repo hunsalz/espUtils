@@ -55,6 +55,7 @@ namespace esp8266util {
     return json;
   }
 
+  // TODO reflect the hierarchy
   JsonArray& FSService::getFileListing() {
 
     DynamicJsonBuffer jsonBuffer;
