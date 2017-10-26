@@ -46,41 +46,42 @@ namespace esp8266util {
     this->maxBytes = bytes;
   }
 
-  void LogService::write(char* buffer, bool verbose) {
+  void LogService::write(char* entry, bool verbose) {
 
     File file = getFile();
     if (file) {
       // ensure that every line has the same length
       lineLength = getLineLength();
-      // if lineLength is undefined (<= 0) determine lineLength by length of char buffer + CR
+      // if lineLength is undefined (<= 0) determine lineLength by length of entry + CR
       if (lineLength <= 0) {
-        lineLength = strlen(buffer) + 1;
+        lineLength = strlen(entry) + 1;
       }
-      // create a character entry with a fixed line length
-      char entry[lineLength];
-      // copy buffer into the fixed entry, so that ...
-      // ... a smaller buffer is filled up by padding empty spaces and keep one character for CR
-      if (strlen(buffer) < lineLength) {
-        sprintf(entry, "%-*s", lineLength - 1, buffer);
-      // ... a bigger buffer is truncated to fit and keep one character for CR
+      // create a character buffer with a fixed line length
+      char buffer[lineLength];
+      // copy entry into the fixed buffer, so that ...
+      // ... a smaller entry is filled up by padding empty spaces and keep one character for CR
+      if (strlen(entry) < lineLength) {
+        sprintf(buffer, "%-*s", lineLength - 1, entry);
+      // ... a bigger entry is truncated to fit and keep one character for CR
       } else {
-        sprintf(entry, "%.*s", lineLength - 1, buffer);
+        sprintf(buffer, "%.*s", lineLength - 1, entry);
       }
-      // write log entry at next offset position
+      // write log buffer at next offset position
       uint16_t offset = getOffset() + 1;
       file.seek(offset, SeekSet);
-      file.println(entry);
+      // write buffer with CR
+      file.println(buffer);
       // persist new offset position in file
       writeOffset(offset + lineLength);
       // write to serial output in verbose mode
       if (verbose) {
-        Log.verbose(F("[%s][length=%d]" CR), entry, lineLength);
+        Log.verbose(F("[%s][length=%d][offset=%d]" CR), entry, getLineLength(), getOffset());
       }
     }
   }
 
-  void LogService::write(String str, bool verbose) {
-    write(str.c_str(), verbose);
+  void LogService::write(String entry, bool verbose) {
+    write(entry.c_str(), verbose);
   }
 
   StreamString LogService::getLog() {
@@ -88,20 +89,20 @@ namespace esp8266util {
     StreamString stream;
     String line;
     uint16_t offset = readOffset();
-    // start reading from offset position until lines reached
+    // start reading from offset position until EoF reached
     file.seek(offset, SeekSet);
     Log.verbose(F("Read file from offset [%d]." CR), offset);
     while (file.available()) {
       line = file.readStringUntil('\n');
-      stream.println(line);
+      stream.print(line);
     }
-    // continue reading from inital offset until lines reached or offset reached
+    // continue reading from inital offset until EoF or offset reached
     file.seek(DEFAULT_OFFSET, SeekSet);
     int bytes = DEFAULT_OFFSET;
     while (file.available() && bytes < offset) {
       line = file.readStringUntil('\n');
       bytes += line.length() + 1;
-      stream.println(line);
+      stream.print(line);
     }
     stream.flush();
 
@@ -118,8 +119,6 @@ namespace esp8266util {
       offset = line.toInt();
       if (offset == 0) {
         Log.error(F("File [%s] doesn't contain a valid offset value." CR), path.c_str());
-      } else {
-        Log.verbose(F("Offset from file is [%d]." CR), offset);
       }
     }
 
@@ -182,7 +181,7 @@ namespace esp8266util {
         } else {
           Log.error(F("Creating new file [%s] failed." CR), path.c_str());
         }
-      //}
+      }
     }
   }
 }

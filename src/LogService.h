@@ -21,23 +21,44 @@ namespace esp8266util {
       LogService(String path);
       ~LogService();
 
+      /*
+       Return log file path.
+       */
       String getPath();
 
+      /*
+       Return offset of next log entry.
+       */
       uint16_t getOffset();
 
       /*
-        Returns fixed line length. Returns 0 if no log entry is available.
+        Return fixed line length. Returns 0 if no log entry is available.
        */
       uint16_t getLineLength();
 
+      /*
+       Return max file size in bytes.
+       */
       uint16_t getMaxFileSize();
 
+      /*
+       Set max file size in bytes.
+       */
       void setMaxFileSize(uint16_t bytes);
 
-      void write(char* buffer, bool verbose = false);
+      /*
+       Write log entry.
+       */
+      void write(char* entry, bool verbose = false);
 
-      void write(String str, bool verbose = false);
+      /*
+       Write log entry.
+       */
+      void write(String entry, bool verbose = false);
 
+      /*
+       Return log in chronological order
+       */
       StreamString getLog();
 
     private:
