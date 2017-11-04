@@ -90,22 +90,22 @@ namespace esp8266util {
 
   void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
 
-    int length = json.measureLength() + 1;
-    char content[length];
-    json.printTo(content, length);
-    Log.verbose(F("Send response: %s." CR), content);
-
-    request->send(new AsyncBasicResponse(200, "text/json", String(content)));
+    StreamString stream;
+    json.prettyPrintTo(stream);
+    send(request, stream);
   }
 
   void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
 
-    int length = json.measureLength() + 1;
-    char content[length];
-    json.printTo(content, length);
-    Log.verbose(F("Send response: %s." CR), content);
+    StreamString stream;
+    json.prettyPrintTo(stream);
+    send(request, stream);
+  }
 
-    request->send(new AsyncBasicResponse(200, "text/json", String(content)));
+  void WebService::send(AsyncWebServerRequest *request, StreamString stream) {
+  
+    request->send(new AsyncBasicResponse(200, "text/json", stream));
+    Log.verbose(F("Send response: %s." CR), stream.c_str());
   }
 
   JsonArray& WebService::getDetails() {

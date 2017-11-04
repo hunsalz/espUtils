@@ -11,6 +11,7 @@
 #include <ESPAsyncTCP.h> // https://github.com/me-no-dev/ESPAsyncTCP/blob/master/src/ESPAsyncTCP.h
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+#include <StreamString.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 
 #include "Service.h"
 #include "WebSocketListener.h"
@@ -38,6 +39,8 @@ namespace esp8266util {
       void send(AsyncWebServerRequest *request, JsonObject &json);
 
       void send(AsyncWebServerRequest *request, JsonArray &json);
+
+      void send(AsyncWebServerRequest *request, StreamString stream);
 
       JsonArray& getDetails();
 
