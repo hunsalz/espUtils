@@ -118,7 +118,7 @@ namespace esp8266util {
       String line = file.readStringUntil('\n');
       offset = line.toInt();
       if (offset == 0) {
-        Log.error(F("File [%s] doesn't contain a valid offset value." CR), path.c_str());
+        Log.error(F("File [%s] doesn't contain a valid offset value." CR), getPath().c_str());
       }
     }
 
@@ -162,24 +162,24 @@ namespace esp8266util {
 
     if (!file) {
       // open existing file and set file preferences
-      if (SPIFFS.exists(path)) {
-        file = SPIFFS.open(path, "r+");
+      if (SPIFFS.exists(getPath())) {
+        file = SPIFFS.open(getPath(), "r+");
         if (file) {
-          Log.verbose(F("Open file [%s] successful." CR), path.c_str());
+          Log.verbose(F("Open file [%s] successful." CR), getPath().c_str());
           offset = readOffset();
           lineLength = readLineLength();
         } else {
-          Log.error(F("Open file [%s] failed." CR), path.c_str());
+          Log.error(F("Open file [%s] failed." CR), getPath().c_str());
         }
       // create a new file and set default file preferences
       } else {
-        file = SPIFFS.open(path, "w+");
+        file = SPIFFS.open(getPath(), "w+");
         if (file) {
-          Log.error(F("Creating new file [%s] successful." CR), path.c_str());
+          Log.error(F("Creating new file [%s] successful." CR), getPath().c_str());
           writeOffset(DEFAULT_OFFSET);
           lineLength = 0; // unset by default
         } else {
-          Log.error(F("Creating new file [%s] failed." CR), path.c_str());
+          Log.error(F("Creating new file [%s] failed." CR), getPath().c_str());
         }
       }
     }
