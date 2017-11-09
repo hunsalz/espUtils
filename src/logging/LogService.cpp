@@ -3,7 +3,7 @@
 namespace esp8266util {
 
   LogService::LogService(String path) {
-    this->path = path;
+    _path = path;
   }
 
   LogService::~LogService() {
@@ -11,60 +11,58 @@ namespace esp8266util {
   }
 
   String LogService::getPath() {
-    return path;
+    return _path;
   }
 
   uint16_t LogService::getOffset() {
 
-    // if file is null call init first
-    if (file) {
+    // if _file is null call init first
+    if (_file) {
       init();
     }
     // if limit of max bytes is reached, then rollover and override entries from beginning
-    if (offset > getMaxFileSize()) {
-      offset = DEFAULT_OFFSET;
+    if (_offset > getMaxFileSize()) {
+      _offset = DEFAULT_OFFSET;
     }
 
-    return offset;
+    return _offset;
   }
 
   uint16_t LogService::getLineLength() {
 
-    // if file is null call init first
-    if (file) {
+    // if _file is null call init first
+    if (_file) {
       init();
     }
 
-    return lineLength;
+    return _lineLength;
   }
 
   uint16_t LogService::getMaxFileSize() {
-    return maxBytes;
+    return _maxBytes;
   }
 
   void LogService::setMaxFileSize(uint16_t bytes) {
-    this->maxBytes = bytes;
+    _maxBytes = bytes;
   }
 
   void LogService::write(char* entry, bool verbose) {
 
     File file = getFile();
     if (file) {
-      // ensure that every line has the same length
-      lineLength = getLineLength();
-      // if lineLength is undefined (<= 0) determine lineLength by length of entry + CR
-      if (lineLength <= 0) {
-        lineLength = strlen(entry) + 1;
+      // if _lineLength is undefined (<= 0) set _lineLength by length of current entry + CR
+      if (getLineLength() <= 0) {
+        _lineLength = strlen(entry) + 1;
       }
       // create a character buffer with a fixed line length
-      char buffer[lineLength];
+      char buffer[getLineLength()];
       // copy entry into the fixed buffer, so that ...
       // ... a smaller entry is filled up by padding empty spaces and keep one character for CR
-      if (strlen(entry) < lineLength) {
-        sprintf(buffer, "%-*s", lineLength - 1, entry);
+      if (strlen(entry) < getLineLength()) {
+        sprintf(buffer, "%-*s", getLineLength() - 1, entry);
       // ... a bigger entry is truncated to fit and keep one character for CR
       } else {
-        sprintf(buffer, "%.*s", lineLength - 1, entry);
+        sprintf(buffer, "%.*s", getLineLength() - 1, entry);
       }
       // write log buffer at next offset position
       uint16_t offset = getOffset() + 1;
@@ -72,7 +70,7 @@ namespace esp8266util {
       // write buffer with CR
       file.println(buffer);
       // persist new offset position in file
-      writeOffset(offset + lineLength);
+      writeOffset(offset + getLineLength());
       // write to serial output in verbose mode
       if (verbose) {
         Log.verbose(F("[%s][length=%d][offset=%d]" CR), entry, getLineLength(), getOffset());
@@ -89,22 +87,24 @@ namespace esp8266util {
     StreamString stream;
     String line;
     uint16_t offset = readOffset();
-    // start reading from offset position until EoF reached
-    file.seek(offset, SeekSet);
-    Log.verbose(F("Read file from offset [%d]." CR), offset);
-    while (file.available()) {
-      line = file.readStringUntil('\n');
-      stream.print(line);
+    File file = getFile();
+    if (file) {
+      // start reading from offset position until EoF reached
+      file.seek(offset, SeekSet);
+      while (file.available()) {
+        line = file.readStringUntil('\n');
+        stream.print(line);
+      }
+      // continue reading from inital offset until EoF or offset reached
+      file.seek(DEFAULT_OFFSET, SeekSet);
+      int bytes = DEFAULT_OFFSET;
+      while (file.available() && bytes < offset) {
+        line = file.readStringUntil('\n');
+        bytes += line.length() + 1;
+        stream.print(line);
+      }
+      stream.flush();
     }
-    // continue reading from inital offset until EoF or offset reached
-    file.seek(DEFAULT_OFFSET, SeekSet);
-    int bytes = DEFAULT_OFFSET;
-    while (file.available() && bytes < offset) {
-      line = file.readStringUntil('\n');
-      bytes += line.length() + 1;
-      stream.print(line);
-    }
-    stream.flush();
 
     return stream;
   }
@@ -127,12 +127,15 @@ namespace esp8266util {
 
   void LogService::writeOffset(uint16_t offset) {
 
-    file.seek(0, SeekSet);
-    char digits[10]; // max offset value consists of 10 digits
-    sprintf(digits, "%-10d", offset);
-    file.println(digits);
-    file.flush();
-    this->offset = offset;
+    File file = getFile();
+    if (file) {
+      file.seek(0, SeekSet);
+      char digits[10]; // max offset value consists of 10 digits
+      sprintf(digits, "%-10d", offset);
+      file.println(digits);
+      file.flush();
+      _offset = offset;
+    }
   }
 
   uint16_t LogService::readLineLength() {
@@ -151,33 +154,33 @@ namespace esp8266util {
   File LogService::getFile() {
 
     // if file is null call init first
-    if (!file) {
+    if (!_file) {
       init();
     }
 
-    return file;
+    return _file;
   }
 
   void LogService::init() {
 
-    if (!file) {
+    if (!_file) {
       // open existing file and set file preferences
       if (SPIFFS.exists(getPath())) {
-        file = SPIFFS.open(getPath(), "r+");
-        if (file) {
+        _file = SPIFFS.open(getPath(), "r+");
+        if (_file) {
           Log.verbose(F("Open file [%s] successful." CR), getPath().c_str());
-          offset = readOffset();
-          lineLength = readLineLength();
+          _offset = readOffset();
+          _lineLength = readLineLength();
         } else {
           Log.error(F("Open file [%s] failed." CR), getPath().c_str());
         }
       // create a new file and set default file preferences
       } else {
-        file = SPIFFS.open(getPath(), "w+");
-        if (file) {
+        _file = SPIFFS.open(getPath(), "w+");
+        if (_file) {
           Log.error(F("Creating new file [%s] successful." CR), getPath().c_str());
           writeOffset(DEFAULT_OFFSET);
-          lineLength = 0; // unset by default
+          _lineLength = 0; // unset by default
         } else {
           Log.error(F("Creating new file [%s] failed." CR), getPath().c_str());
         }

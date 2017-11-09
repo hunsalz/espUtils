@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
+#include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 #include <StreamString.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 
 namespace esp8266util {
@@ -63,11 +63,11 @@ namespace esp8266util {
 
     private:
 
-      String path;
-      File file;
-      uint16_t offset;
-      uint16_t lineLength;
-      uint16_t maxBytes = 512; // default size 4KBytes
+      String _path;
+      File _file;
+      uint16_t _offset;
+      uint16_t _lineLength;
+      uint16_t _maxBytes = 512; // default size 4KBytes
 
       const static int DEFAULT_OFFSET = 11; // 10 digits and CR as default value
 
