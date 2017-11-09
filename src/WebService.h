@@ -50,10 +50,10 @@ namespace esp8266util {
 
     private:
 
-      AsyncWebServer webServer;
+      AsyncWebServer _webServer;
 
-      std::vector<String> services;
+      std::vector<String> _services;
 
-      bool running = false;
+      bool _running = false;
   };
 }
