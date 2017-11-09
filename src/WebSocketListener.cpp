@@ -3,27 +3,27 @@
 namespace esp8266util {
 
   void WebSocketListener::onConnect(WSEventHandler handler) {
-    connectWSEventHandler = handler;
+    _connectWSEventHandler = handler;
   }
 
   void WebSocketListener::onDisconnect(WSEventHandler handler) {
-    disconnectWSEventHandler = handler;
+    _disconnectWSEventHandler = handler;
   }
 
   void WebSocketListener::onError(WSErrorHandler handler) {
-    errorWSEventHandler = handler;
+    _errorWSEventHandler = handler;
   }
 
   void WebSocketListener::onPong(WSEventHandler handler) {
-    pongWSEventHandler = handler;
+    _pongWSEventHandler = handler;
   }
 
   void WebSocketListener::onTextMessage(WSEventHandler handler) {
-    textWSEventHandler = handler;
+    _textWSEventHandler = handler;
   }
 
   void WebSocketListener::onBinaryMessage(WSEventHandler handler) {
-    binaryWSEventHandler = handler;
+    _binaryWSEventHandler = handler;
   }
 
   void WebSocketListener::onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
@@ -66,8 +66,8 @@ namespace esp8266util {
 
   void WebSocketListener::handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
-    if (connectWSEventHandler != NULL) {
-      connectWSEventHandler(ws, client, type, info, data, len);
+    if (_connectWSEventHandler != NULL) {
+      _connectWSEventHandler(ws, client, type, info, data, len);
     } else {
       Log.verbose(F("ws[%s][%u] connected" CR), ws->url(), client->id());
     }
@@ -75,8 +75,8 @@ namespace esp8266util {
 
   void WebSocketListener::handleDisconnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
-    if (disconnectWSEventHandler != NULL) {
-      disconnectWSEventHandler(ws, client, type, info, data, len);
+    if (_disconnectWSEventHandler != NULL) {
+      _disconnectWSEventHandler(ws, client, type, info, data, len);
     } else {
       Log.verbose(F("ws[%s][%u] disconnected: %u" CR), ws->url(), client->id());
     }
@@ -84,8 +84,8 @@ namespace esp8266util {
 
   void WebSocketListener::handleErrorEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, uint16_t *arg, uint8_t *data, size_t len) {
 
-    if (errorWSEventHandler != NULL) {
-      errorWSEventHandler(ws, client, type, arg, data, len);
+    if (_errorWSEventHandler != NULL) {
+      _errorWSEventHandler(ws, client, type, arg, data, len);
     } else {
       Log.error(F("ws[%s][%u] error(%u): %s" CR), ws->url(), client->id(), arg, (char*)data);
     }
@@ -93,8 +93,8 @@ namespace esp8266util {
 
   void WebSocketListener::handlePongEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
-    if (pongWSEventHandler != NULL) {
-      pongWSEventHandler(ws, client, type, info, data, len);
+    if (_pongWSEventHandler != NULL) {
+      _pongWSEventHandler(ws, client, type, info, data, len);
     } else {
       Log.verbose(F("ws[%s][%u] pong[%u]: %s" CR), ws->url(), client->id(), len, (len)?(char*)data:"");
     }
@@ -102,12 +102,12 @@ namespace esp8266util {
 
   void WebSocketListener::handleTextMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
-    if (textWSEventHandler != NULL) {
+    if (_textWSEventHandler != NULL) {
       data[len] = 0;
       // TODO get Log.verbose(...) running
       //Log.verbose(F("ws[%s][%u] received : %s\n" CR), ws->url(), client->id(), (char*)data);
 
-      textWSEventHandler(ws, client, type, info, data, len);
+      _textWSEventHandler(ws, client, type, info, data, len);
     } else {
       Serial.printf("V: ws[%s][%u] received : %s\n", ws->url(), client->id(), (char*)data);
       // TODO Log.verbose(F("ws[%s][%u] received : %s\n" CR), ws->url(), client->id(), (char*)data); results in fatal error
@@ -116,8 +116,8 @@ namespace esp8266util {
 
   void WebSocketListener::handleBinaryMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
-    if (binaryWSEventHandler != NULL) {
-      binaryWSEventHandler(ws, client, type, info, data, len);
+    if (_binaryWSEventHandler != NULL) {
+      _binaryWSEventHandler(ws, client, type, info, data, len);
     } else {
       Log.verbose(F("ws[%s][%u] received : %d bytes" CR), ws->url(), client->id(), len);
     }

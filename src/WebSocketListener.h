@@ -24,12 +24,12 @@ namespace esp8266util {
 
     private:
 
-      WSEventHandler connectWSEventHandler;
-      WSEventHandler disconnectWSEventHandler;
-      WSErrorHandler errorWSEventHandler;
-      WSEventHandler pongWSEventHandler;
-      WSEventHandler textWSEventHandler;
-      WSEventHandler binaryWSEventHandler;
+      WSEventHandler _connectWSEventHandler;
+      WSEventHandler _disconnectWSEventHandler;
+      WSErrorHandler _errorWSEventHandler;
+      WSEventHandler _pongWSEventHandler;
+      WSEventHandler _textWSEventHandler;
+      WSEventHandler _binaryWSEventHandler;
 
       void handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len);
       void handleDisconnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len);
