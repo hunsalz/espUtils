@@ -21,19 +21,17 @@ namespace esp8266util {
       // webServer.onSslFileRequest(...)
       // example: https://github.com/me-no-dev/ESPAsyncWebServer/issues/75
 
+      // add generic services registry resource
+      on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) {
+        send(request, getDetails());
+      });
 
       // add default 404 handler
-      webServer.onNotFound([](AsyncWebServerRequest *request) {
+      webServer.onNotFound([this](AsyncWebServerRequest *request) {
         Log.verbose(F("HTTP 404 : [http://%s%s] not found." CR), request->host().c_str(), request->url().c_str());
         request->send(404, "text/plain", F("Page not found."));
         // TODO retest
       });
-      // add generic services resource
-      on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) {
-        send(request, getDetails());
-      });
-      // start web server
-      webServer.begin();
 
       // TODO SSL
       // webServer.onSslFileRequest([](void * arg, const char *filename, uint8_t **buf) -> int {
@@ -57,6 +55,9 @@ namespace esp8266util {
       // }, NULL);
       // webServer.beginSecure("/server.cer", "/server.key", NULL);
 
+      // start web server
+      webServer.begin();
+
       running = true;
     }
 
@@ -79,15 +80,26 @@ namespace esp8266util {
   }
 
   AsyncCallbackWebHandler& WebService::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest) {
-
-    // add uri to service listing
-    services.push_back(String(uri));
-
-    webServer.on(uri, method, onRequest);
+    
+    // (Caution) overwrites & disables "catchAllHandler" for onRequestBody(...) in ESPAsyncWebServer; maybe rework again
+    on(uri, method, onRequest, 
+      [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {},
+      [](AsyncWebServerRequest *request, const String& filename, size_t index, uint8_t *data, size_t len, bool final) {});
   }
 
-  // TODO JSON -> char[]*
-
+  AsyncCallbackWebHandler& WebService::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody) {
+    on(uri, method, onRequest, onBody,
+      [](AsyncWebServerRequest *request, const String& filename, size_t index, uint8_t *data, size_t len, bool final) {});
+  }
+  
+  AsyncCallbackWebHandler& WebService::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload) {
+    
+    // add uri to service listing
+    services.push_back(String(uri));
+        
+    webServer.on(uri, method, onRequest, onUpload, onBody);
+  }
+  
   void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
 
     StreamString stream;

@@ -36,6 +36,10 @@ namespace esp8266util {
 
       AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
 
+      AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody);
+
+      AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload);
+
       void send(AsyncWebServerRequest *request, JsonObject &json);
 
       void send(AsyncWebServerRequest *request, JsonArray &json);
