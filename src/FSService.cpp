@@ -2,6 +2,8 @@
 
 namespace esp8266util {
 
+  FSService::FSService() {}
+
   FSService::~FSService() {
     stop();
   }
@@ -34,7 +36,7 @@ namespace esp8266util {
     return isRunning();
   }
 
-  FS* getFS() {
+  FS* FSService::getFS() {
     return &SPIFFS;
   }
 
@@ -63,8 +65,8 @@ namespace esp8266util {
     // enumerate files
     Dir dir = SPIFFS.openDir("/");
     while (dir.next()) {
-      String name = String(dir.fileName());
-      String size = FSService::formatBytes(dir.fileSize());
+      String name = dir.fileName();
+      String size = formatBytes(dir.fileSize());
       JsonObject& entry = json.createNestedObject();
       entry[F("name")] = name;
       entry[F("size")] = size;
@@ -86,4 +88,13 @@ namespace esp8266util {
       return String(bytes/1024.0/1024.0/1024.0) + "GB";
     }
   }
+
+  FSService FSService::getInstance() {
+    
+    static FSService fsService;
+    
+    return fsService;
+  }
+
+  FSService FILESYSTEM = FSService::getInstance();
 }

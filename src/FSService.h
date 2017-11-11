@@ -28,8 +28,14 @@ namespace esp8266util {
 
       static String formatBytes(size_t bytes);
 
+      static FSService getInstance();
+
     private:
+
+      FSService();
 
       bool running = false;
   };
+
+  extern FSService FILESYSTEM;
 }
