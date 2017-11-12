@@ -4,6 +4,8 @@ namespace esp8266util {
 
   WebService::WebService(uint16_t port) :
     _webServer(port) {
+
+    _port = port;
   }
 
   WebService::~WebService() {
@@ -79,6 +81,10 @@ namespace esp8266util {
     return &_webServer;
   }
 
+  uint8_t WebService::getPort() {
+    return _port;
+  }
+
   AsyncCallbackWebHandler& WebService::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest) {
     
     // (Caution) overwrites & disables "catchAllHandler" for onRequestBody(...) in ESPAsyncWebServer; maybe rework again
@@ -109,9 +115,12 @@ namespace esp8266util {
 
   void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
 
-    StreamString stream;
-    json.prettyPrintTo(stream);
-    send(request, stream);
+    // TODO verify why json.prettyPrintTo(stream); causes error for JsonArray
+    int length = json.measureLength() + 1;
+    char content[length];
+    json.printTo(content, length);
+    Log.verbose(F("Send response: %s." CR), content);
+    request->send(new AsyncBasicResponse(200, "text/json", String(content)));
   }
 
   void WebService::send(AsyncWebServerRequest *request, StreamString stream) {

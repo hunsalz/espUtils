@@ -34,6 +34,8 @@ namespace esp8266util {
 
       AsyncWebServer* getWebServer();
 
+      uint8_t getPort();
+
       AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
 
       AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody);
@@ -51,6 +53,8 @@ namespace esp8266util {
     private:
 
       AsyncWebServer _webServer;
+
+      uint8_t _port;
 
       std::vector<String> _services;
 
