@@ -2,16 +2,16 @@
 
 namespace esp8266util {
 
-  static uint16_t pwmRange = 1023;
+  static uint16_t PWM_RANGE = 1023;
 
   uint16_t Driver::getPWMRange() {
-    return pwmRange;
+    return PWM_RANGE;
   }
 
-  void Driver::setPWMRange(uint16_t _pwmRange) {
+  void Driver::setPWMRange(uint16_t pwmRange) {
 
-    pwmRange = _pwmRange;
-    analogWriteRange(pwmRange);
-    Log.verbose(F("Set PWM range to %d" CR), pwmRange);
+    PWM_RANGE = pwmRange;
+    analogWriteRange(PWM_RANGE);
+    Log.verbose(F("Set PWM range to %d" CR), PWM_RANGE);
   }
 }

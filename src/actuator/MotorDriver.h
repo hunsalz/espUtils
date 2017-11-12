@@ -27,10 +27,10 @@ namespace esp8266util {
 
     private:
 
-      uint8_t pinPWM;
-      uint8_t pinDir;
-      int speed;
+      uint8_t _pinPWM;
+      uint8_t _pinDir;
+      int _speed;
 
-      bool setupDone = false;
+      bool _setupDone = false;
   };
 }
