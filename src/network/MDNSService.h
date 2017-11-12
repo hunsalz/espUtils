@@ -14,7 +14,7 @@ namespace esp8266util {
 
 	    ~MDNSService();
 
-			bool isSetup();
+		bool isSetup();
 
 	    bool isRunning();
 
@@ -22,21 +22,19 @@ namespace esp8266util {
 
 	    bool stop();
 
-			MDNSResponder* getMDNSResponder();
+		MDNSResponder* getMDNSResponder();
 
-			bool setup(const char* domainName);
+		bool setup(const char* domainName);
 
-			const char* getDomainName();
+		const char* getDomainName();
 
-			JsonObject& getDetails();
+		JsonObject& getDetails();
 
 	  private:
 
-			const char* domainName;
-			uint16_t port;
-			uint32_t ttl;
+		const char* _domainName;
 
-			bool setupDone = false;
-			bool running = false;
+		bool _setupDone = false;
+		bool _running = false;
 	};
 }

@@ -7,11 +7,11 @@ namespace esp8266util {
   }
 
   bool MDNSService::isSetup() {
-    return setupDone;
+    return _setupDone;
   }
 
   bool MDNSService::isRunning() {
-    return running;
+    return _running;
   }
 
   bool MDNSService::start() {
@@ -20,7 +20,7 @@ namespace esp8266util {
       if (!isRunning()) {
         if (MDNS.begin(getDomainName())) {
           Log.verbose(F("MDNS enabled to http://%s.local" CR), getDomainName());
-          running = true;
+          _running = true;
         } else {
           Log.error(F("MDNS failed for http://%s.local" CR), getDomainName());
         }
@@ -45,15 +45,14 @@ namespace esp8266util {
 
   bool MDNSService::setup(const char* domainName) {
 
-    this->domainName = domainName;
-
-    setupDone = true;
+    _domainName = domainName;
+    _setupDone = true;
 
     return isSetup();
   }
 
   const char* MDNSService::getDomainName() {
-    return domainName;
+    return _domainName;
   }
 
   JsonObject& MDNSService::getDetails() {
