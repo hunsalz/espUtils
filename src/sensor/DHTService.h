@@ -5,31 +5,28 @@
 #include <DHT.h> // https://github.com/adafruit/DHT-sensor-library
 #include <DHT_U.h> // https://github.com/adafruit/DHT-sensor-library
 
-/*
- Open issues:
-  - persist calls per sensor in logfile
-  - add NTP if available
-  - configure by service call
- */
 namespace esp8266util {
 
   class DHTService {
 
     public:
 
-      enum Type {
-        DHT_11 = 11,
-        DHT_21 = 21,
-        DHT_22 = 22
+      struct config_t {
+        uint8_t pin;
+       /**
+        Valid types: 
+        DHT11 = 11
+        DHT21 = 21
+        DHT22 = 22 
+        */
+        uint8_t type;
       };
 
-      DHTService();
+      void begin(config_t config);
 
-      DHTService(uint8_t pin, Type type);
+      config_t getConfig();
 
-      void init(uint8_t pin, Type type);
-
-      void init(JsonObject& json);
+      DHT_Unified* getDHT();
 
       float getTemperature();
 
@@ -39,7 +36,7 @@ namespace esp8266util {
 
     private:
 
-      uint8_t pin;
-      DHT_Unified* dht;
+      DHT_Unified* _dht;
+      config_t _config;
   };
 }

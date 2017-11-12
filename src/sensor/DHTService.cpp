@@ -2,32 +2,32 @@
 
 namespace esp8266util {
 
-  DHTService::DHTService() {
-    // expects late initialization
-  };
-
-  DHTService::DHTService(uint8_t pin, Type type) {
-    init(pin, type);
-  };
-
-  void DHTService::init(uint8_t pin, Type type) {
-    dht = new DHT_Unified(pin, type);
+  void DHTService::begin(DHTService::config_t config) {
+    
+    _config = config;
+    _dht = new DHT_Unified(config.pin, config.type);
   }
 
-  void init(JsonObject& json) {
-    
+  DHTService::config_t DHTService::getConfig() {
+    return _config;
   }
 
   float DHTService::getTemperature() {
 
-    float value = -1;
-    if (dht) {
+    float value = NAN;
+    if (_dht) {
       sensors_event_t event;
-      dht->temperature().getEvent(&event);
+      _dht->temperature().getEvent(&event);
       if (isnan(event.temperature)) {
-        Log.error("Error reading temperature");
+        Log.error(F("Error reading temperature" CR));
       } else {
         value = event.temperature;
+
+        // TODO
+        char out[10];
+        dtostrf(value, 1, 2, out);
+        Serial.printf("---------------------------------Temp :: %s\n", out);
+  
       }
     }
 
@@ -36,12 +36,12 @@ namespace esp8266util {
 
   float DHTService::getHumidity() {
 
-    float value = -1;
-    if (dht) {
+    float value = NAN;
+    if (_dht) {
       sensors_event_t event;
-      dht->humidity().getEvent(&event);
+      _dht->humidity().getEvent(&event);
       if (isnan(event.relative_humidity)) {
-        Log.error("Error reading temperature");
+        Log.error(F("Error reading humidity" CR));
       } else {
         value = event.relative_humidity;
       }
@@ -52,23 +52,23 @@ namespace esp8266util {
 
   JsonArray& DHTService::getDetails() {
 
-    sensor_t sensor;
     DynamicJsonBuffer jsonBuffer;
     JsonArray& json = jsonBuffer.createArray();
-    if (dht) {
+    if (_dht) {
+      sensor_t sensor;
       // map temperature sensor values
-      dht->temperature().getSensor(&sensor);
+      _dht->temperature().getSensor(&sensor);
       JsonObject& temperature = json.createNestedObject().createNestedObject(F("temperature"));
-      temperature[F("name")] = sensor.name;
+      temperature[F("name")] = String(sensor.name);
       temperature[F("version")] = sensor.version;
       temperature[F("id")] = sensor.sensor_id;
       temperature[F("min")] = sensor.max_value;
       temperature[F("max")] = sensor.min_value;
       temperature[F("resolution")] = sensor.resolution;
       // map humidity sensor values
-      dht->humidity().getSensor(&sensor);
+      _dht->humidity().getSensor(&sensor);
       JsonObject& humidity = json.createNestedObject().createNestedObject(F("humidity"));
-      humidity[F("name")] = sensor.name;
+      humidity[F("name")] = String(sensor.name);
       humidity[F("version")] = sensor.version;
       humidity[F("id")] = sensor.sensor_id;
       humidity[F("min")] = sensor.max_value;
