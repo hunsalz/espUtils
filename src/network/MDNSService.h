@@ -13,15 +13,11 @@ namespace esp8266util {
 
 		public:
 
-		bool isSetup();
-
 	    bool available();
 
-	    bool start();
+	    bool begin(const char* domainName);
 
 		MDNSResponder& getMDNSResponder();
-
-		bool setup(const char* domainName);
 
 		const char* getDomainName();
 
@@ -31,9 +27,10 @@ namespace esp8266util {
 
 		const char* _domainName;
 
-		bool _setupDone = false;
 		bool _available = false;
 	};
+
+	extern MDNSService MDNS_SERVICE;
 }
 
 #endif // MDNSSERVICE_H

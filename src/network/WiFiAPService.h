@@ -12,6 +12,9 @@ extern "C" {
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
+#include "MDNSService.h"
+
+using esp8266util::MDNS_SERVICE;
 
 namespace esp8266util {
 
@@ -21,17 +24,13 @@ namespace esp8266util {
 
       ~WiFiAPService();
 
-      bool isSetup();
-
       bool available();
 
-      bool start();
+      bool begin(const char* ssid, const char* passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
 
-      bool stop();
+      bool end();
 
       ESP8266WiFiClass& getWiFi();
-
-      bool setup(const char* ssid, const char* passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
 
       JsonObject& getDetails();
 
@@ -39,17 +38,9 @@ namespace esp8266util {
 
     private:
 
-      const char* _ssid;
-      const char* _passphrase;
-      int _channel = 1;
-      int _ssid_hidden = 0;
-      int _max_connection = 4;
-
       WiFiEventHandler _softAPModeStationConnectedHandler;
       WiFiEventHandler _softAPModeStationDisconnectedHandler;
       WiFiEventHandler _softAPModeProbeRequestReceivedHandler;
-
-      bool _setupDone = false;
   };
 }
 

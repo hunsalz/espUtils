@@ -3,25 +3,27 @@
 namespace esp8266util {
 
   WiFiAPService::~WiFiAPService() {
-    stop();
-  }
-
-  bool WiFiAPService::isSetup() {
-    return _setupDone;
+    end();
   }
 
   bool WiFiAPService::available() {
     return WiFi.status();
   }
 
-  bool WiFiAPService::start() {
+  bool WiFiAPService::begin(const char* ssid, const char* passphrase, int channel, int ssid_hidden, int max_connection, bool autoConnect, bool persistent) {
 
-    if (isSetup()) {
+    if (!available()) {
+      WiFi.enableAP(true);
+      WiFi.setAutoConnect(true);
+      WiFi.persistent(false);
       WiFi.softAPdisconnect();
-      // TODO reflect changes to MDNS
-      if (WiFi.softAP(_ssid, _passphrase, _channel, _ssid_hidden, _max_connection)) {
-        Log.notice(F("Soft AP established successful. IP address of AP is: %s" CR), WiFi.softAPIP().toString().c_str());
-        
+      if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
+        // reflect change to MDNS
+        if (MDNS_SERVICE.available()) {
+          MDNS_SERVICE.getMDNSResponder().update();
+        }
+        Log.notice(F("Soft AP established successful. IP address of AP is: %s" CR), WiFi.softAPIP().toString().c_str());       
+        // TODO callbacks
         _softAPModeStationConnectedHandler = WiFi.onSoftAPModeStationConnected([this](const WiFiEventSoftAPModeStationConnected& event) {
           Log.verbose(F("MAC address [%s] joined AP." CR), macAddress(event.mac).c_str());
         });
@@ -34,14 +36,12 @@ namespace esp8266util {
       } else {
         Log.error(F("Couldn't establish a soft access point." CR));
       }
-    } else {
-      Log.error("Call setup() first.");
     }
 
     return available();
   }
 
-  bool WiFiAPService::stop() {
+  bool WiFiAPService::end() {
 
     WiFi.softAPdisconnect();
 
@@ -50,23 +50,6 @@ namespace esp8266util {
 
   ESP8266WiFiClass& WiFiAPService::getWiFi() {
     return WiFi;
-  }
-
-  bool WiFiAPService::setup(const char* ssid, const char* passphrase, int channel, int ssid_hidden, int max_connection, bool autoConnect, bool persistent) {
-
-    _ssid = ssid;
-    _passphrase = passphrase;
-    _channel = channel;
-    _ssid_hidden = ssid_hidden;
-    _max_connection = max_connection;
-    // general settings
-    WiFi.enableAP(true);
-    WiFi.setAutoConnect(true);
-    WiFi.persistent(false);
-
-    _setupDone = true;
-
-    return isSetup();
   }
 
   JsonObject& WiFiAPService::getDetails() {

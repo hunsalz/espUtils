@@ -7,6 +7,9 @@
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
+#include "MDNSService.h"
+
+using esp8266util::MDNS_SERVICE;
 
 namespace esp8266util {
 
@@ -16,19 +19,15 @@ namespace esp8266util {
 
       ~WiFiService();
 
-      bool isSetup();
-
       bool available();
 
-      bool start();
+      bool begin(uint8_t retries = 20, bool autoConnect = true, bool persistent = false);
 
-      bool stop();
+      bool end();
 
       ESP8266WiFiClass& getWiFi();
 
       ESP8266WiFiMulti& getWiFiMulti();
-
-      bool setup(uint8_t retries = 20, bool autoConnect = true, bool persistent = false);
 
       JsonObject& getDetails();
 
@@ -36,15 +35,11 @@ namespace esp8266util {
 
       ESP8266WiFiMulti _wifiMulti;
 
-      byte _retries = 0;
-
       WiFiEventHandler _stationModeConnectedHandler;
       WiFiEventHandler _stationModeDisconnectedHandler;
       WiFiEventHandler _stationModeAuthModeChangedHandler;
       WiFiEventHandler _stationModeGotIPHandler;
       WiFiEventHandler _stationModeDHCPTimeoutHandler;
-
-      bool _setupDone = false;
   };
 }
 
