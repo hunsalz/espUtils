@@ -1,9 +1,9 @@
-#pragma once
+#ifndef NTPSERVICE_H
+#define NTPSERVICE_H
 
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
-#include <NTPClient.h> // https://github.com/arduino-libraries/NTPClient
-#include <WiFiUdp.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi
+#include <NtpClientLib.h> // https://github.com/gmag11/NtpClient/blob/master/src/NtpClientLib.h
 
 #include "Service.h"
 
@@ -13,33 +13,24 @@ namespace esp8266util {
 
     public:
 
-      NTPService(const char* poolServerName, int timeOffset = 0, int updateInterval = 60000);
-
       ~NTPService();
 
       bool isRunning();
 
-      bool start();
+      bool begin(String ntpServerName = DEFAULT_NTP_SERVER, int timeOffset = DEFAULT_NTP_TIMEZONE, bool daylight = false);
 
-      bool stop();
+      bool end();
 
-      NTPClient* getNTPClient();
-
-      const char* getPoolServerName();
-      int getTimeOffset();
-      int getUpdateInterval();
+      NTPClient& getNTPClient();
 
       JsonObject& getDetails();
 
     private:
 
-      WiFiUDP ntpUDP;
-      NTPClient ntpClient;
-
-      const char* poolServerName;
-      int timeOffset;
-      int updateInterval;
-
-      bool running = false;
+      bool _running = false;
   };
+
+  extern NTPService NTP_SERVICE;
 }
+
+#endif // NTPSERVICE_H

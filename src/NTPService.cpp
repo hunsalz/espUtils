@@ -2,78 +2,51 @@
 
 namespace esp8266util {
 
-  NTPService::NTPService(const char* poolServerName, int timeOffset, int updateInterval) :
-    ntpClient(ntpUDP, poolServerName, timeOffset, updateInterval) {
-
-    this->poolServerName = poolServerName;
-    this->timeOffset = timeOffset;
-    this->updateInterval = updateInterval;
-  }
-
   NTPService::~NTPService() {
-    stop();
+    end();
   }
 
   bool NTPService::isRunning() {
-    return running;
+    return _running;
   }
 
-  bool NTPService::start() {
-
-    if (!isRunning()) {
-      ntpClient.begin();
-      running = ntpClient.forceUpdate();
-      if (running) {
-        Log.verbose(F("Connection to NTP server [%s] established." CR), getPoolServerName());
-      } else {
-        Log.error(F("Connection to NTP server [%s] failed." CR), getPoolServerName());
-      }
-    }
-
-    return isRunning();
+  bool NTPService::begin(String ntpServerName, int timeOffset, bool daylight) {
+    return NTP.begin(ntpServerName, timeOffset, daylight);
   }
 
-  bool NTPService::stop() {
-
-    if (isRunning()) {
-      ntpClient.end();
-      running = false;
-    }
-
-    return isRunning();
+  bool NTPService::end() {
+    
+    _running = false;
+    
+    return NTP.stop();
   }
 
-  NTPClient* NTPService::getNTPClient() {
+  NTPClient& NTPService::getNTPClient() {
 
-    if (!ntpClient.update()) {
-      Log.error(F("Updating time with NTP server [%s] failed." CR), getPoolServerName());
-    }
+    _running = true;
 
-    return &ntpClient;
-  }
-
-  const char* NTPService::getPoolServerName() {
-    return poolServerName;
-  }
-
-  int NTPService::getTimeOffset() {
-    return timeOffset;
-  }
-
-  int NTPService::getUpdateInterval() {
-    return updateInterval;
+    return NTP;
   }
 
   JsonObject& NTPService::getDetails() {
 
     DynamicJsonBuffer jsonBuffer;
     JsonObject &json = jsonBuffer.createObject();
-    json[F("ntpServer")] = getPoolServerName();
-    json[F("UTCOffset")] = getTimeOffset();
-    json[F("updateInterval")] = getUpdateInterval();
-    json[F("time")] = getNTPClient()->getFormattedTime();
-    json[F("timestamp")] = getNTPClient()->getEpochTime();
+    json[F("ntpServerName")] = NTP.getNtpServerName();
+    json[F("timeZone")] = NTP.getTimeZone();
+    json[F("shortInterval")] = NTP.getShortInterval();
+    json[F("longInterval")] = NTP.getLongInterval();
+    json[F("dayLight")] = NTP.getDayLight();
+    json[F("time")] = NTP.getTimeStr();
+    json[F("date")] = NTP.getDateStr();
+    json[F("timedate")] = NTP.getTimeDateString();
+    json[F("firstSync")] = NTP.getFirstSync();
+    json[F("lastSync")] = NTP.getLastNTPSync();
+    json[F("uptime")] = NTP.getUptimeString();
+    json[F("lastBootTime")] = NTP.getLastBootTime();
 
     return json;
   }
+
+  NTPService NTP_SERVICE = NTPService();
 }
