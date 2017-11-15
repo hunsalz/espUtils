@@ -2,8 +2,6 @@
 
 namespace esp8266util {
 
-  EspService::EspService() {};
-
   bool EspService::isRunning() {
     return true;
   }
