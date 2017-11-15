@@ -98,14 +98,15 @@ namespace esp8266util {
   
   void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
 
-    StreamString stream;
-    json.prettyPrintTo(stream);
-    send(request, stream);
+    int length = json.measureLength() + 1;
+    char content[length];
+    json.printTo(content, length);
+    Log.verbose(F("Send response: %s." CR), content);
+    request->send(new AsyncBasicResponse(200, "text/json", String(content)));
   }
 
   void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
 
-    // TODO verify why json.prettyPrintTo(stream); causes error for JsonArray
     int length = json.measureLength() + 1;
     char content[length];
     json.printTo(content, length);
