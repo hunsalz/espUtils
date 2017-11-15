@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOTORDRIVER_H
+#define MOTORDRIVER_H
 
 #include "Driver.h"
 
@@ -11,8 +12,10 @@ namespace esp8266util {
 
     public:
 
+      // TODO
       bool isSetup();
 
+      // TODO config_t
       bool setup(uint8_t pinPWM, uint8_t pinDir);
 
       int getSpeed();
@@ -34,3 +37,5 @@ namespace esp8266util {
       bool _setupDone = false;
   };
 }
+
+#endif // MOTORDRIVER_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WEBSOCKETLISTENER_H
+#define WEBSOCKETLISTENER_H
 
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
@@ -39,3 +40,5 @@ namespace esp8266util {
       void handleBinaryMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len);
   };
 }
+
+#endif // WEBSOCKETLISTENER_H

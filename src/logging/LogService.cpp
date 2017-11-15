@@ -2,12 +2,14 @@
 
 namespace esp8266util {
 
-  LogService::LogService(String path) {
-    _path = path;
-  }
+  LogService::LogService() {};
 
   LogService::~LogService() {
     getFile().close();
+  }
+
+  void LogService::begin(const char* path) {
+    _path = path;
   }
 
   String LogService::getPath() {
@@ -163,7 +165,7 @@ namespace esp8266util {
 
   void LogService::init() {
 
-    if (!_file) {
+    if (!_file && _path) {
       // open existing file and set file preferences
       if (SPIFFS.exists(getPath())) {
         _file = SPIFFS.open(getPath(), "r+");

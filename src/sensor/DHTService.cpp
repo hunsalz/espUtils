@@ -12,6 +12,10 @@ namespace esp8266util {
     return _config;
   }
 
+  DHT_Unified& DHTService::getDHT() {
+    return *_dht;
+  }
+
   float DHTService::getTemperature() {
 
     float value = NAN;

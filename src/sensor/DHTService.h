@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DHTSERVICE_H
+#define DHTSERVICE_H
 
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
@@ -26,7 +27,7 @@ namespace esp8266util {
 
       config_t getConfig();
 
-      DHT_Unified* getDHT();
+      DHT_Unified& getDHT();
 
       float getTemperature();
 
@@ -36,7 +37,9 @@ namespace esp8266util {
 
     private:
 
-      DHT_Unified* _dht;
+      DHT_Unified* _dht = NULL;
       config_t _config;
   };
 }
+
+#endif // DHTSERVICE_H

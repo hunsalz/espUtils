@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DRIVER_H
+#define DRIVER_H
 
 #include <Arduino.h>
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
@@ -20,3 +21,5 @@ namespace esp8266util {
 
   };
 }
+
+#endif // DRIVER_H

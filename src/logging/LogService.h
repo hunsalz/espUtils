@@ -6,7 +6,8 @@
   - 2nd line determines line length of each log entry. LogService support only one sector, so that every line claims the same amount of characters.
 */
 
-#pragma once
+#ifndef LOGSERVICE_H
+#define LOGSERVICE_H
 
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
@@ -18,8 +19,11 @@ namespace esp8266util {
 
     public:
 
-      LogService(String path);
+      LogService();
       ~LogService();
+
+      // TODO test if everything works well if a beginn call is missing
+      void begin(const char* path);
 
       /*
        Return log file path.
@@ -63,7 +67,7 @@ namespace esp8266util {
 
     private:
 
-      String _path;
+      const char* _path;
       File _file;
       uint16_t _offset;
       uint16_t _lineLength;
@@ -82,3 +86,5 @@ namespace esp8266util {
       void init();
   };
 }
+
+#endif // LOGSERVICE_H
