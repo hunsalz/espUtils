@@ -12,15 +12,17 @@ namespace esp8266util {
 
     public:
 
+      FSService();
+
       ~FSService();
 
       bool isRunning();
 
-      bool start();
+      bool begin();
 
-      bool stop();
+      bool end();
 
-      FS* getFS();
+      FS& getFS();
 
       JsonObject& getStorageDetails();
 
@@ -28,11 +30,7 @@ namespace esp8266util {
 
       static String formatBytes(size_t bytes);
 
-      static FSService getInstance();
-
     private:
-
-      FSService();
 
       bool running = false;
   };

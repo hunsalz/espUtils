@@ -8,6 +8,7 @@ extern "C" {
 
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+#include <ESP.h> // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
 
 #include "Service.h"
 
@@ -17,12 +18,14 @@ namespace esp8266util {
 
     public:
 
+      EspService();
+
       bool isRunning();
 
-      bool start();
-
-      bool stop();
+      EspClass& getESP();
 
       JsonObject& getDetails();
   };
+
+  extern EspService SYSTEM;
 }

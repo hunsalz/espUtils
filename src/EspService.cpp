@@ -2,26 +2,20 @@
 
 namespace esp8266util {
 
+  EspService::EspService() {};
+
   bool EspService::isRunning() {
     return true;
   }
 
-  bool EspService::start() {
-
-    // nothing to do
-
-    return isRunning();
-  }
-
-  bool EspService::stop() {
-    return isRunning();
+  EspClass& getESP() {
+    return ESP;
   }
 
   JsonObject& EspService::getDetails() {
 
     DynamicJsonBuffer jsonBuffer;
     JsonObject &json = jsonBuffer.createObject();
-    // ESP8266 data from https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
     json[F("vcc")] = ESP.getVcc();
     json[F("heap")] = ESP.getFreeHeap();
     json[F("chipId")] = ESP.getChipId();
@@ -46,4 +40,6 @@ namespace esp8266util {
 
     return json;
   }
+
+  EspService SYSTEM = EspService();
 }

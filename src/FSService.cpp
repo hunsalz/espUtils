@@ -5,14 +5,14 @@ namespace esp8266util {
   FSService::FSService() {}
 
   FSService::~FSService() {
-    stop();
+    end();
   }
 
   bool FSService::isRunning() {
     return running;
   }
 
-  bool FSService::start() {
+  bool FSService::begin() {
 
     if (!isRunning()) {
       if (SPIFFS.begin()) {
@@ -26,7 +26,7 @@ namespace esp8266util {
     return isRunning();
   }
 
-  bool FSService::stop() {
+  bool FSService::end() {
 
     if (isRunning()) {
       SPIFFS.end();
@@ -36,8 +36,8 @@ namespace esp8266util {
     return isRunning();
   }
 
-  FS* FSService::getFS() {
-    return &SPIFFS;
+  FS& FSService::getFS() {
+    return SPIFFS;
   }
 
   JsonObject& FSService::getStorageDetails() {
@@ -57,7 +57,6 @@ namespace esp8266util {
     return json;
   }
 
-  // TODO reflect the hierarchy
   JsonArray& FSService::getFileListing() {
 
     DynamicJsonBuffer jsonBuffer;
@@ -89,12 +88,5 @@ namespace esp8266util {
     }
   }
 
-  FSService FSService::getInstance() {
-    
-    static FSService fsService;
-    
-    return fsService;
-  }
-
-  FSService FILESYSTEM = FSService::getInstance();
+  FSService FILESYSTEM = FSService();
 }
