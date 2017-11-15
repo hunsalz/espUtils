@@ -9,7 +9,7 @@ namespace esp8266util {
   }
 
   bool FSService::isRunning() {
-    return running;
+    return _running;
   }
 
   bool FSService::begin() {
@@ -17,7 +17,7 @@ namespace esp8266util {
     if (!isRunning()) {
       if (SPIFFS.begin()) {
         Log.verbose(F("File system mounted." CR));
-        running = true;
+        _running = true;
       } else {
         Log.warning(F("Mounting file system failed." CR));
       }
@@ -30,13 +30,13 @@ namespace esp8266util {
 
     if (isRunning()) {
       SPIFFS.end();
-      running = false;
+      _running = false;
     }
 
     return isRunning();
   }
 
-  FS& FSService::getFS() {
+  FS& FSService::getFileSystem() {
     return SPIFFS;
   }
 

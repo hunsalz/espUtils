@@ -23,7 +23,7 @@ namespace esp8266util {
 
       bool end();
 
-      FS& getFS();
+      FS& getFileSystem();
 
       JsonObject& getStorageDetails();
 
@@ -33,7 +33,7 @@ namespace esp8266util {
 
     private:
 
-      bool running = false;
+      bool _running = false;
   };
 
   extern FSService FILESYSTEM;
