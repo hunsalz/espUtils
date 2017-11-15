@@ -10,7 +10,7 @@ namespace esp8266util {
     return _setupDone;
   }
 
-  bool WiFiAPService::isRunning() {
+  bool WiFiAPService::available() {
     return WiFi.status();
   }
 
@@ -38,14 +38,14 @@ namespace esp8266util {
       Log.error("Call setup() first.");
     }
 
-    return isRunning();
+    return available();
   }
 
   bool WiFiAPService::stop() {
 
     WiFi.softAPdisconnect();
 
-    return isRunning();
+    return available();
   }
 
   ESP8266WiFiClass& WiFiAPService::getWiFi() {

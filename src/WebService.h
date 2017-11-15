@@ -27,9 +27,11 @@ namespace esp8266util {
 
       ~WebService();
 
-      bool isRunning();
+      bool available();
 
       bool begin(uint16_t port = 80);
+
+      // TODOD bool end();
 
       AsyncWebServer& getWebServer();
 

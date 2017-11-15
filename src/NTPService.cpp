@@ -6,25 +6,25 @@ namespace esp8266util {
     end();
   }
 
-  bool NTPService::isRunning() {
-    return _running;
+  bool NTPService::available() {
+    return _available;
   }
 
   bool NTPService::begin(String ntpServerName, int timeOffset, bool daylight) {
+    
+    _available = true;
+    
     return NTP.begin(ntpServerName, timeOffset, daylight);
   }
 
   bool NTPService::end() {
     
-    _running = false;
+    _available = false;
     
     return NTP.stop();
   }
 
   NTPClient& NTPService::getNTPClient() {
-
-    _running = true;
-
     return NTP;
   }
 

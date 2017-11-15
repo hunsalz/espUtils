@@ -8,32 +8,32 @@ namespace esp8266util {
     end();
   }
 
-  bool FSService::isRunning() {
-    return _running;
+  bool FSService::available() {
+    return _available;
   }
 
   bool FSService::begin() {
 
-    if (!isRunning()) {
+    if (!available()) {
       if (SPIFFS.begin()) {
         Log.verbose(F("File system mounted." CR));
-        _running = true;
+        _available = true;
       } else {
         Log.warning(F("Mounting file system failed." CR));
       }
     }
 
-    return isRunning();
+    return available();
   }
 
   bool FSService::end() {
 
-    if (isRunning()) {
+    if (available()) {
       SPIFFS.end();
-      _running = false;
+      _available = false;
     }
 
-    return isRunning();
+    return available();
   }
 
   FS& FSService::getFileSystem() {

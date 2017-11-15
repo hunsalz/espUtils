@@ -19,7 +19,7 @@ namespace esp8266util {
 
     public:
 
-      bool isRunning();
+      bool available();
 
       EspClass& getESP();
 

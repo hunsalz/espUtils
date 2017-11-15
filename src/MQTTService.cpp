@@ -10,14 +10,14 @@ namespace esp8266util {
     return _setupDone;
   }
 
-  bool MQTTService::isRunning() {
+  bool MQTTService::available() {
     return getMqttClient().connected();
   }
 
   bool MQTTService::begin() {
 
     if (isSetup()) {
-      if (!isRunning()) {
+      if (!available()) {
         // add verbose callback handlers
         _mqttClient.onConnect([this](bool sessionPresent) {
           Log.verbose(F("Connected to MQTT broker [%s:%d]" CR), getHostName(), getPort());
@@ -53,16 +53,16 @@ namespace esp8266util {
       Log.error("Call setup() first.");
     }
 
-    return isRunning();
+    return available();
   }
 
   bool MQTTService::end() {
 
-    if (isRunning()) {
+    if (available()) {
       _mqttClient.disconnect();
     }
 
-    return isRunning();
+    return available();
   }
 
   AsyncMqttClient& MQTTService::getMqttClient() {

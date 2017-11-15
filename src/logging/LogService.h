@@ -15,6 +15,7 @@
 
 namespace esp8266util {
 
+  // TODO Service
   class LogService {
 
     public:

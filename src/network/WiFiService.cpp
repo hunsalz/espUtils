@@ -10,14 +10,14 @@ namespace esp8266util {
     return _setupDone;
   }
 
-  bool WiFiService::isRunning() {
+  bool WiFiService::available() {
     return WiFi.isConnected();
   }
 
   bool WiFiService::start() {
 
     if (isSetup()) {
-      if (!isRunning()) {
+      if (!available()) {
         // try to connect
         // TODO reflect changes to MDNS ?
         Log.verbose("Trying to connect to WiFi ");
@@ -59,14 +59,14 @@ namespace esp8266util {
       Log.error("Call setup() first.");
     }
 
-    return isRunning();
+    return available();
   }
 
   bool WiFiService::stop() {
 
     WiFi.disconnect();
 
-    return isRunning();
+    return available();
   }
 
   ESP8266WiFiClass& WiFiService::getWiFi() {

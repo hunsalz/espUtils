@@ -9,13 +9,13 @@ namespace esp8266util {
     getWebServer().reset();
   }
 
-  bool WebService::isRunning() {
+  bool WebService::available() {
     return _webServer;
   }
 
   bool WebService::begin(uint16_t port) {
 
-    if (!isRunning()) {
+    if (!available()) {
       _webServer = new AsyncWebServer(port);
 
       // TODO make TLS available
@@ -62,7 +62,7 @@ namespace esp8266util {
       Log.verbose("WebServer started.\n");
     }
 
-    return isRunning();
+    return available();
   }
 
   AsyncWebServer& WebService::getWebServer() {
@@ -88,7 +88,7 @@ namespace esp8266util {
   
   AsyncCallbackWebHandler& WebService::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload) {
     
-    if (isRunning()) {
+    if (available()) {
       // add uri to service listing
       _services.push_back(String(uri));
       // add to web server

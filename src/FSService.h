@@ -17,7 +17,7 @@ namespace esp8266util {
 
       ~FSService();
 
-      bool isRunning();
+      bool available();
 
       bool begin();
 
@@ -33,7 +33,7 @@ namespace esp8266util {
 
     private:
 
-      bool _running = false;
+      bool _available = false;
   };
 
   extern FSService FILESYSTEM;

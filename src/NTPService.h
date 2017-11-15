@@ -15,7 +15,7 @@ namespace esp8266util {
 
       ~NTPService();
 
-      bool isRunning();
+      bool available();
 
       bool begin(String ntpServerName = DEFAULT_NTP_SERVER, int timeOffset = DEFAULT_NTP_TIMEZONE, bool daylight = false);
 
@@ -27,7 +27,7 @@ namespace esp8266util {
 
     private:
 
-      bool _running = false;
+      bool _available = false;
   };
 
   extern NTPService NTP_SERVICE;

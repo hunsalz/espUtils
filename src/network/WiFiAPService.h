@@ -23,7 +23,7 @@ namespace esp8266util {
 
       bool isSetup();
 
-      bool isRunning();
+      bool available();
 
       bool start();
 

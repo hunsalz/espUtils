@@ -7,9 +7,8 @@ namespace esp8266util {
 
     public:
 
-      // TODO rename to available()
-      // returns if this service is running
-      virtual bool isRunning() = 0;
+      // returns if this service is available
+      virtual bool available() = 0;
   };
 }
 

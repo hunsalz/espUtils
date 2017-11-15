@@ -2,25 +2,21 @@
 
 namespace esp8266util {
 
-  MDNSService::~MDNSService() {
-    stop();
-  }
-
   bool MDNSService::isSetup() {
     return _setupDone;
   }
 
-  bool MDNSService::isRunning() {
-    return _running;
+  bool MDNSService::available() {
+    return _available;
   }
 
   bool MDNSService::start() {
 
     if (isSetup()) {
-      if (!isRunning()) {
+      if (!available()) {
         if (MDNS.begin(getDomainName())) {
           Log.verbose(F("MDNS enabled to http://%s.local" CR), getDomainName());
-          _running = true;
+          _available = true;
         } else {
           Log.error(F("MDNS failed for http://%s.local" CR), getDomainName());
         }
@@ -29,14 +25,7 @@ namespace esp8266util {
       Log.error("Call setup() first.");
     }
 
-    return isRunning();
-  }
-
-  bool MDNSService::stop() {
-
-    // TODO how to disable MDNS ?
-
-    return isRunning();
+    return available();
   }
 
   MDNSResponder& MDNSService::getMDNSResponder() {
