@@ -2,25 +2,24 @@
 
 namespace esp8266util {
 
-  WebService::WebService(uint16_t port) :
-    _webServer(port) {
-
-    _port = port;
+  WebService::WebService() {
   }
 
   WebService::~WebService() {
-    stop();
+    getWebServer().reset();
   }
 
   bool WebService::isRunning() {
-    return _running;
+    return _webServer;
   }
 
-  bool WebService::start() {
+  bool WebService::begin(uint16_t port) {
 
     if (!isRunning()) {
+      _webServer = new AsyncWebServer(port);
+
       // TODO make TLS available
-      // _webServer.onSslFileRequest(...)
+      // getWebServer().onSslFileRequest(...)
       // example: https://github.com/me-no-dev/ESPAsyncWebServer/issues/75
 
       // add generic services registry resource
@@ -29,14 +28,14 @@ namespace esp8266util {
       });
 
       // add default 404 handler
-      _webServer.onNotFound([this](AsyncWebServerRequest *request) {
+      getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
         Log.verbose(F("HTTP 404 : [http://%s%s] not found." CR), request->host().c_str(), request->url().c_str());
         request->send(404, "text/plain", F("Page not found."));
         // TODO retest
       });
 
-      // TODO SSL
-      // _webServer.onSslFileRequest([](void * arg, const char *filename, uint8_t **buf) -> int {
+      //TODO SSL
+      // getWebServer().onSslFileRequest([](void * arg, const char *filename, uint8_t **buf) -> int {
       //   File file = SPIFFS.open(filename, "r");
       //   if (file) {
       //     Serial.printf("SSL file found: %s\n", filename);
@@ -55,30 +54,19 @@ namespace esp8266util {
       //   *buf = 0;
       //   return 0;
       // }, NULL);
-      // _webServer.beginSecure("/server.cer", "/server.key", NULL);
+      // getWebServer().beginSecure("/server.cer", "/server.key", NULL);
 
       // start web server
-      _webServer.begin();
+      getWebServer().begin();
 
-      _running = true;
-    }
-
-    Log.verbose("WebServer started.\n");
-
-    return isRunning();
-  }
-
-  bool WebService::stop() {
-
-    if (isRunning()) {
-      _webServer.reset();
+      Log.verbose("WebServer started.\n");
     }
 
     return isRunning();
   }
 
-  AsyncWebServer* WebService::getWebServer() {
-    return &_webServer;
+  AsyncWebServer& WebService::getWebServer() {
+    return *_webServer;
   }
 
   uint8_t WebService::getPort() {
@@ -100,10 +88,12 @@ namespace esp8266util {
   
   AsyncCallbackWebHandler& WebService::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload) {
     
-    // add uri to service listing
-    _services.push_back(String(uri));
-        
-    _webServer.on(uri, method, onRequest, onUpload, onBody);
+    if (isRunning()) {
+      // add uri to service listing
+      _services.push_back(String(uri));
+      // add to web server
+      getWebServer().on(uri, method, onRequest, onUpload, onBody);
+    }
   }
   
   void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
@@ -139,4 +129,6 @@ namespace esp8266util {
 
     return json;
   }
+
+  extern WebService SERVER = WebService();
 }

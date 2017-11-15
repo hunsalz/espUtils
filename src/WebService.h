@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WEBSERVICE_H
+#define WEBSERVICE_H
 
 #ifdef Arduino_h
 // arduino is not compatible with std::vector
@@ -22,17 +23,15 @@ namespace esp8266util {
 
     public:
 
-      WebService(uint16_t port = 80);
+      WebService();
 
       ~WebService();
 
       bool isRunning();
 
-      bool start();
+      bool begin(uint16_t port = 80);
 
-      bool stop();
-
-      AsyncWebServer* getWebServer();
+      AsyncWebServer& getWebServer();
 
       uint8_t getPort();
 
@@ -52,12 +51,14 @@ namespace esp8266util {
 
     private:
 
-      AsyncWebServer _webServer;
+      AsyncWebServer* _webServer = NULL;
 
-      uint8_t _port;
+      uint8_t _port = -1;
 
       std::vector<String> _services;
-
-      bool _running = false;
   };
+
+  extern WebService SERVER;
 }
+
+#endif // WEBSERVICE_H

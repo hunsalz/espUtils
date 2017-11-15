@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FSSERVICE_H
+#define FSPSERVICE_H
 
 #include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
@@ -37,3 +38,5 @@ namespace esp8266util {
 
   extern FSService FILESYSTEM;
 }
+
+#endif // FSSERVICE_H

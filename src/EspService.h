@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ESPSERVICE_H
+#define ESPSERVICE_H
 
 #ifdef ESP8266
 extern "C" {
@@ -29,3 +30,5 @@ namespace esp8266util {
 
   extern EspService SYSTEM;
 }
+
+#endif // ESPSERVICE_H
