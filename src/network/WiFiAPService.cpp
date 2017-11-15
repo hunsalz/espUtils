@@ -7,7 +7,7 @@ namespace esp8266util {
   }
 
   bool WiFiAPService::isSetup() {
-    return setupDone;
+    return _setupDone;
   }
 
   bool WiFiAPService::isRunning() {
@@ -19,8 +19,18 @@ namespace esp8266util {
     if (isSetup()) {
       WiFi.softAPdisconnect();
       // TODO reflect changes to MDNS
-      if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
+      if (WiFi.softAP(_ssid, _passphrase, _channel, _ssid_hidden, _max_connection)) {
         Log.notice(F("Soft AP established successful. IP address of AP is: %s" CR), WiFi.softAPIP().toString().c_str());
+        
+        _softAPModeStationConnectedHandler = WiFi.onSoftAPModeStationConnected([this](const WiFiEventSoftAPModeStationConnected& event) {
+          Log.verbose(F("MAC address [%s] joined AP." CR), macAddress(event.mac).c_str());
+        });
+        _softAPModeStationDisconnectedHandler = WiFi.onSoftAPModeStationDisconnected([this](const WiFiEventSoftAPModeStationDisconnected& event) {
+          Log.verbose(F("MAC address [%s] disappeared from AP." CR), macAddress(event.mac).c_str());
+        });
+        _softAPModeProbeRequestReceivedHandler = WiFi.onSoftAPModeProbeRequestReceived([this](const WiFiEventSoftAPModeProbeRequestReceived& event) {
+          //Log.verbose(F("RSSI is [%d]" CR), event.rssi);
+        });
       } else {
         Log.error(F("Couldn't establish a soft access point." CR));
       }
@@ -38,23 +48,23 @@ namespace esp8266util {
     return isRunning();
   }
 
-  ESP8266WiFiClass* WiFiAPService::getWiFi() {
-    return &WiFi;
+  ESP8266WiFiClass& WiFiAPService::getWiFi() {
+    return WiFi;
   }
 
   bool WiFiAPService::setup(const char* ssid, const char* passphrase, int channel, int ssid_hidden, int max_connection, bool autoConnect, bool persistent) {
 
-    this->ssid = ssid;
-    this->passphrase = passphrase;
-    this->channel = channel;
-    this->ssid_hidden = ssid_hidden;
-    this->max_connection = max_connection;
+    _ssid = ssid;
+    _passphrase = passphrase;
+    _channel = channel;
+    _ssid_hidden = ssid_hidden;
+    _max_connection = max_connection;
     // general settings
     WiFi.enableAP(true);
     WiFi.setAutoConnect(true);
     WiFi.persistent(false);
 
-    setupDone = true;
+    _setupDone = true;
 
     return isSetup();
   }
@@ -63,10 +73,18 @@ namespace esp8266util {
 
     DynamicJsonBuffer jsonBuffer;
     JsonObject &json = jsonBuffer.createObject();
-    json[F("softAPgetStationNum")] = getWiFi()->softAPgetStationNum();
-    json[F("softAPIP")] = getWiFi()->softAPIP().toString();
-    json[F("softAPmacAddress")] = getWiFi()->softAPmacAddress();
+    json[F("softAPgetStationNum")] = WiFi.softAPgetStationNum();
+    json[F("softAPIP")] = WiFi.softAPIP().toString();
+    json[F("softAPmacAddress")] = WiFi.softAPmacAddress();
 
     return json;
+  }
+
+  String WiFiAPService::macAddress(const unsigned char* mac) {
+    
+    char buffer[20];
+    snprintf(buffer, sizeof(buffer), "%02x:%02x:%02x:%02x:%02x:%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    
+    return String(buffer  );
   }
 }

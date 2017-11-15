@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MQTTSERVICE_H
+#define MQTTSERVICE_H
 
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <AsyncMqttClient.h> // https://github.com/marvinroger/async-mqtt-client
@@ -18,11 +19,11 @@ namespace esp8266util {
 
       bool isRunning();
 
-      bool start();
+      bool begin();
 
-      bool stop();
+      bool end();
 
-      AsyncMqttClient* getMqttClient();
+      AsyncMqttClient& getMqttClient();
 
       bool setup(const char* server, uint16_t port);
 
@@ -34,11 +35,13 @@ namespace esp8266util {
 
     private:
 
-      AsyncMqttClient mqttClient;
+      AsyncMqttClient _mqttClient;
 
-      const char* hostName;
-      uint16_t port;
+      const char* _hostName;
+      uint16_t _port;
 
-      bool setupDone = false;
+      bool _setupDone = false;
   };
 }
+
+#endif // MQTTSERVICE_H

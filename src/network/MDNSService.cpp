@@ -39,8 +39,8 @@ namespace esp8266util {
     return isRunning();
   }
 
-  MDNSResponder* MDNSService::getMDNSResponder() {
-    return &MDNS;
+  MDNSResponder& MDNSService::getMDNSResponder() {
+    return MDNS;
   }
 
   bool MDNSService::setup(const char* domainName) {

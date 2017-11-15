@@ -7,7 +7,7 @@ namespace esp8266util {
   }
 
   bool WiFiService::isSetup() {
-    return setupDone;
+    return _setupDone;
   }
 
   bool WiFiService::isRunning() {
@@ -21,14 +21,36 @@ namespace esp8266util {
         // try to connect
         // TODO reflect changes to MDNS ?
         Log.verbose("Trying to connect to WiFi ");
-        while (wifiMulti.run() != WL_CONNECTED && retries-- > 0) { // try to connect for given amount of retries
+        while (_wifiMulti.run() != WL_CONNECTED && _retries-- > 0) { // try to connect for given amount of retries
           Serial.print(F("."));
           delay(300);
         }
         Serial.println();
         // log WiFi connection result
-        if (retries > 0) {
+        if (_retries > 0) {
           Log.notice(F("WiFi successful connected with IP: %s" CR), WiFi.localIP().toString().c_str());
+
+          //WiFi.onEvent([](WiFiEvent_t e) {
+            //Serial.printf("Event wifi -----> %d\n", e);
+          //});
+
+          // TODO extend verbose logs
+          _stationModeConnectedHandler = WiFi.onStationModeConnected([this](const WiFiEventStationModeConnected& event) {
+            Log.verbose(F("Connected with WiFi station." CR));
+          });
+          _stationModeDisconnectedHandler = WiFi.onStationModeDisconnected([this](const WiFiEventStationModeDisconnected& event) {
+            Log.verbose(F("Disconnected from WiFi station." CR));
+          });
+          _stationModeAuthModeChangedHandler = WiFi.onStationModeAuthModeChanged([this](const WiFiEventStationModeAuthModeChanged& event) {
+            Log.verbose(F("WiFi authentication mode changed." CR));
+          });
+          _stationModeGotIPHandler = WiFi.onStationModeGotIP([this](const WiFiEventStationModeGotIP& event) {
+            Log.verbose(F("Received IP from WiFi station." CR));
+          });
+          _stationModeDHCPTimeoutHandler = WiFi.onStationModeDHCPTimeout([this]() {
+            Log.verbose(F("Got DHCP timeout from WiFi station." CR));
+          });
+
         } else {
           Log.error(F("Failed to setup a WiFi connection. Please check your WiFi availability / accessibility and retry." CR));
         }
@@ -47,23 +69,23 @@ namespace esp8266util {
     return isRunning();
   }
 
-  ESP8266WiFiClass* WiFiService::getWiFi() {
-    return &WiFi;
+  ESP8266WiFiClass& WiFiService::getWiFi() {
+    return WiFi;
   }
 
-  ESP8266WiFiMulti* WiFiService::getWiFiMulti() {
-    return &wifiMulti;
+  ESP8266WiFiMulti& WiFiService::getWiFiMulti() {
+    return _wifiMulti;
   }
 
   bool WiFiService::setup(uint8_t retries, bool autoConnect, bool persistent) {
 
-    this->retries = retries;
+    _retries = retries;
     // general settings
     WiFi.enableSTA(true);
     WiFi.setAutoConnect(true);
     WiFi.persistent(false);
 
-    setupDone = true;
+    _setupDone = true;
 
     return isSetup();
   }
@@ -72,23 +94,23 @@ namespace esp8266util {
 
     DynamicJsonBuffer jsonBuffer;
     JsonObject &json = jsonBuffer.createObject();
-    json[F("isConnected")] = getWiFi()->isConnected();
-    json[F("autoConnect")] = getWiFi()->getAutoConnect();
-    json[F("localIP")] = getWiFi()->localIP().toString();
-    json[F("macAddress")] = getWiFi()->macAddress();
-    json[F("subnetMask")] = getWiFi()->subnetMask().toString();
-    json[F("gatewayIP")] = getWiFi()->gatewayIP().toString();
-    json[F("dnsIP")] = getWiFi()->dnsIP().toString();
-    json[F("hostname")] = getWiFi()->hostname();
-    json[F("status")] = getWiFi()->status();
-    json[F("ssid")] = getWiFi()->SSID();
-    json[F("psk")] = getWiFi()->psk();
-    json[F("bssId")] = getWiFi()->BSSIDstr();
-    json[F("rssi")] = getWiFi()->RSSI();
-    json[F("channel")] = getWiFi()->channel();
-    json[F("sleepMode")] = getWiFi()->getSleepMode();
-    json[F("phyMode")] = getWiFi()->getPhyMode();
-    json[F("wiFiMode")] = getWiFi()->getMode();
+    json[F("isConnected")] = WiFi.isConnected();
+    json[F("autoConnect")] = WiFi.getAutoConnect();
+    json[F("localIP")] = WiFi.localIP().toString();
+    json[F("macAddress")] = WiFi.macAddress();
+    json[F("subnetMask")] = WiFi.subnetMask().toString();
+    json[F("gatewayIP")] = WiFi.gatewayIP().toString();
+    json[F("dnsIP")] = WiFi.dnsIP().toString();
+    json[F("hostname")] = WiFi.hostname();
+    json[F("status")] = WiFi.status();
+    json[F("ssid")] = WiFi.SSID();
+    json[F("psk")] = WiFi.psk();
+    json[F("bssId")] = WiFi.BSSIDstr();
+    json[F("rssi")] = WiFi.RSSI();
+    json[F("channel")] = WiFi.channel();
+    json[F("sleepMode")] = WiFi.getSleepMode();
+    json[F("phyMode")] = WiFi.getPhyMode();
+    json[F("wiFiMode")] = WiFi.getMode();
 
     return json;
   }
