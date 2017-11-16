@@ -70,4 +70,6 @@ namespace esp8266util {
     
     return String(buffer  );
   }
+
+  extern WiFiAPService WIFI_STATION = WiFiAPService();
 }

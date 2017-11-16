@@ -41,6 +41,8 @@ namespace esp8266util {
       WiFiEventHandler _stationModeGotIPHandler;
       WiFiEventHandler _stationModeDHCPTimeoutHandler;
   };
+
+  extern WiFiService WIFI_CLIENT;
 }
 
 #endif // WIFISERVICE_H

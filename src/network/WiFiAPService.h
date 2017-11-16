@@ -42,6 +42,8 @@ namespace esp8266util {
       WiFiEventHandler _softAPModeStationDisconnectedHandler;
       WiFiEventHandler _softAPModeProbeRequestReceivedHandler;
   };
+
+  extern WiFiAPService WIFI_STATION;
 }
 
 #endif // WIFIAPSERVICE_H

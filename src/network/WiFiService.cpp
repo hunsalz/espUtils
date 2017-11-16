@@ -101,4 +101,6 @@ namespace esp8266util {
 
     return json;
   }
+
+  extern WiFiService WIFI_CLIENT = WiFiService();
 }
