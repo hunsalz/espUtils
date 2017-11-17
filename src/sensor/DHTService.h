@@ -6,10 +6,12 @@
 #include <DHT.h> // https://github.com/adafruit/DHT-sensor-library
 #include <DHT_U.h> // https://github.com/adafruit/DHT-sensor-library
 
+#include "Configurable.h"
+
 namespace esp8266util {
 
   // TODO Service
-  class DHTService {
+  class DHTService : public Configurable {
 
     public:
 
@@ -24,11 +26,17 @@ namespace esp8266util {
         uint8_t type;
       };
 
-      void begin(config_t config);
+      bool begin(config_t config);
+
+      bool begin(JsonObject& json);
 
       config_t getConfig();
 
+      JsonObject& getConfigAsJson();
+
       DHT_Unified& getDHT();
+
+      bool update();
 
       float getTemperature();
 
@@ -40,6 +48,9 @@ namespace esp8266util {
 
       DHT_Unified* _dht = NULL;
       config_t _config;
+
+      float _temperature = NAN;
+      float _humidity = NAN;
   };
 }
 
