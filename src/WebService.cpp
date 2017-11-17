@@ -30,8 +30,8 @@ namespace esp8266util {
       // add default 404 handler
       getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
         Log.verbose(F("HTTP 404 : [http://%s%s] not found." CR), request->host().c_str(), request->url().c_str());
-        request->send(404, "text/plain", F("Page not found."));
-        // TODO retest
+        // TODO make a nice 404 page
+        request->send(404, "text/plain", F("404 Error - Sorry: Page not found."));
       });
 
       //TODO SSL
