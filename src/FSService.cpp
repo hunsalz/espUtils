@@ -37,10 +37,15 @@ namespace esp8266util {
   }
 
   FS& FSService::getFileSystem() {
+    
+    begin(); // call begin in case SPIFFS.begin() isn't called before
+    
     return SPIFFS;
   }
 
   JsonObject& FSService::getStorageDetails() {
+
+    begin(); // call begin in case SPIFFS.begin() isn't called before
 
     FSInfo fs_info;
     SPIFFS.info(fs_info);
@@ -58,6 +63,8 @@ namespace esp8266util {
   }
 
   JsonArray& FSService::getFileListing() {
+
+    begin(); // call begin in case SPIFFS.begin() isn't called before
 
     DynamicJsonBuffer jsonBuffer;
     JsonArray& json = jsonBuffer.createArray();

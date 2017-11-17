@@ -1,5 +1,5 @@
 #ifndef FSSERVICE_H
-#define FSPSERVICE_H
+#define FSSERVICE_H
 
 #include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
@@ -19,8 +19,6 @@ namespace esp8266util {
 
       bool available();
 
-      bool begin();
-
       bool end();
 
       FS& getFileSystem();
@@ -32,6 +30,8 @@ namespace esp8266util {
       static String formatBytes(size_t bytes);
 
     private:
+
+      bool begin(); // called implicitly
 
       bool _available = false;
   };
