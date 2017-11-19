@@ -11,7 +11,6 @@ namespace esp8266util {
     if (!_config.type) {
       Log.error(F("Missing type declaration." CR));
     }
-    
     _dht = new DHT_Unified(config.pin, config.type);
 
     return true;
@@ -70,20 +69,12 @@ namespace esp8266util {
   }
 
   float DHTService::getTemperature() {
-
-    // TODO
-    char out[10];
-    dtostrf(_temperature, 1, 2, out);
-    Serial.printf("---------------------------------Temp :: %s\n", out);
-
     return _temperature;
   }
 
   float DHTService::getHumidity() {
     return _humidity;
   }
-
-
 
   JsonArray& DHTService::getDetails() {
 
