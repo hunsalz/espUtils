@@ -59,6 +59,8 @@ namespace esp8266util {
       // start web server
       getWebServer().begin();
 
+      // TODO onDisconnect
+
       Log.verbose("WebServer started.\n");
     }
 
@@ -97,6 +99,9 @@ namespace esp8266util {
   }
   
   void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
+
+    // TODO verify https://github.com/me-no-dev/ESPAsyncWebServer#direct-access-to-web-socket-message-buffer
+
 
     int length = json.measureLength() + 1;
     char content[length];
