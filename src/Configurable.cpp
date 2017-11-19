@@ -23,8 +23,12 @@ namespace esp8266util {
   void Configurable::write(const char* path) {
 
     JsonObject& json = getConfigAsJson();
+    int length = json.measureLength() + 1;
+    char content[length];
+    json.printTo(content, length);
+
     File file = FILESYSTEM.getFileSystem().open(path, "w+");
-    json.prettyPrintTo(file);
+    file.print(content);
     file.flush();
     file.close();
 
