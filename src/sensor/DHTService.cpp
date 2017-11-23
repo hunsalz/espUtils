@@ -2,7 +2,15 @@
 
 namespace esp8266util {
 
-  bool DHTService::begin(DHTService::config_t config) {
+  bool DHTService::begin(uint8_t pin, uint8_t type) {
+
+    config_t config;
+    config.pin = pin;
+    config.type = type;
+    begin(config);
+  }
+
+  bool DHTService::begin(config_t config) {
     
     _config = config;
     if (!_config.pin) {
@@ -18,7 +26,7 @@ namespace esp8266util {
 
   bool DHTService::begin(JsonObject& json) {
     
-    DHTService::config_t config;
+    config_t config;
     config.pin = json["pin"];
     config.type = json["type"];
     

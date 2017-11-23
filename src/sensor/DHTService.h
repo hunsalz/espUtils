@@ -26,6 +26,8 @@ namespace esp8266util {
         uint8_t type;
       };
 
+      bool begin(uint8_t pin, uint8_t type);
+
       bool begin(config_t config);
 
       bool begin(JsonObject& json);
