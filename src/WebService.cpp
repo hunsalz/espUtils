@@ -31,7 +31,7 @@ namespace esp8266util {
       getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
         Log.verbose(F("HTTP 404 : [http://%s%s] not found." CR), request->host().c_str(), request->url().c_str());
         // TODO make a nice 404 page
-        request->send(404, "text/plain", F("404 Error - Sorry: Page not found."));
+        request->send(404, "text/plain", F("404 error - Page not found."));
       });
 
       //TODO SSL
