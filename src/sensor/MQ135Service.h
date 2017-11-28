@@ -32,11 +32,9 @@ namespace esp8266util {
 
       bool update();
 
-      float getPPM();
+      float getPPM(); // unit in PPM
 
-      float getCo2();
-
-      JsonArray& getDetails();
+      float getCo2(); // unit in percent, %
 
     private:
 

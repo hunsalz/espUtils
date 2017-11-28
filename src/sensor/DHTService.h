@@ -40,9 +40,9 @@ namespace esp8266util {
 
       bool update();
 
-      float getTemperature();
+      float getTemperature(); // unit in Celsius, °C
 
-      float getHumidity();
+      float getHumidity(); // unit in percent, %
 
       JsonArray& getDetails();
 
