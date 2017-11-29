@@ -23,7 +23,25 @@ namespace esp8266util {
 
       EspClass& getESP();
 
+      long unsigned getRemainingLoopInterval();
+
+      bool nextLoopInterval();
+
+      int getLoopInterval();
+
+      void setLoopInterval(int milliseconds);
+
+      int getDeepSleepInterval();
+
+      void setDeepSleepInterval(int milliseconds);
+
       JsonObject& getDetails();
+
+    private:
+
+      int _loopInterval = 5000; // milliseconds
+      unsigned long _lastLoopInterval = millis();
+      int _deepSleepInterval = 60000; // milliseconds
   };
 
   extern EspService SYSTEM;

@@ -6,8 +6,55 @@ namespace esp8266util {
     return true;
   }
 
-  EspClass& getESP() {
+  EspClass& EspService::getESP() {
     return ESP;
+  }
+
+  long unsigned EspService::getRemainingLoopInterval() {
+    
+    long unsigned nextLoopInterval = _lastLoopInterval + getLoopInterval();
+    long unsigned now = millis();
+
+    if (nextLoopInterval > now) {
+      return nextLoopInterval - now;
+    } else {
+      _lastLoopInterval = millis();
+      return 0;
+    }
+  }
+
+  bool EspService::nextLoopInterval() {
+    return !getRemainingLoopInterval();
+  }
+
+  int EspService::getLoopInterval() {
+    return _loopInterval;
+  }
+
+  void EspService::setLoopInterval(int milliseconds) {
+
+    if (milliseconds < 500) {
+      milliseconds = 500;
+      Log.warning(F("Loop interval limited to %d milliseconds." CR), milliseconds);
+    } else {
+      Log.verbose(F("Loop interval set to %d milliseconds." CR), milliseconds);
+    }
+    _loopInterval = milliseconds;
+  }
+
+  int EspService::getDeepSleepInterval() {
+    return _deepSleepInterval;
+  }
+
+  void EspService::setDeepSleepInterval(int milliseconds) {
+    
+    if (milliseconds < 30000) {
+      milliseconds = 30000;
+      Log.warning(F("Deep sleep interval limited to %d milliseconds." CR), milliseconds);
+    } else {
+      Log.verbose(F("Deep sleep interval set to %d milliseconds." CR), milliseconds);
+    }
+    _deepSleepInterval = milliseconds;
   }
 
   JsonObject& EspService::getDetails() {
@@ -35,6 +82,9 @@ namespace esp8266util {
     json[F("resetInfo")] = ESP.getResetInfo();
     json[F("cycleCount")] = ESP.getCycleCount();
     json[F("uptime")] = millis();
+    json[F("loopInterval")] = getLoopInterval();
+    json[F("remainingLoopInterval")] = getRemainingLoopInterval();
+    json[F("deepSleepInterval")] = getDeepSleepInterval();
 
     return json;
   }
