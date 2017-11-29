@@ -34,7 +34,7 @@ namespace esp8266util {
 
       float getPPM(); // unit in PPM
 
-      float getCo2(); // unit in percent, %
+      float getCO2(); // unit in percent, %
 
     private:
 

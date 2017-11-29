@@ -64,7 +64,7 @@ namespace esp8266util {
     return _ppm;
   }
 
-  float MQ135Service::getCo2() {
+  float MQ135Service::getCO2() {
     return _ppm / 100;
   }
 }
