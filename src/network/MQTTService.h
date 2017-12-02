@@ -13,34 +13,33 @@ namespace esp8266util {
 
     public:
 
-      ~MQTTService();
+      struct config_t {
+        const char* hostName;
+        uint16_t port;
+      };
 
-      bool isSetup();
+      ~MQTTService();
 
       bool available();
 
-      bool begin();
+      bool begin(const char* hostName, uint16_t port);
+
+      bool begin(config_t config);
+
+      config_t getConfig();
 
       bool end();
 
       AsyncMqttClient& getMqttClient();
 
-      bool setup(const char* server, uint16_t port);
-
-      const char* getHostName();
-
-      uint16_t getPort();
-
       void publish(const char* topic, JsonObject& json);
+
+      void publish(const char* topic, JsonArray& json);
 
     private:
 
       AsyncMqttClient _mqttClient;
-
-      const char* _hostName;
-      uint16_t _port;
-
-      bool _setupDone = false;
+      config_t _config;
   };
 }
 
