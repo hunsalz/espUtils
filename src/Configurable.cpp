@@ -24,11 +24,11 @@ namespace esp8266util {
 
     JsonObject& json = getConfigAsJson();
     int length = json.measureLength() + 1;
-    char content[length];
-    json.printTo(content, length);
+    char payload[length];
+    json.printTo(payload, length);
 
     File file = FILESYSTEM.getFileSystem().open(path, "w+");
-    file.print(content);
+    file.print(payload);
     file.flush();
     file.close();
 
