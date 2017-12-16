@@ -18,15 +18,15 @@ namespace esp8266util {
       WiFi.persistent(false);
       WiFi.softAPdisconnect();
       // verbose callback handlers
-      _softAPModeStationConnectedHandler = WiFi.onSoftAPModeStationConnected([this](const WiFiEventSoftAPModeStationConnected& event) {
-        Log.verbose(F("MAC address [%s] joined AP." CR), macAddress(event.mac).c_str());
-      });
-      _softAPModeStationDisconnectedHandler = WiFi.onSoftAPModeStationDisconnected([this](const WiFiEventSoftAPModeStationDisconnected& event) {
-        Log.verbose(F("MAC address [%s] disappeared from AP." CR), macAddress(event.mac).c_str());
-      });
-      _softAPModeProbeRequestReceivedHandler = WiFi.onSoftAPModeProbeRequestReceived([this](const WiFiEventSoftAPModeProbeRequestReceived& event) {
-        //Log.verbose(F("RSSI is [%d]" CR), event.rssi);
-      });
+      // _softAPModeStationConnectedHandler = WiFi.onSoftAPModeStationConnected([this](const WiFiEventSoftAPModeStationConnected& event) {
+      //   Log.verbose(F("MAC address [%s] joined AP." CR), macAddress(event.mac).c_str());
+      // });
+      // _softAPModeStationDisconnectedHandler = WiFi.onSoftAPModeStationDisconnected([this](const WiFiEventSoftAPModeStationDisconnected& event) {
+      //   Log.verbose(F("MAC address [%s] disappeared from AP." CR), macAddress(event.mac).c_str());
+      // });
+      // _softAPModeProbeRequestReceivedHandler = WiFi.onSoftAPModeProbeRequestReceived([this](const WiFiEventSoftAPModeProbeRequestReceived& event) {
+      //   Log.verbose(F("RSSI is [%d]" CR), event.rssi);
+      // });
       // enable AP mode
       if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
         // reflect change to MDNS

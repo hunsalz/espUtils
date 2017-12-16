@@ -17,16 +17,10 @@ namespace esp8266util {
 
     if (!available()) {
       _webServer = new AsyncWebServer(port);
-
-      // TODO make TLS available
-      // getWebServer().onSslFileRequest(...)
-      // example: https://github.com/me-no-dev/ESPAsyncWebServer/issues/75
-
       // add generic services registry resource
       on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) {
         send(request, getDetails());
       });
-
       // add default 404 handler
       getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
         Log.verbose(F("HTTP 404 : [http://%s%s] not found." CR), request->host().c_str(), request->url().c_str());
@@ -34,7 +28,8 @@ namespace esp8266util {
         request->send(404, "text/plain", F("404 error - Page not found."));
       });
 
-      //TODO SSL
+      // TODO SSL/TLS example: https://github.com/me-no-dev/ESPAsyncWebServer/issues/75
+      // Works, but isn't reliable: https://github.com/esp8266/Arduino/issues/2733#issuecomment-264710234
       // getWebServer().onSslFileRequest([](void * arg, const char *filename, uint8_t **buf) -> int {
       //   File file = SPIFFS.open(filename, "r");
       //   if (file) {
@@ -58,8 +53,6 @@ namespace esp8266util {
 
       // start web server
       getWebServer().begin();
-
-      // TODO onDisconnect
 
       Log.verbose("WebServer started.\n");
     }
@@ -100,23 +93,16 @@ namespace esp8266util {
   
   void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
 
-    // TODO verify https://github.com/me-no-dev/ESPAsyncWebServer#direct-access-to-web-socket-message-buffer
-
-
-    int length = json.measureLength() + 1;
-    char payload[length];
-    json.printTo(payload, length);
-    Log.verbose(F("Send response: %s." CR), payload);
-    request->send(new AsyncBasicResponse(200, "text/json", String(payload)));
+    String payload = toString(json);
+    Log.verbose(F("Send response: %s." CR), payload.c_str());
+    request->send(new AsyncBasicResponse(200, "text/json", payload));
   }
 
   void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
 
-    int length = json.measureLength() + 1;
-    char payload[length];
-    json.printTo(payload, length);
-    Log.verbose(F("Send response: %s." CR), payload);
-    request->send(new AsyncBasicResponse(200, "text/json", String(payload)));
+    String payload = toString(json);
+    Log.verbose(F("Send response: %s." CR), payload.c_str());
+    request->send(new AsyncBasicResponse(200, "text/json", payload));
   }
 
   void WebService::send(AsyncWebServerRequest *request, StreamString stream) {

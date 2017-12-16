@@ -12,15 +12,22 @@ namespace esp8266util {
 
     public:
 
-      // TODO
-      bool isSetup();
+      struct config_t {
+        uint8_t pinPWM;
+        uint8_t pinDir;
+      };
 
-      // TODO config_t
-      bool setup(uint8_t pinPWM, uint8_t pinDir);
+      bool begin(uint8_t pinPWM, uint8_t pinDir);
 
-      int getSpeed();
+      bool begin(config_t config);
+
+      config_t getConfig();
+
+      JsonObject& getConfigAsJson();
 
       uint8_t getDirection();
+
+      int getSpeed();
 
       void setSpeed(int speed);
 
@@ -30,11 +37,8 @@ namespace esp8266util {
 
     private:
 
-      uint8_t _pinPWM;
-      uint8_t _pinDir;
+      config_t _config;
       int _speed;
-
-      bool _setupDone = false;
   };
 }
 

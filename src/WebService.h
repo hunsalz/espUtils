@@ -15,7 +15,10 @@
 #include <StreamString.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 
 #include "Service.h"
+#include "JsonHelper.h"
 #include "WebSocketListener.h"
+
+using esp8266util::toString;
 
 namespace esp8266util {
 
@@ -31,7 +34,7 @@ namespace esp8266util {
 
       bool begin(uint16_t port = 80);
 
-      // TODOD bool end();
+      // TODO bool end();
 
       AsyncWebServer& getWebServer();
 
@@ -55,7 +58,7 @@ namespace esp8266util {
 
       AsyncWebServer* _webServer = NULL;
 
-      uint8_t _port = -1;
+      uint8_t _port = 80;
 
       std::vector<String> _services;
   };

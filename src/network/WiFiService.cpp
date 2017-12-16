@@ -17,7 +17,22 @@ namespace esp8266util {
       WiFi.enableSTA(true);
       WiFi.setAutoConnect(true);
       WiFi.persistent(false);
-      
+      // verbose callback handlers
+      // _stationModeConnectedHandler = WiFi.onStationModeConnected([this](const WiFiEventStationModeConnected& event) {
+      //   Log.verbose(F("Connected with WiFi station." CR));
+      // });
+      // _stationModeDisconnectedHandler = WiFi.onStationModeDisconnected([this](const WiFiEventStationModeDisconnected& event) {
+      //   Log.verbose(F("Disconnected from WiFi station." CR));
+      // });
+      // _stationModeAuthModeChangedHandler = WiFi.onStationModeAuthModeChanged([this](const WiFiEventStationModeAuthModeChanged& event) {
+      //   Log.verbose(F("WiFi authentication mode changed." CR));
+      // });
+      // _stationModeGotIPHandler = WiFi.onStationModeGotIP([this](const WiFiEventStationModeGotIP& event) {
+      //   Log.verbose(F("Received IP from WiFi station." CR));
+      // });
+      // _stationModeDHCPTimeoutHandler = WiFi.onStationModeDHCPTimeout([this]() {
+      //   Log.verbose(F("Got DHCP timeout from WiFi station." CR));
+      // });
       // try to connect
       Log.verbose("Trying to connect to WiFi ");
       while (_wifiMulti.run() != WL_CONNECTED && retries-- > 0) { // try to connect for given amount of retries
@@ -31,29 +46,7 @@ namespace esp8266util {
         if (MDNS_SERVICE.available()) {
           MDNS_SERVICE.getMDNSResponder().update();
         }
-        Log.notice(F("WiFi successful connected with IP: %s" CR), WiFi.localIP().toString().c_str());
-
-        //WiFi.onEvent([](WiFiEvent_t e) {
-          //Serial.printf("Event wifi -----> %d\n", e);
-        //});
-
-        // TODO extend verbose logs
-        _stationModeConnectedHandler = WiFi.onStationModeConnected([this](const WiFiEventStationModeConnected& event) {
-          Log.verbose(F("Connected with WiFi station." CR));
-        });
-        _stationModeDisconnectedHandler = WiFi.onStationModeDisconnected([this](const WiFiEventStationModeDisconnected& event) {
-          Log.verbose(F("Disconnected from WiFi station." CR));
-        });
-        _stationModeAuthModeChangedHandler = WiFi.onStationModeAuthModeChanged([this](const WiFiEventStationModeAuthModeChanged& event) {
-          Log.verbose(F("WiFi authentication mode changed." CR));
-        });
-        _stationModeGotIPHandler = WiFi.onStationModeGotIP([this](const WiFiEventStationModeGotIP& event) {
-          Log.verbose(F("Received IP from WiFi station." CR));
-        });
-        _stationModeDHCPTimeoutHandler = WiFi.onStationModeDHCPTimeout([this]() {
-          Log.verbose(F("Got DHCP timeout from WiFi station." CR));
-        });
-
+        Log.verbose(F("WiFi successful connected with IP: %s" CR), WiFi.localIP().toString().c_str());
       } else {
         Log.error(F("Failed to setup a WiFi connection. Please check your WiFi availability / accessibility and retry." CR));
       }

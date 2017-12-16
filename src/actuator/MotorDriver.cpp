@@ -2,29 +2,44 @@
 
 namespace esp8266util {
 
-  bool MotorDriver::isSetup() {
-    return _setupDone;
+  bool MotorDriver::begin(uint8_t pinPWM, uint8_t pinDir) {
+
+    config_t config;
+    config.pinPWM = pinPWM;
+    config.pinDir = pinDir;
+    begin(config);
   }
 
-  bool MotorDriver::setup(uint8_t pinPWM, uint8_t pinDir) {
+  bool MotorDriver::begin(config_t config) {
 
-    _pinPWM = pinPWM;
-    _pinDir = pinDir;
-    pinMode(_pinPWM, OUTPUT);
-    pinMode(_pinDir, OUTPUT);
-    Log.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d" CR), _pinPWM, _pinDir);
+    _config = config;
+    pinMode(_config.pinPWM, OUTPUT);
+    pinMode(_config.pinDir, OUTPUT);
+    Log.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d" CR), _config.pinPWM, _config.pinDir);
 
-    _setupDone = true;
-
-    return isSetup();
+    return true;
   }
 
-  int MotorDriver::getSpeed() {
-    return _speed;
+  MotorDriver::config_t MotorDriver::getConfig() {
+    return _config;
+  }
+
+  JsonObject& MotorDriver::getConfigAsJson() {
+
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& json = jsonBuffer.createObject();
+    json["pinPWM"] = _config.pinPWM;
+    json["pinDir"] = _config.pinDir; 
+
+    return json;
   }
 
   uint8_t MotorDriver::getDirection() {
     return getSpeed() > 0 ? 1 : 0;
+  }
+
+  int MotorDriver::getSpeed() {
+    return _speed;
   }
 
   void MotorDriver::setSpeed(int speed) {
@@ -37,9 +52,9 @@ namespace esp8266util {
     }
     Log.verbose(F("Write speed = %d" CR), speed);
     // write speed to PWM
-    analogWrite(_pinPWM, abs(speed));
+    analogWrite(_config.pinPWM, abs(speed));
     // change direction accordingly to original signed speed to HIGH or LOW
-    digitalWrite(_pinDir, getDirection());
+    digitalWrite(_config.pinDir, getDirection());
     // save new speed value
     _speed = speed;
 
@@ -54,8 +69,8 @@ namespace esp8266util {
 
     DynamicJsonBuffer jsonBuffer;
     JsonObject &json = jsonBuffer.createObject();
-    json[F("pinPWM")] = _pinPWM;
-    json[F("pinDir")] = _pinDir;
+    json[F("pinPWM")] = _config.pinPWM;
+    json[F("pinDir")] = _config.pinDir;
     json[F("pwmRange")] = getPWMRange();
     json[F("speed")] = getSpeed();
 
