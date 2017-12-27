@@ -75,7 +75,7 @@ namespace esp8266util {
       writeOffset(offset + getLineLength());
       // write to serial output in verbose mode
       if (verbose) {
-        Log.verbose(F("[%s][length=%d][offset=%d]" CR), entry, getLineLength(), getOffset());
+        LOG.verbose(F("[%s][length=%d][offset=%d]"), entry, getLineLength(), getOffset());
       }
     }
   }
@@ -120,7 +120,7 @@ namespace esp8266util {
       String line = file.readStringUntil('\n');
       offset = line.toInt();
       if (offset == 0) {
-        Log.error(F("File [%s] doesn't contain a valid offset value." CR), getPath().c_str());
+        LOG.error(F("File [%s] doesn't contain a valid offset value."), getPath().c_str());
       }
     }
 
@@ -170,21 +170,21 @@ namespace esp8266util {
       if (SPIFFS.exists(getPath())) {
         _file = SPIFFS.open(getPath(), "r+");
         if (_file) {
-          Log.verbose(F("Open file [%s] successful." CR), getPath().c_str());
+          LOG.verbose(F("Open file [%s] successful."), getPath().c_str());
           _offset = readOffset();
           _lineLength = readLineLength();
         } else {
-          Log.error(F("Open file [%s] failed." CR), getPath().c_str());
+          LOG.error(F("Open file [%s] failed."), getPath().c_str());
         }
       // create a new file and set default file preferences
       } else {
         _file = SPIFFS.open(getPath(), "w+");
         if (_file) {
-          Log.error(F("Creating new file [%s] successful." CR), getPath().c_str());
+          LOG.error(F("Creating new file [%s] successful."), getPath().c_str());
           writeOffset(DEFAULT_OFFSET);
           _lineLength = 0; // unset by default
         } else {
-          Log.error(F("Creating new file [%s] failed." CR), getPath().c_str());
+          LOG.error(F("Creating new file [%s] failed."), getPath().c_str());
         }
       }
     }

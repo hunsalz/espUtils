@@ -23,7 +23,7 @@ namespace esp8266util {
       });
       // add default 404 handler
       getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
-        Log.verbose(F("HTTP 404 : [http://%s%s] not found." CR), request->host().c_str(), request->url().c_str());
+        LOG.verbose(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
         // TODO make a nice 404 page
         request->send(404, "text/plain", F("404 error - Page not found."));
       });
@@ -54,7 +54,7 @@ namespace esp8266util {
       // start web server
       getWebServer().begin();
 
-      Log.verbose("WebServer started.\n");
+      LOG.verbose(F("WebServer started."));
     }
 
     return available();
@@ -94,21 +94,21 @@ namespace esp8266util {
   void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
 
     String payload = toString(json);
-    Log.verbose(F("Send response: %s." CR), payload.c_str());
+    LOG.verbose(F("Send response: %s."), payload.c_str());
     request->send(new AsyncBasicResponse(200, "text/json", payload));
   }
 
   void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
 
     String payload = toString(json);
-    Log.verbose(F("Send response: %s." CR), payload.c_str());
+    LOG.verbose(F("Send response: %s."), payload.c_str());
     request->send(new AsyncBasicResponse(200, "text/json", payload));
   }
 
   void WebService::send(AsyncWebServerRequest *request, StreamString stream) {
   
     request->send(new AsyncBasicResponse(200, "text/json", stream));
-    Log.verbose(F("Send response: %s." CR), stream.c_str());
+    LOG.verbose(F("Send response: %s."), stream.c_str());
   }
 
   JsonArray& WebService::getDetails() {

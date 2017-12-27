@@ -1,9 +1,8 @@
 #ifndef NTPSERVICE_H
 #define NTPSERVICE_H
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <NtpClientLib.h> // https://github.com/gmag11/NtpClient/blob/master/src/NtpClientLib.h
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 

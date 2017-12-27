@@ -1,7 +1,6 @@
 #ifndef BMP280SERVICE_H
 #define BMP280SERVICE_H
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <Adafruit_BMP280.h> // https://github.com/adafruit/Adafruit_BMP280_Library
 

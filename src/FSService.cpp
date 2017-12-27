@@ -16,10 +16,10 @@ namespace esp8266util {
 
     if (!available()) {
       if (SPIFFS.begin()) {
-        Log.verbose(F("File system mounted." CR));
+        LOG.verbose(F("File system mounted."));
         _available = true;
       } else {
-        Log.warning(F("Mounting file system failed." CR));
+        LOG.warning(F("Mounting file system failed."));
       }
     }
 
@@ -76,7 +76,7 @@ namespace esp8266util {
       JsonObject& entry = json.createNestedObject();
       entry[F("name")] = name;
       entry[F("size")] = size;
-      Log.verbose(F("Found file: name=%s, size=%s" CR), name.c_str(), size.c_str());
+      LOG.verbose(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
     }
 
     return json;

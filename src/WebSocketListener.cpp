@@ -58,7 +58,7 @@ namespace esp8266util {
         }
         break;
       default:
-        Log.error(F("ws[%s][%u] - Unexpected type definition" CR), ws->url(), client->id());
+        LOG.error(F("ws[%s][%u] - Unexpected type definition"), ws->url(), client->id());
         // TODO send an error response to the client
         break;
       }
@@ -69,7 +69,7 @@ namespace esp8266util {
     if (_connectWSEventHandler) {
       _connectWSEventHandler(ws, client, type, info, data, len);
     } else {
-      Log.verbose(F("ws[%s][%u] connected" CR), ws->url(), client->id());
+      LOG.verbose(F("ws[%s][%u] connected"), ws->url(), client->id());
     }
   }
 
@@ -78,7 +78,7 @@ namespace esp8266util {
     if (_disconnectWSEventHandler) {
       _disconnectWSEventHandler(ws, client, type, info, data, len);
     } else {
-      Log.verbose(F("ws[%s][%u] disconnected: %u" CR), ws->url(), client->id());
+      LOG.verbose(F("ws[%s][%u] disconnected: %u"), ws->url(), client->id());
     }
   }
 
@@ -87,7 +87,7 @@ namespace esp8266util {
     if (_errorWSEventHandler) {
       _errorWSEventHandler(ws, client, type, arg, data, len);
     } else {
-      Log.error(F("ws[%s][%u] error(%u): %s" CR), ws->url(), client->id(), arg, (char*)data);
+      LOG.error(F("ws[%s][%u] error(%u): %s"), ws->url(), client->id(), arg, (char*)data);
     }
   }
 
@@ -96,7 +96,7 @@ namespace esp8266util {
     if (_pongWSEventHandler) {
       _pongWSEventHandler(ws, client, type, info, data, len);
     } else {
-      Log.verbose(F("ws[%s][%u] pong[%u]: %s" CR), ws->url(), client->id(), len, (len)?(char*)data:"");
+      LOG.verbose(F("ws[%s][%u] pong[%u]: %s"), ws->url(), client->id(), len, (len)?(char*)data:"");
     }
   }
 
@@ -104,13 +104,10 @@ namespace esp8266util {
 
     if (_textWSEventHandler) {
       data[len] = 0;
-      // TODO get Log.verbose(...) running
-      //Log.verbose(F("ws[%s][%u] received : %s\n" CR), ws->url(), client->id(), (char*)data);
-
       _textWSEventHandler(ws, client, type, info, data, len);
     } else {
-      Serial.printf("V: ws[%s][%u] received : %s\n", ws->url(), client->id(), (char*)data);
-      // TODO Log.verbose(F("ws[%s][%u] received : %s\n" CR), ws->url(), client->id(), (char*)data); results in fatal error
+      // TODO test verbose message
+      LOG.verbose(F("ws[%s][%u] received : %s"), ws->url(), client->id(), (char*)data);
     }
   }
 
@@ -119,7 +116,7 @@ namespace esp8266util {
     if (_binaryWSEventHandler) {
       _binaryWSEventHandler(ws, client, type, info, data, len);
     } else {
-      Log.verbose(F("ws[%s][%u] received : %d bytes" CR), ws->url(), client->id(), len);
+      LOG.verbose(F("ws[%s][%u] received : %d bytes"), ws->url(), client->id(), len);
     }
   }
 }

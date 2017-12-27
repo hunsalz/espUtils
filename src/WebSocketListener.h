@@ -1,9 +1,11 @@
 #ifndef WEBSOCKETLISTENER_H
 #define WEBSOCKETLISTENER_H
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
-#include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+#include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
+#include <Logger.h> // https://github.com/hunsalz/log4arduino
+
+using log4arduino::LOG;
 
 namespace esp8266util {
 

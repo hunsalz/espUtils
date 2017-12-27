@@ -12,6 +12,6 @@ namespace esp8266util {
 
     PWM_RANGE = pwmRange;
     analogWriteRange(PWM_RANGE);
-    Log.verbose(F("Set PWM range to %d" CR), PWM_RANGE);
+    LOG.verbose(F("Set PWM range to %d"), PWM_RANGE);
   }
 }

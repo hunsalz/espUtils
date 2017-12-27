@@ -8,16 +8,17 @@
 #endif
 #include <vector>
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <ESPAsyncTCP.h> // https://github.com/me-no-dev/ESPAsyncTCP/blob/master/src/ESPAsyncTCP.h
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+#include <Logger.h> // https://github.com/hunsalz/log4arduino
 #include <StreamString.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 
 #include "Service.h"
 #include "JsonHelper.h"
 #include "WebSocketListener.h"
 
+using log4arduino::LOG;
 using esp8266util::toString;
 
 namespace esp8266util {

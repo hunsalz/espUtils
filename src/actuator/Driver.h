@@ -2,7 +2,9 @@
 #define DRIVER_H
 
 #include <Arduino.h>
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
+#include <Logger.h> // https://github.com/hunsalz/log4arduino
+
+using log4arduino::LOG;
 
 namespace esp8266util {
 

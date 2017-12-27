@@ -20,24 +20,25 @@ namespace esp8266util {
 
   bool MQTTService::begin(config_t config) {
     
+    _config = config;
     // add verbose callback handlers
     _mqttClient.onConnect([this](bool sessionPresent) {
-      Log.verbose(F("Connected to MQTT broker [%s:%d]" CR), getConfig().hostName, getConfig().port);
+      LOG.verbose(F("Connected to MQTT broker [%s:%d]"), getConfig().hostName, getConfig().port);
     });
     _mqttClient.onDisconnect([this](AsyncMqttClientDisconnectReason reason) {
-      Log.verbose(F("Disconnected from MQTT broker [%s:%d]" CR), getConfig().hostName, getConfig().port);
+      LOG.verbose(F("Disconnected from MQTT broker [%s:%d]"), getConfig().hostName, getConfig().port);
     });
     _mqttClient.onSubscribe([](uint16_t packetId, uint8_t qos) {
-      Log.verbose(F("Subscribe acknowledged with packetId [%d]" CR), packetId);
+      LOG.verbose(F("Subscribe acknowledged with packetId [%d]"), packetId);
     });
     _mqttClient.onUnsubscribe([](uint16_t packetId) {
-      Log.verbose(F("Unsubscribe acknowledged with packetId [%d]" CR), packetId);
+      LOG.verbose(F("Unsubscribe acknowledged with packetId [%d]"), packetId);
     });
     _mqttClient.onMessage([](char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-      Log.verbose(F("Message received for topic [%s]: %s" CR), topic, payload);
+      LOG.verbose(F("Message received for topic [%s]: %s"), topic, payload);
     });
     _mqttClient.onPublish([](uint16_t packetId) {
-      Log.verbose(F("Publish acknowledged with packetId [%d]" CR), packetId);
+      LOG.verbose(F("Publish acknowledged with packetId [%d]"), packetId);
     });
     // configure mqtt client
     _mqttClient.setServer(config.hostName, config.port);
@@ -80,7 +81,7 @@ namespace esp8266util {
 
     // TODO check publish
     _mqttClient.publish(topic, 0, true, payload, length);
-    Log.verbose(F("Message send: %s" CR), payload);
+    LOG.verbose(F("Message send: %s"), payload);
   }
 
   void MQTTService::publish(const char* topic, JsonArray& json) {
@@ -92,6 +93,6 @@ namespace esp8266util {
 
     // TODO check publish
     _mqttClient.publish(topic, 0, true, payload, length);
-    Log.verbose(F("Message send: %s" CR), payload);
+    LOG.verbose(F("Message send: %s"), payload);
   }
 }

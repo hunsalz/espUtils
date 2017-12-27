@@ -13,7 +13,7 @@ namespace esp8266util {
     
     _config = config;
     if (!_config.pin) {
-      Log.error(F("Missing pin declaration." CR));
+      LOG.error(F("Missing pin declaration."));
     }
     _mq135 = new MQ135(config.pin);
 
@@ -50,9 +50,9 @@ namespace esp8266util {
     bool update = false;
     if (_mq135) {
       int value = analogRead(_config.pin);
-      //Log.verbose(F("Raw analog data = %d" CR), value);
+      //LOG.verbose(F("Raw analog data = %d"), value);
       //float rzero = _mq135->getRZero(); // the specific resistance at atmospheric CO2 level of your sensor
-      //Log.verbose(F("RZero = %D" CR), rzero);
+      //LOG.verbose(F("RZero = %D"), rzero);
       _ppm = _mq135->getPPM(); // parts per million - https://en.wikipedia.org/wiki/Carbon_dioxide_in_Earth%27s_atmosphere
       update = true;
     }

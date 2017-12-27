@@ -35,9 +35,9 @@ namespace esp8266util {
 
     if (milliseconds < 500) {
       milliseconds = 500;
-      Log.warning(F("Loop interval limited to %d milliseconds." CR), milliseconds);
+      LOG.warning(F("Loop interval limited to %d milliseconds."), milliseconds);
     } else {
-      Log.verbose(F("Loop interval set to %d milliseconds." CR), milliseconds);
+      LOG.verbose(F("Loop interval set to %d milliseconds."), milliseconds);
     }
     _loopInterval = milliseconds;
   }
@@ -50,9 +50,9 @@ namespace esp8266util {
     
     if (milliseconds < 30000) {
       milliseconds = 30000;
-      Log.warning(F("Deep sleep interval limited to %d milliseconds." CR), milliseconds);
+      LOG.warning(F("Deep sleep interval limited to %d milliseconds."), milliseconds);
     } else {
-      Log.verbose(F("Deep sleep interval set to %d milliseconds." CR), milliseconds);
+      LOG.verbose(F("Deep sleep interval set to %d milliseconds."), milliseconds);
     }
     _deepSleepInterval = milliseconds;
   }

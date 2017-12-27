@@ -15,7 +15,7 @@ namespace esp8266util {
     _config = config;
     pinMode(_config.pinPWM, OUTPUT);
     pinMode(_config.pinDir, OUTPUT);
-    Log.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d" CR), _config.pinPWM, _config.pinDir);
+    LOG.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d"), _config.pinPWM, _config.pinDir);
 
     return true;
   }
@@ -50,7 +50,7 @@ namespace esp8266util {
     } else if (speed < -getPWMRange()) {
       speed = -getPWMRange();
     }
-    Log.verbose(F("Write speed = %d" CR), speed);
+    LOG.verbose(F("Write speed = %d"), speed);
     // write speed to PWM
     analogWrite(_config.pinPWM, abs(speed));
     // change direction accordingly to original signed speed to HIGH or LOW
@@ -58,7 +58,7 @@ namespace esp8266util {
     // save new speed value
     _speed = speed;
 
-    Log.verbose(F("Write speed = %d - DONE" CR), _speed);
+    LOG.verbose(F("Write speed = %d - DONE"), _speed);
   }
 
   void MotorDriver::applySpeed(int speed) {

@@ -9,9 +9,11 @@
 #ifndef LOGSERVICE_H
 #define LOGSERVICE_H
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
+#include <Logger.h> // https://github.com/hunsalz/log4arduino
 #include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 #include <StreamString.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
+
+using log4arduino::LOG;
 
 namespace esp8266util {
 

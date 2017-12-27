@@ -1,14 +1,15 @@
 #ifndef WIFISERVICE_H
 #define WIFISERVICE_H
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ESP8266WiFi.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 #include <ESP8266WiFiMulti.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
+#include <Logger.h> // https://github.com/hunsalz/log4arduino
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 #include "MDNSService.h"
 
+using log4arduino::LOG;
 using esp8266util::MDNS_SERVICE;
 
 namespace esp8266util {

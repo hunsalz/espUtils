@@ -7,11 +7,13 @@ extern "C" {
 }
 #endif
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <ESP.h> // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
+#include <Logger.h> // https://github.com/hunsalz/log4arduino
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
+
+using log4arduino::LOG;
 
 namespace esp8266util {
 

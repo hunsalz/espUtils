@@ -10,9 +10,9 @@ namespace esp8266util {
       DynamicJsonBuffer buffer;
       json = buffer.parse(file);
       if (json.success()) {
-        Log.verbose(F("Loaded json config from file [%s]" CR), path);
+        LOG.verbose(F("Loaded json config from file [%s]"), path);
       } else {
-        Log.error(F("Malformed json config file [%s]" CR), path);
+        LOG.error(F("Malformed json config file [%s]"), path);
       }
       file.close();
     }
@@ -32,6 +32,6 @@ namespace esp8266util {
     file.flush();
     file.close();
 
-    Log.verbose(F("Saved config to file [%s]" CR), path);
+    LOG.verbose(F("Saved config to file [%s]"), path);
   }
 }

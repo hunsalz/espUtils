@@ -14,10 +14,10 @@ namespace esp8266util {
     
     _config = config;
     if (!_config.pin) {
-      Log.error(F("Missing pin declaration." CR));
+      LOG.error(F("Missing pin declaration."));
     }
     if (!_config.type) {
-      Log.error(F("Missing type declaration." CR));
+      LOG.error(F("Missing type declaration."));
     }
     _dht = new DHT_Unified(config.pin, config.type);
 
@@ -58,14 +58,14 @@ namespace esp8266util {
       sensors_event_t event;
       getDHT().temperature().getEvent(&event);
       if (isnan(event.temperature)) {
-        Log.error(F("Error reading temperature" CR));
+        LOG.error(F("Error reading temperature"));
         _temperature = NAN;
       } else {
         _temperature = event.temperature;
       }
       getDHT().humidity().getEvent(&event);
       if (isnan(event.relative_humidity)) {
-        Log.error(F("Error reading humidity" CR));
+        LOG.error(F("Error reading humidity"));
         _humidity = NAN;
       } else {
         _humidity = event.relative_humidity;

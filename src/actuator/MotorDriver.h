@@ -3,7 +3,6 @@
 
 #include "Driver.h"
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 namespace esp8266util {

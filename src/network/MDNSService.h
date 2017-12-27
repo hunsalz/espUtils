@@ -1,11 +1,13 @@
 #ifndef MDNSSERVICE_H
 #define MDNSSERVICE_H
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ESP8266mDNS.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/ESP8266mDNS.h
+#include <Logger.h> // https://github.com/hunsalz/log4arduino
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
+
+using log4arduino::LOG;
 
 namespace esp8266util {
 

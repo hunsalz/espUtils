@@ -12,10 +12,10 @@ namespace esp8266util {
     
     if (!available()) {
       if (MDNS.begin(getDomainName())) {
-        Log.verbose(F("MDNS enabled to http://%s.local" CR), getDomainName());
+        LOG.verbose(F("MDNS enabled to http://%s.local"), getDomainName());
         _available = true;
       } else {
-        Log.error(F("MDNS failed for http://%s.local" CR), getDomainName());
+        LOG.error(F("MDNS failed for http://%s.local"), getDomainName());
       }
     }
 

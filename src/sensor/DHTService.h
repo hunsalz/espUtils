@@ -1,10 +1,9 @@
 #ifndef DHTSERVICE_H
 #define DHTSERVICE_H
 
-#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <DHT.h> // https://github.com/adafruit/DHT-sensor-library
 #include <DHT_U.h> // https://github.com/adafruit/DHT-sensor-library
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Configurable.h"
 
