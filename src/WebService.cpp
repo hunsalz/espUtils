@@ -115,7 +115,7 @@ namespace esp8266util {
 
     DynamicJsonBuffer jsonBuffer;
     JsonArray& json = jsonBuffer.createArray();
-    for(std::vector<String>::iterator i = _services.begin(); i != _services.end(); ++i) {
+    for (std::vector<String>::iterator i = _services.begin(); i != _services.end(); ++i) {
       json.add(*i);
     }
 
