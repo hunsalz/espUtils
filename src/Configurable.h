@@ -2,11 +2,11 @@
 #define CONFIGURABLE_H
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
-#include <Logger.h> // https://github.com/hunsalz/log4arduino
+#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 
 #include "FSService.h"
 
-using log4arduino::LOG;
+using log4Esp::LOG;
 
 namespace esp8266util {
 

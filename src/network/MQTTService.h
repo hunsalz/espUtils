@@ -1,13 +1,13 @@
 #ifndef MQTTSERVICE_H
 #define MQTTSERVICE_H
 
-#include <Logger.h> // https://github.com/hunsalz/log4arduino
+#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 #include <AsyncMqttClient.h> // https://github.com/marvinroger/async-mqtt-client
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 
-using log4arduino::LOG;
+using log4Esp::LOG;
 
 namespace esp8266util {
 

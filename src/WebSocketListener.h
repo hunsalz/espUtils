@@ -3,9 +3,9 @@
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
-#include <Logger.h> // https://github.com/hunsalz/log4arduino
+#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 
-using log4arduino::LOG;
+using log4Esp::LOG;
 
 namespace esp8266util {
 

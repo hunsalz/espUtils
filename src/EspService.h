@@ -8,12 +8,12 @@ extern "C" {
 #endif
 
 #include <ESP.h> // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
-#include <Logger.h> // https://github.com/hunsalz/log4arduino
+#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 
-using log4arduino::LOG;
+using log4Esp::LOG;
 
 namespace esp8266util {
 

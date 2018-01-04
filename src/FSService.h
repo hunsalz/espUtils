@@ -1,13 +1,13 @@
 #ifndef FSSERVICE_H
 #define FSSERVICE_H
 
-#include <Logger.h> // https://github.com/hunsalz/log4arduino
+#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 #include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 
-using log4arduino::LOG;
+using log4Esp::LOG;
 
 namespace esp8266util {
 
