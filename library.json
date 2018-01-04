@@ -14,7 +14,7 @@
   },
   "version": "0.0.1",
   "license": "Apache License",
-  "frameworks": "arduino",
+  "frameworks": "ESP8266",
   "platforms":"espressif",
   "examples": [
     "examples/*/*.ino"
