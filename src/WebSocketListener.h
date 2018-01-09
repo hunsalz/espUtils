@@ -2,7 +2,7 @@
 #define WEBSOCKETLISTENER_H
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
-#include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
+#include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer
 #include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 
 using log4Esp::LOG;
