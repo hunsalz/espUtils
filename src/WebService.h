@@ -9,8 +9,7 @@
 #include <vector>
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
-#include <ESPAsyncTCP.h> // https://github.com/me-no-dev/ESPAsyncTCP/blob/master/src/ESPAsyncTCP.h
-#include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
+#include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
 #include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 #include <StreamString.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 
