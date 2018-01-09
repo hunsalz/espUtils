@@ -33,6 +33,8 @@ namespace esp8266util {
 
       void setLoopInterval(int milliseconds);
 
+      void deepSleep();
+
       int getDeepSleepInterval();
 
       void setDeepSleepInterval(int milliseconds);

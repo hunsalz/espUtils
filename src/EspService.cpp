@@ -42,6 +42,10 @@ namespace esp8266util {
     _loopInterval = milliseconds;
   }
 
+  void EspService::deepSleep() {
+    ESP.deepSleep(getDeepSleepInterval());
+  }
+
   int EspService::getDeepSleepInterval() {
     return _deepSleepInterval;
   }
