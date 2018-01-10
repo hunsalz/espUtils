@@ -2,7 +2,7 @@
 #define NTPSERVICE_H
 
 #include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
-#include <NtpClientLib.h> // https://github.com/gmag11/NtpClient
+#include <NTPClient.h> // https://github.com/stelgenhof/NTPClient
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
@@ -16,18 +16,16 @@ namespace esp8266util {
     public:
 
       struct config_t {
-        const char* ntpServerName;
-        int timeZone;
-        bool daylight;
-        int shortInterval;
-        int longInterval;
+        const char* server;
+        tz_utc_offsets_t utc_offset;
+        unsigned int interval;
       };
 
       ~NTPService();
 
       bool available();
 
-      bool begin(const char* ntpServerName = DEFAULT_NTP_SERVER, int timeZone = DEFAULT_NTP_TIMEZONE, bool daylight = false, int shortInterval = 30, int longInterval = 300);
+      bool begin(const char* server = DEFAULT_NTP_SERVER, tz_utc_offsets_t utc_offset = UTC, unsigned int interval = (30*60));
 
       bool begin(config_t config);
 
