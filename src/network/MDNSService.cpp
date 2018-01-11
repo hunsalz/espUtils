@@ -1,43 +1,49 @@
 #include "MDNSService.h"
 
-namespace esp8266util {
+namespace esp8266util
+{
 
-  bool MDNSService::available() {
-    return _available;
+bool MDNSService::available()
+{
+  return _available;
+}
+
+bool MDNSService::begin(const char *domainName)
+{
+  _domainName = domainName;
+
+  if (MDNS.begin(getDomainName()))
+  {
+    _available = true;
+    LOG.verbose(F("MDNS enabled to http://%s.local"), getDomainName());
+  }
+  else
+  {
+    _available = false;
+    LOG.error(F("MDNS failed for http://%s.local"), getDomainName());
   }
 
-  bool MDNSService::begin(const char* domainName) {
+  return available();
+}
 
-    _domainName = domainName;
-    
-    if (!available()) {
-      if (MDNS.begin(getDomainName())) {
-        LOG.verbose(F("MDNS enabled to http://%s.local"), getDomainName());
-        _available = true;
-      } else {
-        LOG.error(F("MDNS failed for http://%s.local"), getDomainName());
-      }
-    }
+MDNSResponder &MDNSService::getMDNSResponder()
+{
+  return MDNS;
+}
 
-    return available();
-  }
+const char *MDNSService::getDomainName()
+{
+  return _domainName;
+}
 
-  MDNSResponder& MDNSService::getMDNSResponder() {
-    return MDNS;
-  }
+JsonObject &MDNSService::getDetails()
+{
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  json[F("domainName")] = getDomainName();
 
-  const char* MDNSService::getDomainName() {
-    return _domainName;
-  }
+  return json;
+}
 
-  JsonObject& MDNSService::getDetails() {
-
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject &json = jsonBuffer.createObject();
-    json[F("domainName")] = getDomainName();
-
-    return json;
-  }
-
-  extern MDNSService MDNS_SERVICE = MDNSService();
+extern MDNSService MDNS_SERVICE = MDNSService();
 }

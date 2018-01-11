@@ -3,48 +3,48 @@
 
 #ifdef ESP8266
 extern "C" {
-  #include "user_interface.h" // Expressif ESP8266 Non-OS API
+#include "user_interface.h" // Expressif ESP8266 Non-OS API
 }
 #endif
 
 #include <ESP8266WiFi.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
-#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
+#include <Log4Esp.h>     // https://github.com/hunsalz/log4Esp
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 #include "MDNSService.h"
 
-using log4Esp::LOG;
 using esp8266util::MDNS_SERVICE;
+using log4Esp::LOG;
 
-namespace esp8266util {
+namespace esp8266util
+{
 
-  class WiFiAPService : public Service {
+class WiFiAPService : public Service
+{
 
-    public:
+public:
+  ~WiFiAPService();
 
-      ~WiFiAPService();
+  bool available();
 
-      bool available();
+  bool begin(const char *ssid, const char *passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
 
-      bool begin(const char* ssid, const char* passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
+  bool end();
 
-      bool end();
+  ESP8266WiFiClass &getWiFi();
 
-      ESP8266WiFiClass& getWiFi();
+  JsonObject &getDetails();
 
-      JsonObject& getDetails();
+  String macAddress(const unsigned char *mac);
 
-      String macAddress(const unsigned char* mac);
+private:
+  WiFiEventHandler _softAPModeStationConnectedHandler;
+  WiFiEventHandler _softAPModeStationDisconnectedHandler;
+  WiFiEventHandler _softAPModeProbeRequestReceivedHandler;
+};
 
-    private:
-
-      WiFiEventHandler _softAPModeStationConnectedHandler;
-      WiFiEventHandler _softAPModeStationDisconnectedHandler;
-      WiFiEventHandler _softAPModeProbeRequestReceivedHandler;
-  };
-
-  extern WiFiAPService WIFI_STATION;
+extern WiFiAPService WIFI_STATION;
 }
 
 #endif // WIFIAPSERVICE_H
