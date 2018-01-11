@@ -3,52 +3,52 @@
 
 #ifdef ESP8266
 extern "C" {
-  #include "user_interface.h" // Expressif ESP8266 Non-OS API
+#include "user_interface.h" // Expressif ESP8266 Non-OS API
 }
 #endif
 
-#include <ESP.h> // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
-#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
+#include <ESP.h>         // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
+#include <Log4Esp.h>     // https://github.com/hunsalz/log4Esp
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 
 using log4Esp::LOG;
 
-namespace esp8266util {
+namespace esp8266util
+{
 
-  class EspService : public Service {
+class EspService : public Service
+{
 
-    public:
+public:
+  bool available();
 
-      bool available();
+  EspClass &getESP();
 
-      EspClass& getESP();
+  long unsigned getRemainingLoopInterval();
 
-      long unsigned getRemainingLoopInterval();
+  bool nextLoopInterval();
 
-      bool nextLoopInterval();
+  int getLoopInterval();
 
-      int getLoopInterval();
+  void setLoopInterval(int milliseconds);
 
-      void setLoopInterval(int milliseconds);
+  void deepSleep();
 
-      void deepSleep();
+  int getDeepSleepInterval();
 
-      int getDeepSleepInterval();
+  void setDeepSleepInterval(int milliseconds);
 
-      void setDeepSleepInterval(int milliseconds);
+  JsonObject &getDetails();
 
-      JsonObject& getDetails();
+private:
+  int _loopInterval = 5000; // milliseconds
+  unsigned long _lastLoopInterval = millis();
+  int _deepSleepInterval = 60000; // milliseconds
+};
 
-    private:
-
-      int _loopInterval = 5000; // milliseconds
-      unsigned long _lastLoopInterval = millis();
-      int _deepSleepInterval = 60000; // milliseconds
-  };
-
-  extern EspService SYSTEM;
+extern EspService SYSTEM;
 }
 
 #endif // ESPSERVICE_H

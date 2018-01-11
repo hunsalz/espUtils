@@ -4,7 +4,6 @@
 #include <actuator/Driver.h>
 #include <actuator/MotorDriver.h>
 #include <network/MDNSService.h>
-#include <network/MQTTService.h>
 #include <network/WiFiAPService.h>
 #include <network/WiFiService.h>
 #include <sensor/BMP280Service.h>
@@ -14,6 +13,7 @@
 #include <EspService.h>
 #include <FSService.h>
 #include <JsonHelper.h>
+#include <MQTTService.h>
 #include <NTPService.h>
 #include <Service.h>
 #include <WebService.h>

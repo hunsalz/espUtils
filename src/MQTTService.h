@@ -40,8 +40,8 @@ namespace esp8266util {
 
     private:
 
-      AsyncMqttClient _mqttClient;
       config_t _config;
+      AsyncMqttClient _mqttClient;
   };
 }
 

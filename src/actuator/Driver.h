@@ -6,19 +6,19 @@
 
 using log4Esp::LOG;
 
-namespace esp8266util {
+namespace esp8266util
+{
 
-  class Driver {
+class Driver
+{
 
-    public:
+public:
+  static uint16_t getPWMRange();
 
-      static uint16_t getPWMRange();
+  static void setPWMRange(uint16_t pwmRange = 1023);
 
-      static void setPWMRange(uint16_t pwmRange = 1023);
-
-      // TODO add analogWriteFreq analog to pwm range
-
-  };
+  // TODO add analogWriteFreq analog to pwm range
+};
 }
 
 #endif // DRIVER_H

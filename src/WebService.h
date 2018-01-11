@@ -26,8 +26,6 @@ namespace esp8266util {
 
     public:
 
-      WebService();
-
       ~WebService();
 
       bool available();

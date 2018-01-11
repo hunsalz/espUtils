@@ -2,24 +2,25 @@
 #define CONFIGURABLE_H
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
-#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
+#include <Log4Esp.h>     // https://github.com/hunsalz/log4Esp
 
 #include "FSService.h"
 
 using log4Esp::LOG;
 
-namespace esp8266util {
+namespace esp8266util
+{
 
-  class Configurable {
+class Configurable
+{
 
-    public:
+public:
+  virtual JsonObject &getConfigAsJson() = 0;
 
-      virtual JsonObject& getConfigAsJson() = 0;
+  JsonVariant read(const char *path);
 
-      JsonVariant read(const char* path);
-
-      void write(const char* path);
-  };
+  void write(const char *path);
+};
 }
 
 #endif // CONFIGURABLE_H

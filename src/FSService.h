@@ -1,44 +1,44 @@
 #ifndef FSSERVICE_H
 #define FSSERVICE_H
 
-#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
-#include <FS.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
+#include <Log4Esp.h>     // https://github.com/hunsalz/log4Esp
+#include <FS.h>          // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 
 using log4Esp::LOG;
 
-namespace esp8266util {
+namespace esp8266util
+{
 
-  class FSService : public Service {
+class FSService : public Service
+{
 
-    public:
+public:
+  FSService();
 
-      FSService();
+  ~FSService();
 
-      ~FSService();
+  bool available();
 
-      bool available();
+  bool end();
 
-      bool end();
+  FS &getFileSystem();
 
-      FS& getFileSystem();
+  JsonObject &getStorageDetails();
 
-      JsonObject& getStorageDetails();
+  JsonArray &getFileListing();
 
-      JsonArray& getFileListing();
+  static String formatBytes(size_t bytes);
 
-      static String formatBytes(size_t bytes);
+private:
+  bool begin(); // called implicitly
 
-    private:
+  bool _available = false;
+};
 
-      bool begin(); // called implicitly
-
-      bool _available = false;
-  };
-
-  extern FSService FILESYSTEM;
+extern FSService FILESYSTEM;
 }
 
 #endif // FSSERVICE_H
