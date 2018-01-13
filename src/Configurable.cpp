@@ -1,22 +1,17 @@
 #include "Configurable.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-JsonVariant Configurable::read(const char *path)
-{
+JsonVariant Configurable::read(const char *path) {
+  
   JsonVariant json;
-  if (FILESYSTEM.getFileSystem().exists(path))
-  {
+  if (FILESYSTEM.getFileSystem().exists(path)) {
     File file = FILESYSTEM.getFileSystem().open(path, "r+");
     DynamicJsonBuffer buffer;
     json = buffer.parse(file);
-    if (json.success())
-    {
+    if (json.success()) {
       LOG.verbose(F("Loaded json config from file [%s]"), path);
-    }
-    else
-    {
+    } else {
       LOG.error(F("Malformed json config file [%s]"), path);
     }
     file.close();
@@ -25,8 +20,8 @@ JsonVariant Configurable::read(const char *path)
   return json;
 }
 
-void Configurable::write(const char *path)
-{
+void Configurable::write(const char *path) {
+  
   JsonObject &json = getConfigAsJson();
   int length = json.measureLength() + 1;
   char payload[length];
@@ -39,4 +34,4 @@ void Configurable::write(const char *path)
 
   LOG.verbose(F("Saved config to file [%s]"), path);
 }
-}
+} // namespace esp8266util

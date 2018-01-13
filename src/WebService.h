@@ -8,60 +8,58 @@
 #endif
 #include <vector>
 
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+#include <ArduinoJson.h>       // https://github.com/bblanchon/ArduinoJson
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
-#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
-#include <StreamString.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
+#include <Log4Esp.h>           // https://github.com/hunsalz/log4Esp
+#include <StreamString.h>      // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 
-#include "Service.h"
 #include "JsonHelper.h"
+#include "Service.h"
 #include "WebSocketListener.h"
 
-using log4Esp::LOG;
 using esp8266util::toString;
+using log4Esp::LOG;
 
 namespace esp8266util {
 
-  class WebService : public Service {
+class WebService : public Service {
 
-    public:
+public:
+  ~WebService();
 
-      ~WebService();
+  bool available();
 
-      bool available();
+  bool begin(uint16_t port = 80);
 
-      bool begin(uint16_t port = 80);
+  // TODO bool end();
 
-      // TODO bool end();
+  AsyncWebServer &getWebServer();
 
-      AsyncWebServer& getWebServer();
+  uint8_t getPort();
 
-      uint8_t getPort();
+  AsyncCallbackWebHandler &on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
 
-      AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
+  AsyncCallbackWebHandler &on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody);
 
-      AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody);
+  AsyncCallbackWebHandler &on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload);
 
-      AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload);
+  void send(AsyncWebServerRequest *request, JsonObject &json);
 
-      void send(AsyncWebServerRequest *request, JsonObject &json);
+  void send(AsyncWebServerRequest *request, JsonArray &json);
 
-      void send(AsyncWebServerRequest *request, JsonArray &json);
+  void send(AsyncWebServerRequest *request, StreamString stream);
 
-      void send(AsyncWebServerRequest *request, StreamString stream);
+  JsonArray &getDetails();
 
-      JsonArray& getDetails();
+private:
+  AsyncWebServer *_webServer = NULL;
 
-    private:
+  uint8_t _port = 80;
 
-      AsyncWebServer* _webServer = NULL;
+  std::vector<String> _services;
+};
 
-      uint8_t _port = 80;
-
-      std::vector<String> _services;
-  };
-
-  extern WebService SERVER;
-}
+extern WebService SERVER;
+} // namespace esp8266util
 
 #endif // WEBSERVICE_H

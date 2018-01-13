@@ -9,17 +9,16 @@ extern "C" {
 
 #include <ESP.h>         // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
 #include <Log4Esp.h>     // https://github.com/hunsalz/log4Esp
+// include ArduinoJson.h last - order of includes matters
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 
 using log4Esp::LOG;
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-class EspService : public Service
-{
+class EspService : public Service {
 
 public:
   bool available();
@@ -32,23 +31,24 @@ public:
 
   int getLoopInterval();
 
-  void setLoopInterval(int milliseconds);
+  void setLoopInterval(uint16_t milliseconds);
 
   void deepSleep();
 
   int getDeepSleepInterval();
-
-  void setDeepSleepInterval(int milliseconds);
+  void setDeepSleepInterval(uint16_t milliseconds);
 
   JsonObject &getDetails();
 
 private:
-  int _loopInterval = 5000; // milliseconds
-  unsigned long _lastLoopInterval = millis();
-  int _deepSleepInterval = 60000; // milliseconds
+  uint16_t _loopInterval = 5000; // milliseconds
+  const int MIN_LOOP_INTERVAL = 500; // milliseconds
+  unsigned long _lastLoopInterval = millis(); // milliseconds
+  uint16_t _deepSleepInterval = 60000; // milliseconds
+  const int MIN_SLEEP_INTERVAL = 30000; // milliseconds
 };
 
 extern EspService SYSTEM;
-}
+} // namespace esp8266util
 
 #endif // ESPSERVICE_H

@@ -3,26 +3,24 @@
 
 #include <DHT.h>         // https://github.com/adafruit/DHT-sensor-library
 #include <DHT_U.h>       // https://github.com/adafruit/DHT-sensor-library
+// include ArduinoJson.h last - order of includes matters
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Configurable.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
 // TODO Service
-class DHTService : public Configurable
-{
+class DHTService : public Configurable {
 
 public:
-  struct config_t
-  {
+  struct config_t {
     uint8_t pin;
     /**
-        Valid types: 
+        Valid types:
         DHT11 = 11
         DHT21 = 21
-        DHT22 = 22 
+        DHT22 = 22
         */
     uint8_t type;
   };
@@ -54,6 +52,6 @@ private:
   float _temperature = NAN;
   float _humidity = NAN;
 };
-}
+} // namespace esp8266util
 
 #endif // DHTSERVICE_H

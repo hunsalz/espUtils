@@ -1,85 +1,57 @@
 #include "EspService.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-bool EspService::available()
-{
-  return true;
-}
+bool EspService::available() { return true; }
 
-EspClass &EspService::getESP()
-{
-  return ESP;
-}
+EspClass &EspService::getESP() { return ESP; }
 
-long unsigned EspService::getRemainingLoopInterval()
-{
+long unsigned EspService::getRemainingLoopInterval() {
+  
   long unsigned nextLoopInterval = _lastLoopInterval + getLoopInterval();
   long unsigned now = millis();
 
-  if (nextLoopInterval > now)
-  {
+  if (nextLoopInterval > now) {
     return nextLoopInterval - now;
-  }
-  else
-  {
+  } else {
     _lastLoopInterval = millis();
     return 0;
   }
 }
 
-bool EspService::nextLoopInterval()
-{
-  return !getRemainingLoopInterval();
-}
+bool EspService::nextLoopInterval() { return !getRemainingLoopInterval(); }
 
-int EspService::getLoopInterval()
-{
-  return _loopInterval;
-}
+int EspService::getLoopInterval() { return _loopInterval; }
 
-void EspService::setLoopInterval(int milliseconds)
-{
-  if (milliseconds < 500)
-  {
-    milliseconds = 500;
+void EspService::setLoopInterval(uint16_t milliseconds) {
+  
+  if (milliseconds < MIN_LOOP_INTERVAL) {
+    milliseconds = MIN_LOOP_INTERVAL;
     LOG.warning(F("Loop interval limited to %d milliseconds."), milliseconds);
-  }
-  else
-  {
+  } else {
     LOG.verbose(F("Loop interval set to %d milliseconds."), milliseconds);
   }
   _loopInterval = milliseconds;
 }
 
-// TODO 
-void EspService::deepSleep()
-{
-  ESP.deepSleep(getDeepSleepInterval());
-}
+// TODO
+void EspService::deepSleep() { ESP.deepSleep(getDeepSleepInterval()); }
 
-int EspService::getDeepSleepInterval()
-{
-  return _deepSleepInterval;
-}
+int EspService::getDeepSleepInterval() { return _deepSleepInterval; }
 
-void EspService::setDeepSleepInterval(int milliseconds)
-{
-  if (milliseconds < 30000)
-  {
-    milliseconds = 30000;
+void EspService::setDeepSleepInterval(uint16_t milliseconds) {
+  
+  if (milliseconds < MIN_SLEEP_INTERVAL) {
+    milliseconds = MIN_SLEEP_INTERVAL;
     LOG.warning(F("Deep sleep interval limited to %d milliseconds."), milliseconds);
-  }
-  else
-  {
+  } else {
     LOG.verbose(F("Deep sleep interval set to %d milliseconds."), milliseconds);
   }
   _deepSleepInterval = milliseconds;
 }
 
-JsonObject &EspService::getDetails()
-{
+JsonObject &EspService::getDetails() {
+  
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json[F("vcc")] = ESP.getVcc();
@@ -111,4 +83,4 @@ JsonObject &EspService::getDetails()
 }
 
 EspService SYSTEM = EspService();
-}
+} // namespace esp8266util

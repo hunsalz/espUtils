@@ -1,27 +1,17 @@
 #include "WebService.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-WebService::~WebService()
-{
-  getWebServer().reset();
-}
+WebService::~WebService() { getWebServer().reset(); }
 
-bool WebService::available()
-{
-  return _webServer;
-}
+bool WebService::available() { return _webServer; }
 
-bool WebService::begin(uint16_t port)
-{
-  if (!available())
-  {
+bool WebService::begin(uint16_t port) {
+  
+  if (!available()) {
     _webServer = new AsyncWebServer(port);
     // add generic services registry resource
-    on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) {
-      send(request, getDetails());
-    });
+    on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) { send(request, getDetails()); });
     // add default 404 handler
     getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
       LOG.verbose(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
@@ -61,67 +51,56 @@ bool WebService::begin(uint16_t port)
   return available();
 }
 
-AsyncWebServer &WebService::getWebServer()
-{
-  return *_webServer;
-}
+AsyncWebServer &WebService::getWebServer() { return *_webServer; }
 
-uint8_t WebService::getPort()
-{
-  return _port;
-}
+uint8_t WebService::getPort() { return _port; }
 
-AsyncCallbackWebHandler &WebService::on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest)
-{
+AsyncCallbackWebHandler &WebService::on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest) {
+  
   // (Caution) overwrites & disables "catchAllHandler" for onRequestBody(...) in ESPAsyncWebServer; maybe rework again
-  on(uri, method, onRequest,
-     [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {},
+  on(uri, method, onRequest, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {},
      [](AsyncWebServerRequest *request, const String &filename, size_t index, uint8_t *data, size_t len, bool final) {});
 }
 
-AsyncCallbackWebHandler &WebService::on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody)
-{
+AsyncCallbackWebHandler &WebService::on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody) {
+  
   on(uri, method, onRequest, onBody,
      [](AsyncWebServerRequest *request, const String &filename, size_t index, uint8_t *data, size_t len, bool final) {});
 }
 
-AsyncCallbackWebHandler &WebService::on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload)
-{
-  if (available())
-  {
-    // add uri to service listing
-    _services.push_back(String(uri));
-    // add to web server
-    getWebServer().on(uri, method, onRequest, onUpload, onBody);
-  }
+AsyncCallbackWebHandler &WebService::on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload) {
+  
+  // add uri to service listing
+  _services.push_back(String(uri));
+  // add to web server
+  getWebServer().on(uri, method, onRequest, onUpload, onBody);
 }
 
-void WebService::send(AsyncWebServerRequest *request, JsonObject &json)
-{
+void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
+  
   String payload = toString(json);
   LOG.verbose(F("Send response: %s."), payload.c_str());
   request->send(new AsyncBasicResponse(200, "text/json", payload));
 }
 
-void WebService::send(AsyncWebServerRequest *request, JsonArray &json)
-{
+void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
+  
   String payload = toString(json);
   LOG.verbose(F("Send response: %s."), payload.c_str());
   request->send(new AsyncBasicResponse(200, "text/json", payload));
 }
 
-void WebService::send(AsyncWebServerRequest *request, StreamString stream)
-{
+void WebService::send(AsyncWebServerRequest *request, StreamString stream) {
+  
   request->send(new AsyncBasicResponse(200, "text/json", stream));
   LOG.verbose(F("Send response: %s."), stream.c_str());
 }
 
-JsonArray &WebService::getDetails()
-{
+JsonArray &WebService::getDetails() {
+  
   DynamicJsonBuffer jsonBuffer;
   JsonArray &json = jsonBuffer.createArray();
-  for (std::vector<String>::iterator i = _services.begin(); i != _services.end(); ++i)
-  {
+  for (std::vector<String>::iterator i = _services.begin(); i != _services.end(); ++i) {
     json.add(*i);
   }
 
@@ -129,4 +108,4 @@ JsonArray &WebService::getDetails()
 }
 
 extern WebService SERVER = WebService();
-}
+} // namespace esp8266util

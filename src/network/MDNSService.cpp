@@ -1,24 +1,16 @@
 #include "MDNSService.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-bool MDNSService::available()
-{
-  return _available;
-}
+bool MDNSService::available() { return _available; }
 
-bool MDNSService::begin(const char *domainName)
-{
+bool MDNSService::begin(const char *domainName) {
+  
   _domainName = domainName;
-
-  if (MDNS.begin(getDomainName()))
-  {
+  if (MDNS.begin(getDomainName())) {
     _available = true;
     LOG.verbose(F("MDNS enabled to http://%s.local"), getDomainName());
-  }
-  else
-  {
+  } else {
     _available = false;
     LOG.error(F("MDNS failed for http://%s.local"), getDomainName());
   }
@@ -26,18 +18,12 @@ bool MDNSService::begin(const char *domainName)
   return available();
 }
 
-MDNSResponder &MDNSService::getMDNSResponder()
-{
-  return MDNS;
-}
+MDNSResponder &MDNSService::getMDNSResponder() { return MDNS; }
 
-const char *MDNSService::getDomainName()
-{
-  return _domainName;
-}
+const char *MDNSService::getDomainName() { return _domainName; }
 
-JsonObject &MDNSService::getDetails()
-{
+JsonObject &MDNSService::getDetails() {
+  
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json[F("domainName")] = getDomainName();
@@ -46,4 +32,4 @@ JsonObject &MDNSService::getDetails()
 }
 
 extern MDNSService MDNS_SERVICE = MDNSService();
-}
+} // namespace esp8266util

@@ -3,21 +3,19 @@
 
 #include <Log4Esp.h>     // https://github.com/hunsalz/log4Esp
 #include <NTPClient.h>   // https://github.com/stelgenhof/NTPClient
+// include ArduinoJson.h last - order of includes matters
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Service.h"
 
 using log4Esp::LOG;
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-class NTPService : public Service
-{
+class NTPService : public Service {
 
 public:
-  struct config_t
-  {
+  struct config_t {
     const char *server;
     tz_utc_offsets_t utc_offset;
     unsigned int interval;
@@ -27,7 +25,7 @@ public:
 
   bool available();
 
-  bool begin(const char *server = DEFAULT_NTP_SERVER, tz_utc_offsets_t utc_offset = UTC, unsigned int interval = (30 * 60));
+  bool begin(const char *server = DEFAULT_NTP_SERVER, tz_utc_offsets_t utc_offset = UTC, unsigned int interval = DEFAULT_POLLING_INTERVAL);
 
   bool begin(config_t config);
 
@@ -45,6 +43,6 @@ private:
 };
 
 extern NTPService NTP_SERVICE;
-}
+} // namespace esp8266util
 
 #endif // NTPSERVICE_H

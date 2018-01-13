@@ -1,25 +1,22 @@
 #include "DHTService.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-bool DHTService::begin(uint8_t pin, uint8_t type)
-{
+bool DHTService::begin(uint8_t pin, uint8_t type) {
+
   config_t config;
   config.pin = pin;
   config.type = type;
   begin(config);
 }
 
-bool DHTService::begin(config_t config)
-{
+bool DHTService::begin(config_t config) {
+
   _config = config;
-  if (!_config.pin)
-  {
+  if (!_config.pin) {
     LOG.error(F("Missing pin declaration."));
   }
-  if (!_config.type)
-  {
+  if (!_config.type) {
     LOG.error(F("Missing type declaration."));
   }
   _dht = new DHT_Unified(config.pin, config.type);
@@ -27,8 +24,8 @@ bool DHTService::begin(config_t config)
   return true;
 }
 
-bool DHTService::begin(JsonObject &json)
-{
+bool DHTService::begin(JsonObject &json) {
+
   config_t config;
   config.pin = json["pin"];
   config.type = json["type"];
@@ -36,13 +33,10 @@ bool DHTService::begin(JsonObject &json)
   return begin(config);
 }
 
-DHTService::config_t DHTService::getConfig()
-{
-  return _config;
-}
+DHTService::config_t DHTService::getConfig() { return _config; }
 
-JsonObject &DHTService::getConfigAsJson()
-{
+JsonObject &DHTService::getConfigAsJson() {
+
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["pin"] = _config.pin;
@@ -51,35 +45,25 @@ JsonObject &DHTService::getConfigAsJson()
   return json;
 }
 
-DHT_Unified &DHTService::getDHT()
-{
-  return *_dht;
-}
+DHT_Unified &DHTService::getDHT() { return *_dht; }
 
-bool DHTService::update()
-{
+bool DHTService::update() {
+
   bool update = false;
-  if (_dht)
-  {
+  if (_dht) {
     sensors_event_t event;
     getDHT().temperature().getEvent(&event);
-    if (isnan(event.temperature))
-    {
+    if (isnan(event.temperature)) {
       LOG.error(F("Error reading temperature"));
       _temperature = NAN;
-    }
-    else
-    {
+    } else {
       _temperature = event.temperature;
     }
     getDHT().humidity().getEvent(&event);
-    if (isnan(event.relative_humidity))
-    {
+    if (isnan(event.relative_humidity)) {
       LOG.error(F("Error reading humidity"));
       _humidity = NAN;
-    }
-    else
-    {
+    } else {
       _humidity = event.relative_humidity;
     }
     update = true;
@@ -88,22 +72,15 @@ bool DHTService::update()
   return update;
 }
 
-float DHTService::getTemperature()
-{
-  return _temperature;
-}
+float DHTService::getTemperature() { return _temperature; }
 
-float DHTService::getHumidity()
-{
-  return _humidity;
-}
+float DHTService::getHumidity() { return _humidity; }
 
-JsonArray &DHTService::getDetails()
-{
+JsonArray &DHTService::getDetails() {
+
   DynamicJsonBuffer jsonBuffer;
   JsonArray &json = jsonBuffer.createArray();
-  if (_dht)
-  {
+  if (_dht) {
     sensor_t sensor;
     // map temperature sensor values
     getDHT().temperature().getSensor(&sensor);
@@ -127,4 +104,4 @@ JsonArray &DHTService::getDetails()
 
   return json;
 }
-}
+} // namespace esp8266util

@@ -1,20 +1,13 @@
 #include "WiFiService.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-WiFiService::~WiFiService()
-{
-  end();
-}
+WiFiService::~WiFiService() { end(); }
 
-bool WiFiService::available()
-{
-  return WiFi.isConnected();
-}
+bool WiFiService::available() { return WiFi.isConnected(); }
 
-bool WiFiService::begin(uint8_t retries, bool autoConnect, bool persistent)
-{
+bool WiFiService::begin(uint8_t retries, bool autoConnect, bool persistent) {
+  
   uint8_t i = retries;
   // general settings
   WiFi.enableSTA(true);
@@ -27,29 +20,24 @@ bool WiFiService::begin(uint8_t retries, bool autoConnect, bool persistent)
   _stationModeDisconnectedHandler = WiFi.onStationModeDisconnected([](const WiFiEventStationModeDisconnected &event) {
     LOG.verbose(F("WiFi connection [%s] dropped. Reason: %d"), event.ssid.c_str(), event.reason);
   });
-  _stationModeAuthModeChangedHandler = WiFi.onStationModeAuthModeChanged([](const WiFiEventStationModeAuthModeChanged &event) {
-    LOG.verbose(F("WiFi authentication mode changed."));
-  });
+  _stationModeAuthModeChangedHandler = WiFi.onStationModeAuthModeChanged(
+      [](const WiFiEventStationModeAuthModeChanged &event) { LOG.verbose(F("WiFi authentication mode changed.")); });
   _stationModeGotIPHandler = WiFi.onStationModeGotIP([](const WiFiEventStationModeGotIP &event) {
     LOG.verbose(F("Received IP [%s] from WiFi station."), event.ip.toString().c_str());
   });
-  _stationModeDHCPTimeoutHandler = WiFi.onStationModeDHCPTimeout([]() {
-    LOG.verbose(F("Received DHCP timeout from WiFi station."));
-  });
+  _stationModeDHCPTimeoutHandler =
+      WiFi.onStationModeDHCPTimeout([]() { LOG.verbose(F("Received DHCP timeout from WiFi station.")); });
   // try to connect
   LOG.verbose("Trying to connect to WiFi ");
-  while (_wifiMulti.run() != WL_CONNECTED && i-- > 0)
-  { // try to connect for given amount of retries
-    TODO Serial.print(F("."));
+  while (_wifiMulti.run() != WL_CONNECTED && i-- > 0) { // try to connect for given amount of retries
+    Serial.print(F("."));
     delay(300);
   }
   Serial.println();
   // log WiFi connection result
-  if (i > 0)
-  {
+  if (i > 0) {
     // reflect change to MDNS
-    if (MDNS_SERVICE.available())
-    {
+    if (MDNS_SERVICE.available()) {
       MDNS_SERVICE.getMDNSResponder().update();
     }
     LOG.verbose(F("WiFi successful connected with IP: %s"), WiFi.localIP().toString().c_str());
@@ -58,25 +46,19 @@ bool WiFiService::begin(uint8_t retries, bool autoConnect, bool persistent)
   return available();
 }
 
-bool WiFiService::end()
-{
+bool WiFiService::end() {
+  
   WiFi.disconnect();
 
   return available();
 }
 
-ESP8266WiFiClass &WiFiService::getWiFi()
-{
-  return WiFi;
-}
+ESP8266WiFiClass &WiFiService::getWiFi() { return WiFi; }
 
-ESP8266WiFiMulti &WiFiService::getWiFiMulti()
-{
-  return _wifiMulti;
-}
+ESP8266WiFiMulti &WiFiService::getWiFiMulti() { return _wifiMulti; }
 
-JsonObject &WiFiService::getDetails()
-{
+JsonObject &WiFiService::getDetails() {
+  
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json[F("isConnected")] = WiFi.isConnected();
@@ -101,4 +83,4 @@ JsonObject &WiFiService::getDetails()
 }
 
 extern WiFiService WIFI_CLIENT = WiFiService();
-}
+} // namespace esp8266util

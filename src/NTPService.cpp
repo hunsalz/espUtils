@@ -1,20 +1,13 @@
 #include "NTPService.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-NTPService::~NTPService()
-{
-  end();
-}
+NTPService::~NTPService() { end(); }
 
-bool NTPService::available()
-{
-  return _available;
-}
+bool NTPService::available() { return _available; }
 
-bool NTPService::begin(const char *server, tz_utc_offsets_t utc_offset, unsigned int interval)
-{
+bool NTPService::begin(const char *server, tz_utc_offsets_t utc_offset, unsigned int interval) {
+
   config_t config;
   config.server = server;
   config.utc_offset = utc_offset;
@@ -23,28 +16,27 @@ bool NTPService::begin(const char *server, tz_utc_offsets_t utc_offset, unsigned
   return begin(config);
 }
 
-bool NTPService::begin(config_t config)
-{
+bool NTPService::begin(config_t config) {
+
   // set NTP sync interval
-  if (!config.interval)
-  {
-    config.interval = (30 * 60);
+  if (!config.interval) {
+    config.interval = DEFAULT_POLLING_INTERVAL;
   }
   NTP.setPollingInterval(config.interval);
   // set ntp server
-  if (!config.server)
-  {
+  if (!config.server) {
     config.server = DEFAULT_NTP_SERVER;
   }
   // set a default event handler
   NTP.onSyncEvent([this](NTPSyncEvent_t ntpEvent) {
-    switch (ntpEvent)
-    {
+    switch (ntpEvent) {
     case NTP_EVENT_INIT:
       _available = false;
+      LOG.verbose(F("NTP sync started."));
       break;
     case NTP_EVENT_STOP:
       _available = false;
+      LOG.verbose(F("NTP sync stopped."));
       break;
     case NTP_EVENT_NO_RESPONSE:
       _available = false;
@@ -52,13 +44,13 @@ bool NTPService::begin(config_t config)
       break;
     case NTP_EVENT_SYNCHRONIZED:
       _available = true;
-      LOG.verbose(F("NTP sync with %s was successful: %s"), getConfig().server, NTP.getTimeDate(NTP.getLastSync()));
+      LOG.verbose(F("NTP sync with %s was successful. Date time is %s"), getConfig().server,
+                  NTP.getTimeDate(NTP.getLastSync()));
       break;
     }
   });
   // set utc offset
-  if (!config.utc_offset)
-  {
+  if (!config.utc_offset) {
     config.utc_offset = UTC;
   }
   _config = config;
@@ -66,25 +58,19 @@ bool NTPService::begin(config_t config)
   NTP.init((char *)config.server, config.utc_offset);
 }
 
-bool NTPService::end()
-{
+bool NTPService::end() {
+
   _available = false;
 
   return NTP.stop();
 }
 
-NTPService::config_t NTPService::getConfig()
-{
-  return _config;
-}
+NTPService::config_t NTPService::getConfig() { return _config; }
 
-NTPClient &NTPService::getNTPClient()
-{
-  return NTP;
-}
+NTPClient &NTPService::getNTPClient() { return NTP; }
 
-JsonObject &NTPService::getDetails()
-{
+JsonObject &NTPService::getDetails() {
+
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json[F("server")] = NTP.getNTPServer();
@@ -98,4 +84,4 @@ JsonObject &NTPService::getDetails()
 }
 
 NTPService NTP_SERVICE = NTPService();
-}
+} // namespace esp8266util

@@ -8,11 +8,9 @@
 
 using log4Esp::LOG;
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-class Configurable
-{
+class Configurable {
 
 public:
   virtual JsonObject &getConfigAsJson() = 0;
@@ -21,6 +19,6 @@ public:
 
   void write(const char *path);
 };
-}
+} // namespace esp8266util
 
 #endif // CONFIGURABLE_H

@@ -5,15 +5,12 @@
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-class MotorDriver : public Driver
-{
+class MotorDriver : public Driver {
 
 public:
-  struct config_t
-  {
+  struct config_t {
     uint8_t pinPWM;
     uint8_t pinDir;
   };
@@ -40,6 +37,6 @@ private:
   config_t _config;
   int _speed;
 };
-}
+} // namespace esp8266util
 
 #endif // MOTORDRIVER_H

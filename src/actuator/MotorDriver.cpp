@@ -1,18 +1,17 @@
 #include "MotorDriver.h"
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-bool MotorDriver::begin(uint8_t pinPWM, uint8_t pinDir)
-{
+bool MotorDriver::begin(uint8_t pinPWM, uint8_t pinDir) {
+  
   config_t config;
   config.pinPWM = pinPWM;
   config.pinDir = pinDir;
   begin(config);
 }
 
-bool MotorDriver::begin(config_t config)
-{
+bool MotorDriver::begin(config_t config) {
+  
   _config = config;
   pinMode(_config.pinPWM, OUTPUT);
   pinMode(_config.pinDir, OUTPUT);
@@ -21,13 +20,10 @@ bool MotorDriver::begin(config_t config)
   return true;
 }
 
-MotorDriver::config_t MotorDriver::getConfig()
-{
-  return _config;
-}
+MotorDriver::config_t MotorDriver::getConfig() { return _config; }
 
-JsonObject &MotorDriver::getConfigAsJson()
-{
+JsonObject &MotorDriver::getConfigAsJson() {
+  
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["pinPWM"] = _config.pinPWM;
@@ -36,25 +32,16 @@ JsonObject &MotorDriver::getConfigAsJson()
   return json;
 }
 
-uint8_t MotorDriver::getDirection()
-{
-  return getSpeed() > 0 ? 1 : 0;
-}
+uint8_t MotorDriver::getDirection() { return getSpeed() > 0 ? 1 : 0; }
 
-int MotorDriver::getSpeed()
-{
-  return _speed;
-}
+int MotorDriver::getSpeed() { return _speed; }
 
-void MotorDriver::setSpeed(int speed)
-{
+void MotorDriver::setSpeed(int speed) {
+  
   // limit speed to max. PWM range +/-
-  if (speed > getPWMRange())
-  {
+  if (speed > getPWMRange()) {
     speed = getPWMRange();
-  }
-  else if (speed < -getPWMRange())
-  {
+  } else if (speed < -getPWMRange()) {
     speed = -getPWMRange();
   }
   LOG.verbose(F("Write speed = %d"), speed);
@@ -68,13 +55,10 @@ void MotorDriver::setSpeed(int speed)
   LOG.verbose(F("Write speed = %d - DONE"), _speed);
 }
 
-void MotorDriver::applySpeed(int speed)
-{
-  setSpeed(getSpeed() + speed);
-}
+void MotorDriver::applySpeed(int speed) { setSpeed(getSpeed() + speed); }
 
-JsonObject &MotorDriver::getDetails()
-{
+JsonObject &MotorDriver::getDetails() {
+  
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json[F("pinPWM")] = _config.pinPWM;
@@ -84,4 +68,4 @@ JsonObject &MotorDriver::getDetails()
 
   return json;
 }
-}
+} // namespace esp8266util

@@ -4,19 +4,18 @@
 #include <ESP8266WiFi.h>      // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 #include <ESP8266WiFiMulti.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
 #include <Log4Esp.h>          // https://github.com/hunsalz/log4Esp
-#include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
+// include ArduinoJson.h last - order of includes matters
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
-#include "Service.h"
 #include "MDNSService.h"
+#include "Service.h"
 
 using esp8266util::MDNS_SERVICE;
 using log4Esp::LOG;
 
-namespace esp8266util
-{
+namespace esp8266util {
 
-class WiFiService : public Service
-{
+class WiFiService : public Service {
 
 public:
   ~WiFiService();
@@ -44,6 +43,6 @@ private:
 };
 
 extern WiFiService WIFI_CLIENT;
-}
+} // namespace esp8266util
 
 #endif // WIFISERVICE_H
