@@ -29,4 +29,15 @@ float BMP280Sensor::getTemperature() { return _temperature; }
 float BMP280Sensor::getPressure() { return _pressure; }
 
 float BMP280Sensor::getAltitude() { return _altitude; }
+
+JsonObject &BMP280Sensor::getJsonValue() {
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  json["temperature"] = getTemperature();
+  json["pressure"] = getPressure();
+  json["altitude"] = getAltitude();
+
+  return json;
+}
 } // namespace esp8266util

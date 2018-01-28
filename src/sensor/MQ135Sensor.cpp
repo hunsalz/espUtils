@@ -59,4 +59,14 @@ bool MQ135Sensor::update() {
 float MQ135Sensor::getPPM() { return _ppm; }
 
 float MQ135Sensor::getCO2() { return _ppm / 100; }
+
+JsonObject &MQ135Sensor::getJsonValue() {
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  json["ppm"] = getPPM();
+  json["CO2"] = getCO2();
+
+  return json;
+}
 } // namespace esp8266util

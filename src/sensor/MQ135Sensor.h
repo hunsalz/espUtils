@@ -32,6 +32,8 @@ public:
 
   float getCO2(); // unit in percent, %
 
+  JsonObject &getJsonValue();
+
 private:
   MQ135 *_mq135 = NULL;
   config_t _config;

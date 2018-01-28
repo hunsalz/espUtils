@@ -22,6 +22,8 @@ public:
 
   float getAltitude(); // unit in Meter, m
 
+  JsonObject &getJsonValue();
+
 private:
   Adafruit_BMP280 *_bmp280 = NULL;
 

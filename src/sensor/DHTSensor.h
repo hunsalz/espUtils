@@ -40,7 +40,7 @@ public:
 
   float getHumidity(); // unit in percent, %
 
-  JsonArray &getDetails();
+  JsonObject &getJsonValue();
 
 private:
   DHT_Unified *_dht = NULL;
