@@ -14,7 +14,7 @@ public:
 
   Adafruit_BMP280 &getBMP280();
 
-  bool update();
+  bool update(bool mock = false);
 
   float getTemperature(); // unit is Celsius,°C
 

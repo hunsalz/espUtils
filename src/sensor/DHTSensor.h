@@ -34,7 +34,7 @@ public:
 
   DHT_Unified &getDHT();
 
-  bool update();
+  bool update(bool mock = false);
 
   float getTemperature(); // unit in Celsius, °C
 

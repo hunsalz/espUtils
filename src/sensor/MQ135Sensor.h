@@ -26,7 +26,7 @@ public:
 
   MQ135 &getMQ135();
 
-  bool update();
+  bool update(bool mock = false);
 
   float getPPM(); // unit in PPM
 
