@@ -1,15 +1,15 @@
-#include "MQ135Service.h"
+#include "MQ135Sensor.h"
 
 namespace esp8266util {
 
-bool MQ135Service::begin(uint8_t pin) {
+bool MQ135Sensor::begin(uint8_t pin) {
   
   config_t config;
   config.pin = pin;
   begin(config);
 }
 
-bool MQ135Service::begin(config_t config) {
+bool MQ135Sensor::begin(config_t config) {
   
   _config = config;
   if (!_config.pin) {
@@ -20,7 +20,7 @@ bool MQ135Service::begin(config_t config) {
   return true;
 }
 
-bool MQ135Service::begin(JsonObject &json) {
+bool MQ135Sensor::begin(JsonObject &json) {
   
   config_t config;
   config.pin = json["pin"];
@@ -28,9 +28,9 @@ bool MQ135Service::begin(JsonObject &json) {
   return begin(config);
 }
 
-MQ135Service::config_t MQ135Service::getConfig() { return _config; }
+MQ135Sensor::config_t MQ135Sensor::getConfig() { return _config; }
 
-JsonObject &MQ135Service::getConfigAsJson() {
+JsonObject &MQ135Sensor::getConfigAsJson() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -39,9 +39,9 @@ JsonObject &MQ135Service::getConfigAsJson() {
   return json;
 }
 
-MQ135 &MQ135Service::getMQ135() { return *_mq135; }
+MQ135 &MQ135Sensor::getMQ135() { return *_mq135; }
 
-bool MQ135Service::update() {
+bool MQ135Sensor::update() {
   
   bool update = false;
   if (_mq135) {
@@ -56,7 +56,7 @@ bool MQ135Service::update() {
   return update;
 }
 
-float MQ135Service::getPPM() { return _ppm; }
+float MQ135Sensor::getPPM() { return _ppm; }
 
-float MQ135Service::getCO2() { return _ppm / 100; }
+float MQ135Sensor::getCO2() { return _ppm / 100; }
 } // namespace esp8266util

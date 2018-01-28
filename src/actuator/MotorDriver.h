@@ -1,5 +1,5 @@
-#ifndef MOTORDRIVER_H
-#define MOTORDRIVER_H
+#ifndef MOTOR_DRIVER_H
+#define MOTOR_DRIVER_H
 
 #include "Driver.h"
 
@@ -39,4 +39,4 @@ private:
 };
 } // namespace esp8266util
 
-#endif // MOTORDRIVER_H
+#endif // MOTOR_DRIVER_H

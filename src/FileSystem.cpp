@@ -1,47 +1,26 @@
-#include "FSService.h"
+#include "FileSystem.h"
 
 namespace esp8266util {
 
-FSService::FSService() {}
+bool FileSystem::begin() {
 
-FSService::~FSService() { end(); }
-
-bool FSService::available() { return _available; }
-
-bool FSService::begin() {
-  
-  if (!available()) {
-    if (SPIFFS.begin()) {
-      LOG.verbose(F("File system mounted."));
-      _available = true;
-    } else {
-      LOG.warning(F("Mounting file system failed."));
-    }
+  bool available = SPIFFS.begin();
+  if (available) {
+    LOG.verbose(F("File system mounted."));
+  } else {
+    LOG.warning(F("Mounting file system failed."));
   }
 
-  return available();
+  return available;
 }
 
-bool FSService::end() {
-  
-  if (available()) {
-    SPIFFS.end();
-    _available = false;
-  }
+void FileSystem::end() {
 
-  return available();
+  SPIFFS.end();
+  LOG.verbose(F("File system unmounted."));
 }
 
-FS &FSService::getFileSystem() {
-  
-  begin(); // call begin in case SPIFFS.begin() isn't called before
-
-  return SPIFFS;
-}
-
-JsonObject &FSService::getStorageDetails() {
-  
-  begin(); // call begin in case SPIFFS.begin() isn't called before
+JsonObject &FileSystem::getStorageDetails() {
 
   FSInfo fs_info;
   SPIFFS.info(fs_info);
@@ -58,9 +37,7 @@ JsonObject &FSService::getStorageDetails() {
   return json;
 }
 
-JsonArray &FSService::getFileListing() {
-  
-  begin(); // call begin in case SPIFFS.begin() isn't called before
+JsonArray &FileSystem::getFileListing() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonArray &json = jsonBuffer.createArray();
@@ -78,7 +55,8 @@ JsonArray &FSService::getFileListing() {
   return json;
 }
 
-String FSService::formatBytes(size_t bytes) {
+String FileSystem::formatBytes(size_t bytes) {
+  
   if (bytes < 1024) {
     return String(bytes) + "B";
   } else if (bytes < (1024 * 1024)) {
@@ -89,6 +67,8 @@ String FSService::formatBytes(size_t bytes) {
     return String(bytes / 1024.0 / 1024.0 / 1024.0) + "GB";
   }
 }
-
-FSService FILESYSTEM = FSService();
 } // namespace esp8266util
+
+#if !defined(NO_GLOBAL_INSTANCES)
+esp8266util::FileSystem FILESYSTEM;
+#endif // NO_GLOBAL_INSTANCES

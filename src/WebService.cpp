@@ -106,6 +106,8 @@ JsonArray &WebService::getDetails() {
 
   return json;
 }
-
-extern WebService SERVER = WebService();
 } // namespace esp8266util
+
+#if !defined(NO_GLOBAL_INSTANCES)
+esp8266util::WebService SERVER;
+#endif // NO_GLOBAL_INSTANCES

@@ -4,8 +4,6 @@
 #include <Arduino.h>
 #include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 
-using log4Esp::LOG;
-
 namespace esp8266util {
 
 class Driver {

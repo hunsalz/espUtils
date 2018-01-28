@@ -1,5 +1,5 @@
-#ifndef JSONHELPER_H
-#define JSONHELPER_H
+#ifndef JSON_HELPER_H
+#define JSON_HELPER_H
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
@@ -24,4 +24,4 @@ inline String toString(JsonArray &json) {
 }
 } // namespace esp8266util
 
-#endif // JSONHELPER_H
+#endif // JSON_HELPER_H

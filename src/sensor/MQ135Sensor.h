@@ -1,15 +1,13 @@
-#ifndef MQ135SERVICE_H
-#define MQ135SERVICE_H
+#ifndef MQ135_SENSOR_H
+#define MQ135_SENSOR_H
 
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <MQ135.h> // https://github.com/GeorgK/MQ135 - Set up sensor for the first time? https://hackaday.io/project/3475-sniffing-trinket/log/12363-mq135-arduino-library
 
 #include "Configurable.h"
 
 namespace esp8266util {
 
-// TODO Service
-class MQ135Service : public Configurable {
+class MQ135Sensor : public Configurable {
 
 public:
   struct config_t {
@@ -42,4 +40,4 @@ private:
 };
 } // namespace esp8266util
 
-#endif // MQ135SERVICE_H
+#endif // MQ135_SENSOR_H

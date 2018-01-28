@@ -1,15 +1,13 @@
-#ifndef BMP280SERVICE_H
-#define BMP280SERVICE_H
+#ifndef BMP280_SENSOR_H
+#define BMP280_SENSOR_H
 
 #include <Adafruit_BMP280.h> // https://github.com/adafruit/Adafruit_BMP280_Library
-#include <ArduinoJson.h>     // https://github.com/bblanchon/ArduinoJson
 
 #include "Configurable.h"
 
 namespace esp8266util {
 
-// TODO Service
-class BMP280Service {
+class BMP280Sensor {
 
 public:
   bool begin();
@@ -33,4 +31,4 @@ private:
 };
 } // namespace esp8266util
 
-#endif // BMP280SERVICE_H
+#endif // BMP280_SENSOR_H

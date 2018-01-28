@@ -1,5 +1,5 @@
-#ifndef WEBSERVICE_H
-#define WEBSERVICE_H
+#ifndef WEB_SERVICE_H
+#define WEB_SERVICE_H
 
 #ifdef Arduino_h
 // Arduino is not compatible with std::vector
@@ -8,21 +8,20 @@
 #endif
 #include <vector>
 
-#include <ArduinoJson.h>       // https://github.com/bblanchon/ArduinoJson
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
 #include <Log4Esp.h>           // https://github.com/hunsalz/log4Esp
 #include <StreamString.h>      // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+
 #include "JsonHelper.h"
-#include "Service.h"
 #include "WebSocketListener.h"
 
 using esp8266util::toString;
-using log4Esp::LOG;
 
 namespace esp8266util {
 
-class WebService : public Service {
+class WebService {
 
 public:
   ~WebService();
@@ -58,8 +57,10 @@ private:
 
   std::vector<String> _services;
 };
-
-extern WebService SERVER;
 } // namespace esp8266util
 
-#endif // WEBSERVICE_H
+#if !defined(NO_GLOBAL_INSTANCES)
+extern esp8266util::WebService SERVER;
+#endif // NO_GLOBAL_INSTANCES
+
+#endif // WEB_SERVICE_H

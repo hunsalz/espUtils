@@ -1,22 +1,22 @@
 #ifndef ESP8266UTILS_H
 #define ESP8266UTILS_H
 
-#include <Configurable.h>
-#include <EspService.h>
-#include <FSService.h>
-#include <JsonHelper.h>
-#include <MQTTService.h>
-#include <NTPService.h>
-#include <Service.h>
-#include <WebService.h>
-#include <WebSocketListener.h>
 #include <actuator/Driver.h>
 #include <actuator/MotorDriver.h>
-#include <network/MDNSService.h>
-#include <network/WiFiAPService.h>
-#include <network/WiFiService.h>
-#include <sensor/BMP280Service.h>
-#include <sensor/DHTService.h>
-#include <sensor/MQ135Service.h>
+
+#include <cfg/MDNSConfig.h>
+#include <cfg/SysConfig.h>
+#include <cfg/WiFiAPConfig.h>
+#include <cfg/WiFiStaConfig.h>
+
+#include <sensor/BMP280Sensor.h>
+#include <sensor/DHTSensor.h>
+#include <sensor/MQ135Sensor.h>
+
+#include <Configurable.h>
+#include <FileSystem.h>
+#include <JsonHelper.h>
+#include <WebService.h>
+#include <WebSocketListener.h>
 
 #endif // ESP8266UTILS_H

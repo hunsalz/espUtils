@@ -5,8 +5,8 @@ namespace esp8266util {
 JsonVariant Configurable::read(const char *path) {
   
   JsonVariant json;
-  if (FILESYSTEM.getFileSystem().exists(path)) {
-    File file = FILESYSTEM.getFileSystem().open(path, "r+");
+  if (SPIFFS.exists(path)) {
+    File file = SPIFFS.open(path, "r+");
     DynamicJsonBuffer buffer;
     json = buffer.parse(file);
     if (json.success()) {
@@ -27,7 +27,7 @@ void Configurable::write(const char *path) {
   char payload[length];
   json.printTo(payload, length);
 
-  File file = FILESYSTEM.getFileSystem().open(path, "w+");
+  File file = SPIFFS.open(path, "w+");
   file.print(payload);
   file.flush();
   file.close();

@@ -1,13 +1,9 @@
-#include "EspService.h"
+#include "SysConfig.h"
 
 namespace esp8266util {
 
-bool EspService::available() { return true; }
+long unsigned SysConfig::getRemainingLoopInterval() {
 
-EspClass &EspService::getESP() { return ESP; }
-
-long unsigned EspService::getRemainingLoopInterval() {
-  
   long unsigned nextLoopInterval = _lastLoopInterval + getLoopInterval();
   long unsigned now = millis();
 
@@ -19,12 +15,12 @@ long unsigned EspService::getRemainingLoopInterval() {
   }
 }
 
-bool EspService::nextLoopInterval() { return !getRemainingLoopInterval(); }
+bool SysConfig::nextLoopInterval() { return !getRemainingLoopInterval(); }
 
-int EspService::getLoopInterval() { return _loopInterval; }
+int SysConfig::getLoopInterval() { return _loopInterval; }
 
-void EspService::setLoopInterval(uint16_t milliseconds) {
-  
+void SysConfig::setLoopInterval(uint16_t milliseconds) {
+
   if (milliseconds < MIN_LOOP_INTERVAL) {
     milliseconds = MIN_LOOP_INTERVAL;
     LOG.warning(F("Loop interval limited to %d milliseconds."), milliseconds);
@@ -34,13 +30,12 @@ void EspService::setLoopInterval(uint16_t milliseconds) {
   _loopInterval = milliseconds;
 }
 
-// TODO
-void EspService::deepSleep() { ESP.deepSleep(getDeepSleepInterval()); }
+void SysConfig::deepSleep() { ESP.deepSleep(getDeepSleepInterval()); }
 
-int EspService::getDeepSleepInterval() { return _deepSleepInterval; }
+int SysConfig::getDeepSleepInterval() { return _deepSleepInterval; }
 
-void EspService::setDeepSleepInterval(uint16_t milliseconds) {
-  
+void SysConfig::setDeepSleepInterval(uint16_t milliseconds) {
+
   if (milliseconds < MIN_SLEEP_INTERVAL) {
     milliseconds = MIN_SLEEP_INTERVAL;
     LOG.warning(F("Deep sleep interval limited to %d milliseconds."), milliseconds);
@@ -50,8 +45,8 @@ void EspService::setDeepSleepInterval(uint16_t milliseconds) {
   _deepSleepInterval = milliseconds;
 }
 
-JsonObject &EspService::getDetails() {
-  
+JsonObject &SysConfig::getDetails() {
+
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json[F("vcc")] = ESP.getVcc();
@@ -81,6 +76,8 @@ JsonObject &EspService::getDetails() {
 
   return json;
 }
-
-EspService SYSTEM = EspService();
 } // namespace esp8266util
+
+#if !defined(NO_GLOBAL_INSTANCES)
+esp8266util::SysConfig SYS_CFG;
+#endif // NO_GLOBAL_INSTANCES

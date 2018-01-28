@@ -1,27 +1,24 @@
-#ifndef DHTSERVICE_H
-#define DHTSERVICE_H
+#ifndef DHT_SENSOR_H
+#define DHT_SENSOR_H
 
 #include <DHT.h>         // https://github.com/adafruit/DHT-sensor-library
 #include <DHT_U.h>       // https://github.com/adafruit/DHT-sensor-library
-// include ArduinoJson.h last - order of includes matters
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #include "Configurable.h"
 
 namespace esp8266util {
 
-// TODO Service
-class DHTService : public Configurable {
+class DHTSensor : public Configurable {
 
 public:
   struct config_t {
     uint8_t pin;
     /**
-        Valid types:
-        DHT11 = 11
-        DHT21 = 21
-        DHT22 = 22
-        */
+    Valid types:
+    DHT11 = 11
+    DHT21 = 21
+    DHT22 = 22
+    **/
     uint8_t type;
   };
 
@@ -54,4 +51,4 @@ private:
 };
 } // namespace esp8266util
 
-#endif // DHTSERVICE_H
+#endif // DHT_SENSOR_H
