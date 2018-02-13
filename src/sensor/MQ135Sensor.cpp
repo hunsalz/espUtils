@@ -68,7 +68,7 @@ JsonObject &MQ135Sensor::getJsonValue() {
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["ppm"] = getPPM();
-  json["CO2"] = getCO2();
+  json["co2"] = getCO2();
 
   return json;
 }
