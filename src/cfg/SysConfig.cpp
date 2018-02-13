@@ -47,7 +47,8 @@ void SysConfig::setDeepSleepInterval(uint16_t milliseconds) {
 
 JsonObject &SysConfig::getDetails() {
 
-  DynamicJsonBuffer jsonBuffer;
+  const size_t bufferSize = JSON_OBJECT_SIZE(24);
+  DynamicJsonBuffer jsonBuffer(bufferSize);
   JsonObject &json = jsonBuffer.createObject();
   json[F("vcc")] = ESP.getVcc();
   json[F("heap")] = ESP.getFreeHeap();
