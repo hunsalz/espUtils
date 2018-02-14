@@ -28,9 +28,7 @@ public:
 
   bool update(bool mock = false);
 
-  float getPPM(); // unit in PPM
-
-  float getCO2(); // unit in percent, %
+  float getPPM(); // unit in parts per million (ppm)
 
   JsonObject &getJsonValue();
 

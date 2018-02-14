@@ -61,14 +61,11 @@ bool MQ135Sensor::update(bool mock) {
 
 float MQ135Sensor::getPPM() { return _ppm; }
 
-float MQ135Sensor::getCO2() { return _ppm / 100; }
-
 JsonObject &MQ135Sensor::getJsonValue() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["ppm"] = getPPM();
-  json["co2"] = getCO2();
 
   return json;
 }
