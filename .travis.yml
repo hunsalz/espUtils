@@ -1,4 +1,4 @@
-language: cpp
+language: generic
 dist: trusty
 os: linux
 env:
@@ -14,4 +14,18 @@ install:
   - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --install-boards esp8266:esp8266;
   - arduino --pref "boardsmanager.additional.urls=" --save-prefs;
   - arduino --board esp8266:esp8266:generic --save-prefs
-  - arduino --pref \"compiler.warning_level=all\" --save-prefs
+  - arduino --pref "compiler.warning_level=all" --save-prefs
+  - arduino --install-library log4Esp
+script:
+  - buildExamples() {
+
+    local sketches=$(find $PWD/examples -name *.ino)
+    for sketch in $sketches; do
+      arduino --verbose-build --verify $sketch;
+      local result=$?
+      if [ $result -ne 0 ]; then
+        echo "Build failed ($1)"
+        return $result
+      fi
+    done
+  }
