@@ -34,7 +34,6 @@ void WebSocketListener::onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client
     // process data if it's a single frame and all payload is available
     if (info->final && info->index == 0 && info->len == len) {
       if (info->opcode == WS_TEXT) {
-        data[len] = '\0';
         handleTextMessageEvent(ws, client, type, info, data, len);
       } else {
         handleBinaryMessageEvent(ws, client, type, info, data, len);
@@ -51,7 +50,7 @@ void WebSocketListener::onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client
 }
 
 void WebSocketListener::handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
-  
+ 
   if (_connectWSEventHandler) {
     _connectWSEventHandler(ws, client, type, info, data, len);
   } else {
@@ -69,6 +68,7 @@ void WebSocketListener::handleDisconnectEvent(AsyncWebSocket *ws, AsyncWebSocket
 }
 
 void WebSocketListener::handleErrorEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, uint16_t *arg, uint8_t *data, size_t len) {
+  
   if (_errorWSEventHandler) {
     _errorWSEventHandler(ws, client, type, arg, data, len);
   } else {
@@ -88,7 +88,6 @@ void WebSocketListener::handlePongEvent(AsyncWebSocket *ws, AsyncWebSocketClient
 void WebSocketListener::handleTextMessageEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
   
   if (_textWSEventHandler) {
-    data[len] = 0;
     _textWSEventHandler(ws, client, type, info, data, len);
   } else {
     // TODO test verbose message
