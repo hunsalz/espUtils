@@ -20,12 +20,12 @@ script:
   - buildExamples() {
       local sketches=$(find $PWD/examples -name *.ino)
       for sketch in $sketches; do
-        echo $sketch
+        echo $sketch;
         
-        local result=$?
+        local result=$?;
         if [ $result -ne 0 ]; then
           echo "Build failed ($1)"
-          return $result
+          return $result;
         fi
       done
     }
