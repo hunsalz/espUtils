@@ -17,15 +17,7 @@ install:
   - arduino --pref "compiler.warning_level=all" --save-prefs
   - arduino --install-library log4Esp
 script:
-  - buildExamples() {
-      local sketches=$(find $PWD/examples -name *.ino)
-      for sketch in $sketches; do
-        echo $sketch;
-        
-        local result=$?;
-        if [ $result -ne 0 ]; then
-          echo "Build failed ($1)"
-          return $result;
-        fi
-      done
-    }
+  - echo $PWD;
+  - echo $HOME;
+  - ls -l $PWD;
+  - source $TRAVIS_BUILD_DIR/travis/build.sh;
