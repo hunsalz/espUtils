@@ -21,7 +21,7 @@ script:
       local sketches=$(find $PWD/examples -name *.ino)
       for sketch in $sketches; do
         echo $sketch
-        #arduino --verbose-build --verify $sketch;
+        
         local result=$?
         if [ $result -ne 0 ]; then
           echo "Build failed ($1)"
