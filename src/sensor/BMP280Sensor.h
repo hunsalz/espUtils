@@ -24,7 +24,7 @@ public:
 
   float getAltitude(); // unit in Meter, m
 
-  const char* getJsonValue();
+  const char* getValuesAsJson();
 
 private:
   Adafruit_BMP280 *_bmp280 = NULL;

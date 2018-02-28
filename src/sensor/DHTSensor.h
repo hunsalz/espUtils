@@ -40,7 +40,7 @@ public:
 
   float getHumidity(); // unit in percent, %
 
-  const char* getJsonValue();
+  const char* getValuesAsJson();
 
 private:
   DHT_Unified *_dht = NULL;

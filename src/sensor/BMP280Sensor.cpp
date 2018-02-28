@@ -49,7 +49,7 @@ float BMP280Sensor::getAltitude() {
   return _altitude;
 }
 
-const char* BMP280Sensor::getJsonValue() {
+const char* BMP280Sensor::getValuesAsJson() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();

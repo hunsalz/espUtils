@@ -30,7 +30,7 @@ public:
 
   float getPPM(); // unit in parts per million (ppm)
 
-  const char* getJsonValue();
+  const char* getValuesAsJson();
 
 private:
   MQ135 *_mq135 = NULL;
