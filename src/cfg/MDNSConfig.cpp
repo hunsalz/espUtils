@@ -13,15 +13,24 @@ bool MDNSConfig::begin(const char *domainName) {
   }
 }
 
-const char *MDNSConfig::getDomainName() { return _domainName; }
+const char* MDNSConfig::getDomainName() { return _domainName; }
 
-JsonObject &MDNSConfig::getDetails() {
+const char* MDNSConfig::getConfigAsJson() {
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  // TODO
+
+  return esp8266util::toString(json);
+}
+
+const char* MDNSConfig::getDetails() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json[F("domainName")] = getDomainName();
 
-  return json;
+  return esp8266util::toString(json);
 }
 } // namespace esp8266util
 

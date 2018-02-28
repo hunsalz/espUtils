@@ -45,10 +45,18 @@ void SysConfig::setDeepSleepInterval(uint16_t milliseconds) {
   _deepSleepInterval = milliseconds;
 }
 
-JsonObject &SysConfig::getDetails() {
+const char* SysConfig::getConfigAsJson() {
 
-  const size_t bufferSize = JSON_OBJECT_SIZE(24);
-  DynamicJsonBuffer jsonBuffer(bufferSize);
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  // TODO
+
+  return esp8266util::toString(json);
+}
+
+const char* SysConfig::getDetails() {
+
+  DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json[F("vcc")] = ESP.getVcc();
   json[F("heap")] = ESP.getFreeHeap();
@@ -75,7 +83,7 @@ JsonObject &SysConfig::getDetails() {
   json[F("remainingLoopInterval")] = getRemainingLoopInterval();
   json[F("deepSleepInterval")] = getDeepSleepInterval();
 
-  return json;
+  return esp8266util::toString(json);
 }
 } // namespace esp8266util
 

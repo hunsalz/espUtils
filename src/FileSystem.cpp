@@ -20,7 +20,7 @@ void FileSystem::end() {
   LOG.verbose(F("File system unmounted."));
 }
 
-JsonObject &FileSystem::getStorageDetails() {
+const char* FileSystem::getStorageDetails() {
 
   FSInfo fs_info;
   SPIFFS.info(fs_info);
@@ -34,10 +34,10 @@ JsonObject &FileSystem::getStorageDetails() {
   json[F("maxOpenFiles")] = fs_info.maxOpenFiles;
   json[F("maxPathLength")] = fs_info.maxPathLength;
 
-  return json;
+  return esp8266util::toString(json);
 }
 
-JsonArray &FileSystem::getFileListing() {
+const char* FileSystem::getFileListing() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonArray &json = jsonBuffer.createArray();
@@ -52,7 +52,7 @@ JsonArray &FileSystem::getFileListing() {
     LOG.verbose(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
   }
 
-  return json;
+  return esp8266util::toString(json);
 }
 
 String FileSystem::formatBytes(size_t bytes) {

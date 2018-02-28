@@ -22,7 +22,7 @@ public:
 
   config_t getConfig();
 
-  JsonObject &getConfigAsJson();
+  const char* getConfigAsJson();
 
   MQ135 &getMQ135();
 
@@ -30,7 +30,7 @@ public:
 
   float getPPM(); // unit in parts per million (ppm)
 
-  JsonObject &getJsonValue();
+  const char* getJsonValue();
 
 private:
   MQ135 *_mq135 = NULL;

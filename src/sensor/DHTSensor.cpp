@@ -35,14 +35,14 @@ bool DHTSensor::begin(JsonObject &json) {
 
 DHTSensor::config_t DHTSensor::getConfig() { return _config; }
 
-JsonObject &DHTSensor::getConfigAsJson() {
+const char* DHTSensor::getConfigAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["pin"] = _config.pin;
   json["type"] = _config.type;
 
-  return json;
+  return esp8266util::toString(json);
 }
 
 DHT_Unified &DHTSensor::getDHT() { return *_dht; }
@@ -80,13 +80,13 @@ float DHTSensor::getTemperature() { return _temperature; }
 
 float DHTSensor::getHumidity() { return _humidity; }
 
-JsonObject &DHTSensor::getJsonValue() {
+const char* DHTSensor::getJsonValue() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["temperature"] = getTemperature();
   json["humidity"] = getHumidity();
 
-  return json;
+  return esp8266util::toString(json);
 }
 } // namespace esp8266util

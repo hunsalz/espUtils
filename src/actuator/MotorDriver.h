@@ -3,8 +3,6 @@
 
 #include "Driver.h"
 
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
-
 namespace esp8266util {
 
 class MotorDriver : public Driver {
@@ -21,7 +19,7 @@ public:
 
   config_t getConfig();
 
-  JsonObject &getConfigAsJson();
+  const char* getConfigAsJson();
 
   uint8_t getDirection();
 
@@ -31,7 +29,7 @@ public:
 
   void applySpeed(int speed);
 
-  JsonObject &getDetails();
+  const char* getDetails();
 
 private:
   config_t _config;

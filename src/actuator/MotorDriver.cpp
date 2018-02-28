@@ -22,14 +22,14 @@ bool MotorDriver::begin(config_t config) {
 
 MotorDriver::config_t MotorDriver::getConfig() { return _config; }
 
-JsonObject &MotorDriver::getConfigAsJson() {
+const char* MotorDriver::getConfigAsJson() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["pinPWM"] = _config.pinPWM;
   json["pinDir"] = _config.pinDir;
 
-  return json;
+  return esp8266util::toString(json);
 }
 
 uint8_t MotorDriver::getDirection() { return getSpeed() > 0 ? 1 : 0; }
@@ -57,7 +57,7 @@ void MotorDriver::setSpeed(int speed) {
 
 void MotorDriver::applySpeed(int speed) { setSpeed(getSpeed() + speed); }
 
-JsonObject &MotorDriver::getDetails() {
+const char* MotorDriver::getDetails() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -66,6 +66,6 @@ JsonObject &MotorDriver::getDetails() {
   json[F("pwmRange")] = getPWMRange();
   json[F("speed")] = getSpeed();
 
-  return json;
+  return esp8266util::toString(json);
 }
 } // namespace esp8266util

@@ -56,7 +56,16 @@ WiFiEventHandler WiFiAPConfig::onSoftAPModeProbeRequestReceived(std::function<vo
   return _softAPModeProbeRequestReceivedHandler;
 }
 
-JsonObject &WiFiAPConfig::getDetails() {
+const char* WiFiAPConfig::getConfigAsJson() {
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  // TODO
+
+  return esp8266util::toString(json);
+}
+
+const char* WiFiAPConfig::getDetails() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -64,7 +73,7 @@ JsonObject &WiFiAPConfig::getDetails() {
   json[F("softAPIP")] = WiFi.softAPIP().toString();
   json[F("softAPmacAddress")] = WiFi.softAPmacAddress();
 
-  return json;
+  return esp8266util::toString(json);
 }
 
 String WiFiAPConfig::macAddress(const unsigned char *mac) {

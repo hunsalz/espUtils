@@ -1,12 +1,11 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
-#include <Arduino.h>
-#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
+#include "Configurable.h"
 
 namespace esp8266util {
 
-class Driver {
+class Driver : public Configurable {
 
 public:
   static uint16_t getPWMRange();

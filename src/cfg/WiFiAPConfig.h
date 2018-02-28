@@ -2,17 +2,15 @@
 #define WIFI_AP_SERVICE_H
 
 #include <ESP8266WiFi.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
-#include <Log4Esp.h>     // https://github.com/hunsalz/log4Esp
 
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+#include "Configurable.h"
 
 namespace esp8266util {
 
-class WiFiAPConfig {
+class WiFiAPConfig : public Configurable {
 
 public:
-  bool begin(const char *ssid, const char *passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5,
-             bool autoConnect = true, bool persistent = false);
+  bool begin(const char *ssid, const char *passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false);
 
   void end();
 
@@ -22,7 +20,9 @@ public:
 
   WiFiEventHandler onSoftAPModeProbeRequestReceived(std::function<void(const WiFiEventSoftAPModeProbeRequestReceived&)> f);
 
-  JsonObject &getDetails();
+  const char* getConfigAsJson();
+
+  const char* getDetails();
 
 private:
   WiFiEventHandler _softAPModeStationConnectedHandler;

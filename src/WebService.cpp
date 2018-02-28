@@ -6,12 +6,12 @@ WebService::WebService(uint16_t port) : _webServer(port) {}
 
 bool WebService::begin() {
   // add generic services registry resource
-  on("/services", HTTP_GET,
-     [this](AsyncWebServerRequest *request) { send(request, getServices()); });
+  on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) { 
+    send(request, "text/json", getServices()); 
+  });
   // add default 404 handler
   getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
-    LOG.verbose(F("HTTP 404 : [http://%s%s] not found."),
-                request->host().c_str(), request->url().c_str());
+    LOG.verbose(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
     // TODO make a nice 404 page
     request->send(404, "text/plain", F("404 error - Page not found."));
   });
@@ -91,32 +91,28 @@ AsyncCallbackWebHandler &WebService::on(const char *uri,
   getWebServer().on(uri, method, onRequest, onUpload, onBody);
 }
 
-void WebService::send(AsyncWebServerRequest *request, JsonObject &json) {
-  String payload = toString(json);
-  LOG.verbose(F("Send response: %s."), payload.c_str());
-  request->send(new AsyncBasicResponse(200, "text/json", payload));
+void WebService::send(AsyncWebServerRequest *request, const char* type, const char* response) {
+
+  LOG.verbose(F("Send %s response: %s"), type, response);
+  request->send(new AsyncBasicResponse(200, "text/json", response));
 }
 
-void WebService::send(AsyncWebServerRequest *request, JsonArray &json) {
-  String payload = toString(json);
-  LOG.verbose(F("Send response: %s."), payload.c_str());
-  request->send(new AsyncBasicResponse(200, "text/json", payload));
+void WebService::send(AsyncWebServerRequest *request, JsonVariant &json) {
+  
+  String response = esp8266util::toString(json);
+  LOG.verbose(F("Send text/json response: %s"), response.c_str());
+  request->send(new AsyncBasicResponse(200, "text/json", response));
 }
 
-void WebService::send(AsyncWebServerRequest *request, StreamString stream) {
-  request->send(new AsyncBasicResponse(200, "text/json", stream));
-  LOG.verbose(F("Send response: %s."), stream.c_str());
-}
-
-JsonArray &WebService::getServices() {
+const char* WebService::getServices() {
+  
   DynamicJsonBuffer jsonBuffer;
   JsonArray &json = jsonBuffer.createArray();
-  for (std::vector<String>::iterator i = _services.begin();
-       i != _services.end(); ++i) {
+  for (std::vector<String>::iterator i = _services.begin(); i != _services.end(); ++i) {
     json.add(*i);
   }
 
-  return json;
+  return esp8266util::toString(json);
 }
 }  // namespace esp8266util
 

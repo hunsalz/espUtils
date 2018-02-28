@@ -7,6 +7,14 @@ bool BMP280Sensor::begin() {
   _bmp280->begin();
 }
 
+const char* BMP280Sensor::getConfigAsJson() {
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+
+  return esp8266util::toString(json);
+}
+
 Adafruit_BMP280 &BMP280Sensor::getBMP280() {
   return *_bmp280;
 }
@@ -41,7 +49,7 @@ float BMP280Sensor::getAltitude() {
   return _altitude;
 }
 
-JsonObject &BMP280Sensor::getJsonValue() {
+const char* BMP280Sensor::getJsonValue() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -49,6 +57,6 @@ JsonObject &BMP280Sensor::getJsonValue() {
   json["pressure"] = getPressure();
   json["altitude"] = getAltitude();
 
-  return json;
+  return esp8266util::toString(json);
 }
 }  // namespace esp8266util

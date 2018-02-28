@@ -14,9 +14,7 @@
 
 #include <ArduinoJson.h>  // https://github.com/bblanchon/ArduinoJson
 
-#include "JsonHelper.h"
-
-using esp8266util::toString;
+#include "polyfills/Json2String.h"
 
 namespace esp8266util {
 
@@ -45,13 +43,11 @@ class WebService {
                               ArBodyHandlerFunction onBody,
                               ArUploadHandlerFunction onUpload);
 
-  void send(AsyncWebServerRequest *request, JsonObject &json);
+  void send(AsyncWebServerRequest *request, const char* type, const char* response);
 
-  void send(AsyncWebServerRequest *request, JsonArray &json);
+  void send(AsyncWebServerRequest *request, JsonVariant &json);
 
-  void send(AsyncWebServerRequest *request, StreamString stream);
-
-  JsonArray &getServices();
+  const char* getServices();
 
  private:
   AsyncWebServer _webServer;

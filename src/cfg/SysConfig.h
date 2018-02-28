@@ -8,13 +8,12 @@ extern "C" {
 #endif
 
 #include <ESP.h>     // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
-#include <Log4Esp.h> // https://github.com/hunsalz/log4Esp
 
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+#include "Configurable.h"
 
 namespace esp8266util {
 
-class SysConfig {
+class SysConfig : public Configurable {
 
 public:
   long unsigned getRemainingLoopInterval();
@@ -30,7 +29,9 @@ public:
   int getDeepSleepInterval();
   void setDeepSleepInterval(uint16_t milliseconds);
 
-  JsonObject &getDetails();
+  const char* getConfigAsJson();
+
+  const char* getDetails();
 
 private:
   uint16_t _loopInterval = 5000;              // milliseconds

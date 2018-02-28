@@ -17,18 +17,14 @@ JsonVariant Configurable::read(const char *path) {
     file.close();
   }
 
+  // TODO: returning JSON could result in dangling pointers; FIXME
   return json;
 }
 
 void Configurable::write(const char *path) {
   
-  JsonObject &json = getConfigAsJson();
-  int length = json.measureLength() + 1;
-  char payload[length];
-  json.printTo(payload, length);
-
   File file = SPIFFS.open(path, "w+");
-  file.print(payload);
+  file.print(getConfigAsJson());
   file.flush();
   file.close();
 

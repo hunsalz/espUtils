@@ -30,13 +30,13 @@ bool MQ135Sensor::begin(JsonObject &json) {
 
 MQ135Sensor::config_t MQ135Sensor::getConfig() { return _config; }
 
-JsonObject &MQ135Sensor::getConfigAsJson() {
+const char* MQ135Sensor::getConfigAsJson() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["pin"] = _config.pin;
 
-  return json;
+  return esp8266util::toString(json);
 }
 
 MQ135 &MQ135Sensor::getMQ135() { return *_mq135; }
@@ -61,12 +61,12 @@ bool MQ135Sensor::update(bool mock) {
 
 float MQ135Sensor::getPPM() { return _ppm; }
 
-JsonObject &MQ135Sensor::getJsonValue() {
+const char* MQ135Sensor::getJsonValue() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
   json["ppm"] = getPPM();
 
-  return json;
+  return esp8266util::toString(json);
 }
 } // namespace esp8266util

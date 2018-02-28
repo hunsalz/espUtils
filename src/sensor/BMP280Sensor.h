@@ -7,10 +7,12 @@
 
 namespace esp8266util {
 
-class BMP280Sensor {
+class BMP280Sensor : public Configurable {
 
 public:
   bool begin();
+
+  const char* getConfigAsJson();
 
   Adafruit_BMP280 &getBMP280();
 
@@ -22,7 +24,7 @@ public:
 
   float getAltitude(); // unit in Meter, m
 
-  JsonObject &getJsonValue();
+  const char* getJsonValue();
 
 private:
   Adafruit_BMP280 *_bmp280 = NULL;

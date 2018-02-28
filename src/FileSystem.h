@@ -4,6 +4,8 @@
 #include <FS.h>          // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 #include <Log4Esp.h>     // https://github.com/hunsalz/log4Esp
 
+#include "polyfills/Json2String.h"
+
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 namespace esp8266util {
@@ -16,9 +18,9 @@ public:
 
   void end();
 
-  JsonObject &getStorageDetails();
+  const char* getStorageDetails();
 
-  JsonArray &getFileListing();
+  const char* getFileListing();
 
   static String formatBytes(size_t bytes);
 };

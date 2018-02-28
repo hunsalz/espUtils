@@ -9,13 +9,14 @@
 #include <cfg/WiFiAPConfig.h>
 #include <cfg/WiFiStaConfig.h>
 
+#include <polyfills/Json2String.h>
+
 #include <sensor/BMP280Sensor.h>
 #include <sensor/DHTSensor.h>
 #include <sensor/MQ135Sensor.h>
 
 #include <Configurable.h>
 #include <FileSystem.h>
-#include <JsonHelper.h>
 #include <MQTTService.h>
 #include <WebService.h>
 #include <WebSocketListener.h>
