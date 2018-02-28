@@ -1,6 +1,6 @@
 #include "MQTTService.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool MQTTService::begin(const char *hostName, uint16_t port) {
   
@@ -73,4 +73,4 @@ void MQTTService::publish(const char *topic, JsonArray &json) {
   _mqttClient.publish(topic, 0, true, payload, length);
   LOG.verbose(F("Message send: %s"), payload);
 }
-} // namespace esp8266util
+} // namespace esp8266utils

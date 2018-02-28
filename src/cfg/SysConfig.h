@@ -11,7 +11,7 @@ extern "C" {
 
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class SysConfig : public Configurable {
 
@@ -40,10 +40,10 @@ private:
   uint16_t _deepSleepInterval = 60000;        // milliseconds
   const int MIN_SLEEP_INTERVAL = 30000;       // milliseconds
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266util::SysConfig SYS_CFG;
+extern esp8266utils::SysConfig SYS_CFG;
 #endif // NO_GLOBAL_INSTANCES
 
 #endif // SYS_CONFIG_H

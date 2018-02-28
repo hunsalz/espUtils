@@ -1,6 +1,6 @@
 #include "Driver.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 static uint16_t PWM_RANGE = 1023;
 
@@ -12,4 +12,4 @@ void Driver::setPWMRange(uint16_t pwmRange) {
   analogWriteRange(PWM_RANGE);
   LOG.verbose(F("Set PWM range to %d"), PWM_RANGE);
 }
-} // namespace esp8266util
+} // namespace esp8266utils

@@ -16,7 +16,7 @@
 
 #include "polyfills/Json2String.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class WebService {
  public:
@@ -56,10 +56,10 @@ class WebService {
 
   std::vector<String> _services;
 };
-}  // namespace esp8266util
+}  // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266util::WebService SERVER;
+extern esp8266utils::WebService SERVER;
 #endif  // NO_GLOBAL_INSTANCES
 
 #endif  // WEB_SERVICE_H

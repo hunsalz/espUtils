@@ -3,7 +3,7 @@
 
 #include "Driver.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class MotorDriver : public Driver {
 
@@ -35,6 +35,6 @@ private:
   config_t _config;
   int _speed;
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #endif // MOTOR_DRIVER_H

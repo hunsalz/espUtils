@@ -1,6 +1,6 @@
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 JsonVariant Configurable::read(const char *path) {
   
@@ -30,4 +30,4 @@ void Configurable::write(const char *path) {
 
   LOG.verbose(F("Saved config to file [%s]"), path);
 }
-} // namespace esp8266util
+} // namespace esp8266utils

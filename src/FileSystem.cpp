@@ -1,6 +1,6 @@
 #include "FileSystem.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool FileSystem::begin() {
 
@@ -34,7 +34,7 @@ const char* FileSystem::getStorageDetails() {
   json[F("maxOpenFiles")] = fs_info.maxOpenFiles;
   json[F("maxPathLength")] = fs_info.maxPathLength;
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 const char* FileSystem::getFileListing() {
@@ -52,7 +52,7 @@ const char* FileSystem::getFileListing() {
     LOG.verbose(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
   }
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 String FileSystem::formatBytes(size_t bytes) {
@@ -67,8 +67,8 @@ String FileSystem::formatBytes(size_t bytes) {
     return String(bytes / 1024.0 / 1024.0 / 1024.0) + "GB";
   }
 }
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-esp8266util::FileSystem FILESYSTEM;
+esp8266utils::FileSystem FILESYSTEM;
 #endif // NO_GLOBAL_INSTANCES

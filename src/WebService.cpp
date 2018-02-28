@@ -1,6 +1,6 @@
 #include "WebService.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 WebService::WebService(uint16_t port) : _webServer(port) {}
 
@@ -99,7 +99,7 @@ void WebService::send(AsyncWebServerRequest *request, const char* type, const ch
 
 void WebService::send(AsyncWebServerRequest *request, JsonVariant &json) {
   
-  String response = esp8266util::toString(json);
+  String response = esp8266utils::toString(json);
   LOG.verbose(F("Send text/json response: %s"), response.c_str());
   request->send(new AsyncBasicResponse(200, "text/json", response));
 }
@@ -112,10 +112,10 @@ const char* WebService::getServices() {
     json.add(*i);
   }
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
-}  // namespace esp8266util
+}  // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-esp8266util::WebService SERVER = esp8266util::WebService(80);
+esp8266utils::WebService SERVER = esp8266utils::WebService(80);
 #endif  // NO_GLOBAL_INSTANCES

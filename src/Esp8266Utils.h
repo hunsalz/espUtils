@@ -9,6 +9,7 @@
 #include <cfg/WiFiAPConfig.h>
 #include <cfg/WiFiStaConfig.h>
 
+#include <polyfills/ContentType.h>
 #include <polyfills/Json2String.h>
 
 #include <sensor/BMP280Sensor.h>

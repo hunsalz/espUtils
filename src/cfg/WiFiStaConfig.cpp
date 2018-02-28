@@ -1,6 +1,6 @@
 #include "WiFiStaConfig.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
 
@@ -82,7 +82,7 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
   // }
 
   return WiFi.status();
-} // namespace esp8266util
+}
 
 void end() {
   // TODO
@@ -132,7 +132,7 @@ const char* WiFiStaConfig::getConfigAsJson() {
   JsonObject &json = jsonBuffer.createObject();
   // TODO
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 const char* WiFiStaConfig::getDetails() {
@@ -157,10 +157,10 @@ const char* WiFiStaConfig::getDetails() {
   json[F("phyMode")] = WiFi.getPhyMode();
   json[F("wiFiMode")] = WiFi.getMode();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-esp8266util::WiFiStaConfig WIFI_STA_CFG;
+esp8266utils::WiFiStaConfig WIFI_STA_CFG;
 #endif // NO_GLOBAL_INSTANCES

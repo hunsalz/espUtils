@@ -5,7 +5,7 @@
 
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class MQ135Sensor : public Configurable {
 
@@ -38,6 +38,6 @@ private:
 
   float _ppm = NAN;
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #endif // MQ135_SENSOR_H

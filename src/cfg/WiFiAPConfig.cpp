@@ -1,6 +1,6 @@
 #include "WiFiAPConfig.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool WiFiAPConfig::begin(const char *ssid, const char *passphrase, int channel, int ssid_hidden, int max_connection,
                          bool autoConnect, bool persistent) {
@@ -62,7 +62,7 @@ const char* WiFiAPConfig::getConfigAsJson() {
   JsonObject &json = jsonBuffer.createObject();
   // TODO
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 const char* WiFiAPConfig::getDetails() {
@@ -73,7 +73,7 @@ const char* WiFiAPConfig::getDetails() {
   json[F("softAPIP")] = WiFi.softAPIP().toString();
   json[F("softAPmacAddress")] = WiFi.softAPmacAddress();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 String WiFiAPConfig::macAddress(const unsigned char *mac) {
@@ -83,8 +83,8 @@ String WiFiAPConfig::macAddress(const unsigned char *mac) {
 
   return String(buffer);
 }
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-esp8266util::WiFiAPConfig WIFI_AP_CFG;
+esp8266utils::WiFiAPConfig WIFI_AP_CFG;
 #endif // NO_GLOBAL_INSTANCES

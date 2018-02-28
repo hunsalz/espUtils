@@ -1,6 +1,6 @@
 #include "MQ135Sensor.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool MQ135Sensor::begin(uint8_t pin) {
   
@@ -36,7 +36,7 @@ const char* MQ135Sensor::getConfigAsJson() {
   JsonObject &json = jsonBuffer.createObject();
   json["pin"] = _config.pin;
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 MQ135 &MQ135Sensor::getMQ135() { return *_mq135; }
@@ -67,6 +67,6 @@ const char* MQ135Sensor::getJsonValue() {
   JsonObject &json = jsonBuffer.createObject();
   json["ppm"] = getPPM();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
-} // namespace esp8266util
+} // namespace esp8266utils

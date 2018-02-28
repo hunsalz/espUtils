@@ -1,6 +1,6 @@
 #include "MDNSConfig.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool MDNSConfig::begin(const char *domainName) {
   
@@ -21,7 +21,7 @@ const char* MDNSConfig::getConfigAsJson() {
   JsonObject &json = jsonBuffer.createObject();
   // TODO
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 const char* MDNSConfig::getDetails() {
@@ -30,10 +30,10 @@ const char* MDNSConfig::getDetails() {
   JsonObject &json = jsonBuffer.createObject();
   json[F("domainName")] = getDomainName();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-esp8266util::MDNSConfig MDNS_CFG;
+esp8266utils::MDNSConfig MDNS_CFG;
 #endif // NO_GLOBAL_INSTANCES

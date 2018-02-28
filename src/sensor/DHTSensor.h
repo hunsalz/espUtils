@@ -6,7 +6,7 @@
 
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class DHTSensor : public Configurable {
 
@@ -49,6 +49,6 @@ private:
   float _temperature = NAN;
   float _humidity = NAN;
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #endif // DHT_SENSOR_H

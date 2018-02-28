@@ -1,6 +1,6 @@
 #include "DHTSensor.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool DHTSensor::begin(uint8_t pin, uint8_t type) {
 
@@ -42,7 +42,7 @@ const char* DHTSensor::getConfigAsJson() {
   json["pin"] = _config.pin;
   json["type"] = _config.type;
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 DHT_Unified &DHTSensor::getDHT() { return *_dht; }
@@ -87,6 +87,6 @@ const char* DHTSensor::getJsonValue() {
   json["temperature"] = getTemperature();
   json["humidity"] = getHumidity();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
-} // namespace esp8266util
+} // namespace esp8266utils

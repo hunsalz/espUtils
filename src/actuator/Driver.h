@@ -3,7 +3,7 @@
 
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class Driver : public Configurable {
 
@@ -14,6 +14,6 @@ public:
 
   // TODO add analogWriteFreq analog to pwm range
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #endif // DRIVER_H

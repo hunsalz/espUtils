@@ -1,6 +1,6 @@
 #include "MotorDriver.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool MotorDriver::begin(uint8_t pinPWM, uint8_t pinDir) {
   
@@ -29,7 +29,7 @@ const char* MotorDriver::getConfigAsJson() {
   json["pinPWM"] = _config.pinPWM;
   json["pinDir"] = _config.pinDir;
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 uint8_t MotorDriver::getDirection() { return getSpeed() > 0 ? 1 : 0; }
@@ -66,6 +66,6 @@ const char* MotorDriver::getDetails() {
   json[F("pwmRange")] = getPWMRange();
   json[F("speed")] = getSpeed();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
-} // namespace esp8266util
+} // namespace esp8266utils

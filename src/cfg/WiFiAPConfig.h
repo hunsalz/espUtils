@@ -5,7 +5,7 @@
 
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class WiFiAPConfig : public Configurable {
 
@@ -31,10 +31,10 @@ private:
 
   String macAddress(const unsigned char *mac);
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266util::WiFiAPConfig WIFI_AP_CFG;
+extern esp8266utils::WiFiAPConfig WIFI_AP_CFG;
 #endif // NO_GLOBAL_INSTANCES
 
 #endif // WIFI_AP_SERVICE_H

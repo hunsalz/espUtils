@@ -8,7 +8,7 @@
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class Configurable {
 
@@ -19,6 +19,6 @@ public:
 
   void write(const char *path);
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #endif // CONFIGURABLE_H

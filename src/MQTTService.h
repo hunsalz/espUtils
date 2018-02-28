@@ -6,7 +6,7 @@
 
 #include <ArduinoJson.h>  // https://github.com/bblanchon/ArduinoJson
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class MQTTService {
  public:
@@ -33,6 +33,6 @@ class MQTTService {
   config_t _config;
   AsyncMqttClient _mqttClient;
 };
-}  // namespace esp8266util
+}  // namespace esp8266utils
 
 #endif  // MQTT_SERVICE_H

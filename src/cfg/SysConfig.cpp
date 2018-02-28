@@ -1,6 +1,6 @@
 #include "SysConfig.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 long unsigned SysConfig::getRemainingLoopInterval() {
 
@@ -51,7 +51,7 @@ const char* SysConfig::getConfigAsJson() {
   JsonObject &json = jsonBuffer.createObject();
   // TODO
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 const char* SysConfig::getDetails() {
@@ -83,10 +83,10 @@ const char* SysConfig::getDetails() {
   json[F("remainingLoopInterval")] = getRemainingLoopInterval();
   json[F("deepSleepInterval")] = getDeepSleepInterval();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-esp8266util::SysConfig SYS_CFG;
+esp8266utils::SysConfig SYS_CFG;
 #endif // NO_GLOBAL_INSTANCES

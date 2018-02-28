@@ -1,6 +1,6 @@
 #include "WebSocketListener.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 void WebSocketListener::onConnect(WSEventHandler handler) { _connectWSEventHandler = handler; }
 
@@ -103,4 +103,4 @@ void WebSocketListener::handleBinaryMessageEvent(AsyncWebSocket *ws, AsyncWebSoc
     LOG.verbose(F("ws[%s][%u] received : %d bytes"), ws->url(), client->id(), len);
   }
 }
-} // namespace esp8266util
+} // namespace esp8266utils

@@ -5,7 +5,7 @@
 
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class BMP280Sensor : public Configurable {
 
@@ -33,6 +33,6 @@ private:
   float _pressure = NAN;
   float _altitude = NAN;
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #endif // BMP280_SENSOR_H

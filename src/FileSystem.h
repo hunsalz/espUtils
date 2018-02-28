@@ -8,7 +8,7 @@
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class FileSystem {
 
@@ -24,10 +24,10 @@ public:
 
   static String formatBytes(size_t bytes);
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266util::FileSystem FILESYSTEM;
+extern esp8266utils::FileSystem FILESYSTEM;
 #endif // NO_GLOBAL_INSTANCES
 
 #endif // FILE_SYSTEM_H

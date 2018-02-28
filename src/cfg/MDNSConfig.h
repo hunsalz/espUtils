@@ -5,7 +5,7 @@
 
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class MDNSConfig : public Configurable {
 
@@ -24,10 +24,10 @@ public:
 private:
   const char *_domainName;
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266util::MDNSConfig MDNS_CFG;
+extern esp8266utils::MDNSConfig MDNS_CFG;
 #endif // NO_GLOBAL_INSTANCES
 
 #endif // MDNS_CONFIG_H

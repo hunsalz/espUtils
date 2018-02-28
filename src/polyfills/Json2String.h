@@ -3,7 +3,7 @@
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
-namespace esp8266util {
+namespace esp8266utils {
 
 inline char* toString(const JsonVariant &json) {
   
@@ -13,6 +13,6 @@ inline char* toString(const JsonVariant &json) {
 
   return buf;
 }
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #endif // JSON_2_STRING_H

@@ -1,6 +1,6 @@
 #include "BMP280Sensor.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 bool BMP280Sensor::begin() {
   _bmp280 = new Adafruit_BMP280();
@@ -12,7 +12,7 @@ const char* BMP280Sensor::getConfigAsJson() {
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
 
 Adafruit_BMP280 &BMP280Sensor::getBMP280() {
@@ -57,6 +57,6 @@ const char* BMP280Sensor::getJsonValue() {
   json["pressure"] = getPressure();
   json["altitude"] = getAltitude();
 
-  return esp8266util::toString(json);
+  return esp8266utils::toString(json);
 }
-}  // namespace esp8266util
+}  // namespace esp8266utils

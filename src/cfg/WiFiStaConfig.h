@@ -6,7 +6,7 @@
 
 #include "Configurable.h"
 
-namespace esp8266util {
+namespace esp8266utils {
 
 class WiFiStaConfig : public Configurable {
 
@@ -41,10 +41,10 @@ private:
   WiFiEventHandler _stationModeGotIPHandler;
   WiFiEventHandler _stationModeDHCPTimeoutHandler;
 };
-} // namespace esp8266util
+} // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266util::WiFiStaConfig WIFI_STA_CFG;
+extern esp8266utils::WiFiStaConfig WIFI_STA_CFG;
 #endif // NO_GLOBAL_INSTANCES
 
 #endif // WIFI_STA_CONFIG_H
