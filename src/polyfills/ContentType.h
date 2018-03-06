@@ -5,10 +5,10 @@ namespace esp8266utils {
 
 const char* TEXT_CSS = "text/css";
 const char* TEXT_HTML = "text/html";
-const char* TEXT_JSON = "text/json";
 const char* TEXT_PLAIN = "text/plain";
 const char* TEXT_XML = "text/xml";
 const char* APP_JS = "application/javascript";
+const char* APP_JSON = "application/json";
 const char* APP_PDF = "application/pdf";
 const char* APP_ZIP = "application/zip";
 const char* APP_GZ = "application/x-gzip";

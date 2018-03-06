@@ -7,7 +7,7 @@ bool BMP280Sensor::begin() {
   _bmp280->begin();
 }
 
-const char* BMP280Sensor::getConfigAsJson() {
+String BMP280Sensor::getConfigAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -49,14 +49,15 @@ float BMP280Sensor::getAltitude() {
   return _altitude;
 }
 
-const char* BMP280Sensor::getValuesAsJson() {
+String BMP280Sensor::getValuesAsJson() {
   
-  DynamicJsonBuffer jsonBuffer;
+  const size_t bufferSize = JSON_OBJECT_SIZE(3);
+  DynamicJsonBuffer jsonBuffer(bufferSize);
   JsonObject &json = jsonBuffer.createObject();
   json["temperature"] = getTemperature();
   json["pressure"] = getPressure();
   json["altitude"] = getAltitude();
-
+  
   return esp8266utils::toString(json);
 }
 }  // namespace esp8266utils

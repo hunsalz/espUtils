@@ -17,9 +17,9 @@ public:
 
   const char* getDomainName();
 
-  const char* getConfigAsJson();
+  String getConfigAsJson();
 
-  const char* getDetails();
+  String getDetails();
 
 private:
   const char *_domainName;

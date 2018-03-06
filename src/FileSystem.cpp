@@ -20,7 +20,7 @@ void FileSystem::end() {
   LOG.verbose(F("File system unmounted."));
 }
 
-const char* FileSystem::getStorageDetails() {
+String FileSystem::getStorageDetails() {
 
   FSInfo fs_info;
   SPIFFS.info(fs_info);
@@ -37,7 +37,7 @@ const char* FileSystem::getStorageDetails() {
   return esp8266utils::toString(json);
 }
 
-const char* FileSystem::getFileListing() {
+String FileSystem::getFileListing() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonArray &json = jsonBuffer.createArray();

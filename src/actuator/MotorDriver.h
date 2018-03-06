@@ -19,7 +19,7 @@ public:
 
   config_t getConfig();
 
-  const char* getConfigAsJson();
+  String getConfigAsJson();
 
   uint8_t getDirection();
 
@@ -29,7 +29,7 @@ public:
 
   void applySpeed(int speed);
 
-  const char* getDetails();
+  String getDetails();
 
 private:
   config_t _config;

@@ -5,14 +5,15 @@
 
 namespace esp8266utils {
 
-inline char* toString(const JsonVariant &json) {
-  
-  int length = json.measureLength() + 1;
-  char* buf = new char[length];
-  json.printTo(buf, length);
+inline String toString(const JsonVariant &json) {
 
-  return buf;
+  String buffer;
+  json.printTo(buffer);
+
+  return buffer;
 }
+
+
 } // namespace esp8266utils
 
 #endif // JSON_2_STRING_H

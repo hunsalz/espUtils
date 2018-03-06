@@ -126,7 +126,7 @@ WiFiEventHandler WiFiStaConfig::onStationModeDHCPTimeout(std::function<void(void
   return _stationModeDHCPTimeoutHandler;
 }
 
-const char* WiFiStaConfig::getConfigAsJson() {
+String WiFiStaConfig::getConfigAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -135,7 +135,7 @@ const char* WiFiStaConfig::getConfigAsJson() {
   return esp8266utils::toString(json);
 }
 
-const char* WiFiStaConfig::getDetails() {
+String WiFiStaConfig::getDetails() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();

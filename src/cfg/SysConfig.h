@@ -29,9 +29,9 @@ public:
   int getDeepSleepInterval();
   void setDeepSleepInterval(uint16_t milliseconds);
 
-  const char* getConfigAsJson();
+  String getConfigAsJson();
 
-  const char* getDetails();
+  String getDetails();
 
 private:
   uint16_t _loopInterval = 5000;              // milliseconds

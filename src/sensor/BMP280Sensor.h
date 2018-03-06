@@ -12,7 +12,7 @@ class BMP280Sensor : public Configurable {
 public:
   bool begin();
 
-  const char* getConfigAsJson();
+  String getConfigAsJson();
 
   Adafruit_BMP280 &getBMP280();
 
@@ -24,7 +24,7 @@ public:
 
   float getAltitude(); // unit in Meter, m
 
-  const char* getValuesAsJson();
+  String getValuesAsJson();
 
 private:
   Adafruit_BMP280 *_bmp280 = NULL;

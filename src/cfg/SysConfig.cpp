@@ -45,7 +45,7 @@ void SysConfig::setDeepSleepInterval(uint16_t milliseconds) {
   _deepSleepInterval = milliseconds;
 }
 
-const char* SysConfig::getConfigAsJson() {
+String SysConfig::getConfigAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -54,7 +54,7 @@ const char* SysConfig::getConfigAsJson() {
   return esp8266utils::toString(json);
 }
 
-const char* SysConfig::getDetails() {
+String SysConfig::getDetails() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();

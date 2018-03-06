@@ -28,9 +28,9 @@ public:
 
   WiFiEventHandler onStationModeDHCPTimeout(std::function<void(void)> f);
 
-  const char* getConfigAsJson();
+  String getConfigAsJson();
 
-  const char* getDetails();
+  String getDetails();
 
 private:
   ESP8266WiFiMulti _wifiMulti;

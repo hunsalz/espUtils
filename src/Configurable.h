@@ -13,7 +13,7 @@ namespace esp8266utils {
 class Configurable {
 
 public:
-  virtual const char* getConfigAsJson() = 0;
+  virtual String getConfigAsJson() = 0;
 
   JsonVariant read(const char *path);
 

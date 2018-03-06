@@ -35,7 +35,7 @@ bool DHTSensor::begin(JsonObject &json) {
 
 DHTSensor::config_t DHTSensor::getConfig() { return _config; }
 
-const char* DHTSensor::getConfigAsJson() {
+String DHTSensor::getConfigAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -80,7 +80,7 @@ float DHTSensor::getTemperature() { return _temperature; }
 
 float DHTSensor::getHumidity() { return _humidity; }
 
-const char* DHTSensor::getValuesAsJson() {
+String DHTSensor::getValuesAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();

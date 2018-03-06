@@ -20,9 +20,9 @@ public:
 
   WiFiEventHandler onSoftAPModeProbeRequestReceived(std::function<void(const WiFiEventSoftAPModeProbeRequestReceived&)> f);
 
-  const char* getConfigAsJson();
+  String getConfigAsJson();
 
-  const char* getDetails();
+  String getDetails();
 
 private:
   WiFiEventHandler _softAPModeStationConnectedHandler;

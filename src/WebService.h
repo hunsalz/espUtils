@@ -43,11 +43,11 @@ class WebService {
                               ArBodyHandlerFunction onBody,
                               ArUploadHandlerFunction onUpload);
 
-  void send(AsyncWebServerRequest *request, const char* type, const char* response);
+  void send(AsyncWebServerRequest *request, const char* type, const String& response);
 
   void send(AsyncWebServerRequest *request, JsonVariant &json);
 
-  const char* getServices();
+  String getServices();
 
  private:
   AsyncWebServer _webServer;

@@ -30,7 +30,7 @@ public:
 
   config_t getConfig();
 
-  const char* getConfigAsJson();
+  String getConfigAsJson();
 
   DHT_Unified &getDHT();
 
@@ -40,7 +40,7 @@ public:
 
   float getHumidity(); // unit in percent, %
 
-  const char* getValuesAsJson();
+  String getValuesAsJson();
 
 private:
   DHT_Unified *_dht = NULL;

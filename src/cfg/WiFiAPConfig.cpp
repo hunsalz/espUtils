@@ -56,7 +56,7 @@ WiFiEventHandler WiFiAPConfig::onSoftAPModeProbeRequestReceived(std::function<vo
   return _softAPModeProbeRequestReceivedHandler;
 }
 
-const char* WiFiAPConfig::getConfigAsJson() {
+String WiFiAPConfig::getConfigAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -65,7 +65,7 @@ const char* WiFiAPConfig::getConfigAsJson() {
   return esp8266utils::toString(json);
 }
 
-const char* WiFiAPConfig::getDetails() {
+String WiFiAPConfig::getDetails() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();

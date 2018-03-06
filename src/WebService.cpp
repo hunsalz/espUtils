@@ -13,7 +13,15 @@ bool WebService::begin() {
   getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
     LOG.verbose(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
     // TODO make a nice 404 page
-    request->send(404, "text/plain", F("404 error - Page not found."));
+    // request->send(404, "text/plain", F("404 error - Page not found."));
+
+    // _  _    ___  _  _
+    //| || |  / _ \| || |
+    //| || |_| | | | || |_
+    //|__   _| | | |__   _|
+    //   | | | |_| |  | |
+    //   |_|  \___/   |_|
+    request->send(404, "text/plain", F(" _  _    ___  _  _\n| || |  / _ \\| || |\n| || |_| | | | || |_\n|__   _| | | |__   _|\n   | | | |_| |  | |\n   |_|  \\___/   |_|"));
   });
 
   // TODO SSL/TLS example:
@@ -91,9 +99,9 @@ AsyncCallbackWebHandler &WebService::on(const char *uri,
   getWebServer().on(uri, method, onRequest, onUpload, onBody);
 }
 
-void WebService::send(AsyncWebServerRequest *request, const char* type, const char* response) {
+void WebService::send(AsyncWebServerRequest *request, const char* type, const String& response) {
 
-  LOG.verbose(F("Send %s response: %s"), type, response);
+  LOG.verbose(F("Send %s response: %s"), type, response.c_str());
   request->send(new AsyncBasicResponse(200, "text/json", response));
 }
 
@@ -104,7 +112,7 @@ void WebService::send(AsyncWebServerRequest *request, JsonVariant &json) {
   request->send(new AsyncBasicResponse(200, "text/json", response));
 }
 
-const char* WebService::getServices() {
+String WebService::getServices() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonArray &json = jsonBuffer.createArray();

@@ -15,7 +15,7 @@ bool MDNSConfig::begin(const char *domainName) {
 
 const char* MDNSConfig::getDomainName() { return _domainName; }
 
-const char* MDNSConfig::getConfigAsJson() {
+String MDNSConfig::getConfigAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -24,7 +24,7 @@ const char* MDNSConfig::getConfigAsJson() {
   return esp8266utils::toString(json);
 }
 
-const char* MDNSConfig::getDetails() {
+String MDNSConfig::getDetails() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();

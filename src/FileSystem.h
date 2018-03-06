@@ -18,9 +18,9 @@ public:
 
   void end();
 
-  const char* getStorageDetails();
+  String getStorageDetails();
 
-  const char* getFileListing();
+  String getFileListing();
 
   static String formatBytes(size_t bytes);
 };

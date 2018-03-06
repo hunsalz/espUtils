@@ -30,7 +30,7 @@ bool MQ135Sensor::begin(JsonObject &json) {
 
 MQ135Sensor::config_t MQ135Sensor::getConfig() { return _config; }
 
-const char* MQ135Sensor::getConfigAsJson() {
+String MQ135Sensor::getConfigAsJson() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -61,7 +61,7 @@ bool MQ135Sensor::update(bool mock) {
 
 float MQ135Sensor::getPPM() { return _ppm; }
 
-const char* MQ135Sensor::getValuesAsJson() {
+String MQ135Sensor::getValuesAsJson() {
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();

@@ -22,7 +22,7 @@ bool MotorDriver::begin(config_t config) {
 
 MotorDriver::config_t MotorDriver::getConfig() { return _config; }
 
-const char* MotorDriver::getConfigAsJson() {
+String MotorDriver::getConfigAsJson() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
@@ -57,7 +57,7 @@ void MotorDriver::setSpeed(int speed) {
 
 void MotorDriver::applySpeed(int speed) { setSpeed(getSpeed() + speed); }
 
-const char* MotorDriver::getDetails() {
+String MotorDriver::getDetails() {
   
   DynamicJsonBuffer jsonBuffer;
   JsonObject &json = jsonBuffer.createObject();
