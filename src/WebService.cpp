@@ -12,7 +12,7 @@ bool WebService::begin() {
   // add default 404 handler
   getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
     LOG.verbose(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
-    // TODO make a nice 404 page
+
     // request->send(404, "text/plain", F("404 error - Page not found."));
 
     // _  _    ___  _  _
@@ -20,8 +20,8 @@ bool WebService::begin() {
     //| || |_| | | | || |_
     //|__   _| | | |__   _|
     //   | | | |_| |  | |
-    //   |_|  \___/   |_|
-    request->send(404, "text/plain", F(" _  _    ___  _  _\n| || |  / _ \\| || |\n| || |_| | | | || |_\n|__   _| | | |__   _|\n   | | | |_| |  | |\n   |_|  \\___/   |_|"));
+    //   |_|  \___/   |_| page not found
+    request->send(404, "text/plain", F(" _  _    ___  _  _\n| || |  / _ \\| || |\n| || |_| | | | || |_\n|__   _| | | |__   _|\n   | | | |_| |  | |\n   |_|  \\___/   |_| page not found"));
   });
 
   // TODO SSL/TLS example:
