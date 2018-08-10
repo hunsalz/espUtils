@@ -7,7 +7,7 @@ bool DHTSensor::begin(uint8_t pin, uint8_t type) {
   config_t config;
   config.pin = pin;
   config.type = type;
-  begin(config);
+  return begin(config);
 }
 
 bool DHTSensor::begin(config_t config) {
@@ -55,14 +55,14 @@ bool DHTSensor::update(bool mock) {
     getDHT().temperature().getEvent(&event);
     if (isnan(event.temperature)) {
       LOG.error(F("Error reading temperature"));
-      _temperature = NAN;
+      _temperature = 999;
     } else {
       _temperature = event.temperature;
     }
     getDHT().humidity().getEvent(&event);
     if (isnan(event.relative_humidity)) {
       LOG.error(F("Error reading humidity"));
-      _humidity = NAN;
+      _humidity = 999;
     } else {
       _humidity = event.relative_humidity;
     }
@@ -86,6 +86,8 @@ String DHTSensor::getValuesAsJson() {
   JsonObject &json = jsonBuffer.createObject();
   json["temperature"] = getTemperature();
   json["humidity"] = getHumidity();
+
+  //return String("{\"temperature\": ") + getTemperature() + String(",\"humidity\":") + getHumidity() + String("}");
 
   return esp8266utils::toString(json);
 }

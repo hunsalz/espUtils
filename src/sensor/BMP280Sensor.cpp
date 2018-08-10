@@ -4,7 +4,7 @@ namespace esp8266utils {
 
 bool BMP280Sensor::begin() {
   _bmp280 = new Adafruit_BMP280();
-  _bmp280->begin();
+  return _bmp280->begin();
 }
 
 String BMP280Sensor::getConfigAsJson() {

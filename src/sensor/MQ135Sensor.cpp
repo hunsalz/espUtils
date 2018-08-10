@@ -6,7 +6,7 @@ bool MQ135Sensor::begin(uint8_t pin) {
   
   config_t config;
   config.pin = pin;
-  begin(config);
+  return begin(config);
 }
 
 bool MQ135Sensor::begin(config_t config) {
