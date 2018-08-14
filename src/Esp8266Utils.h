@@ -12,6 +12,7 @@
 #include <polyfills/ContentType.h>
 #include <polyfills/Json2String.h>
 
+#include <sensor/BME280Sensor.h>
 #include <sensor/BMP280Sensor.h>
 #include <sensor/DHTSensor.h>
 #include <sensor/MQ135Sensor.h>
