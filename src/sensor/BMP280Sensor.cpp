@@ -2,9 +2,9 @@
 
 namespace esp8266utils {
 
-bool BMP280Sensor::begin() {
+bool BMP280Sensor::begin(uint8_t i2cAddr, uint8_t chipId) {
   _bmp280 = new Adafruit_BMP280();
-  return _bmp280->begin();
+  return _bmp280->begin(i2cAddr, chipId);
 }
 
 String BMP280Sensor::getConfigAsJson() {
@@ -23,7 +23,7 @@ bool BMP280Sensor::update(bool mock) {
   
   bool update = false;
   if (_bmp280 && !mock) {
-    _temperature = _bmp280->readTemperature();  // unit is Celsius
+    _temperature = _bmp280->readTemperature();  // unit is Celsius, °C
     _pressure = _bmp280->readPressure();  // unit is Pascal (Pa) - // https://en.wikipedia.org/wiki/Pascal_(unit)
     _altitude = _bmp280->readAltitude(1013.25);  // use standard baseline - // https://en.wikipedia.org/wiki/Pressure_altitude
     update = true;

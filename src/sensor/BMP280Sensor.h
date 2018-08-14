@@ -10,7 +10,7 @@ namespace esp8266utils {
 class BMP280Sensor : public Configurable {
 
 public:
-  bool begin();
+  bool begin(uint8_t i2cAddr = BMP280_ADDRESS, uint8_t chipId = BMP280_CHIPID);
 
   String getConfigAsJson();
 
@@ -18,7 +18,7 @@ public:
 
   bool update(bool mock = false);
 
-  float getTemperature(); // unit is Celsius,°C
+  float getTemperature(); // unit is Celsius, °C
 
   float getPressure(); // unit is Pascal, Pa
 
