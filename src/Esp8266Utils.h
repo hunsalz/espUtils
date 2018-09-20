@@ -13,6 +13,7 @@
 #include <polyfills/Json2String.h>
 
 #include <sensor/BME280Sensor.h>
+#include <sensor/BME680Sensor.h>
 #include <sensor/BMP085Sensor.h>
 #include <sensor/BMP280Sensor.h>
 #include <sensor/DHTSensor.h>

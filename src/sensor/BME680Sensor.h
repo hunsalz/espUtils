@@ -1,20 +1,20 @@
-#ifndef BME280_SENSOR_H
-#define BME280_SENSOR_H
+#ifndef BME680_SENSOR_H
+#define BME680_SENSOR_H
 
-#include <Adafruit_BME280.h> // https://github.com/adafruit/Adafruit_BME280_Library
+#include <Adafruit_BME680.h> // https://github.com/adafruit/Adafruit_BME680
 
 #include "Configurable.h"
 
 namespace esp8266utils {
 
-class BME280Sensor : public Configurable {
+class BME680Sensor : public Configurable {
 
 public:
-  bool begin(uint8_t i2cAddr = BME280_ADDRESS);
+  bool begin(uint8_t i2cAddr = BME680_DEFAULT_ADDRESS);
 
   String getConfigAsJson();
 
-  Adafruit_BME280 &getBME280();
+  Adafruit_BME680 &getBME680();
 
   bool update(bool mock = false);
 
@@ -24,18 +24,21 @@ public:
 
   float getPressure(); // unit is Pascal, Pa
 
+  uint32_t getGasResistance(); // unit is Ohm
+
   float getApproximateAltitude(); // unit in Meter, m
 
   String getValuesAsJson();
 
 private:
-  Adafruit_BME280 *_bme280 = NULL;
+  Adafruit_BME680 *_bme680 = NULL;
 
   float _temperature = NAN;
   float _humidity = NAN;
   float _pressure = NAN;
+  uint32_t _gas = 0;
   float _altitude = NAN;
 };
 } // namespace esp8266utils
 
-#endif // BME280_SENSOR_H
+#endif // BME680_SENSOR_H

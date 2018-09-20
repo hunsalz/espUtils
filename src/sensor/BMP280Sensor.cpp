@@ -45,7 +45,7 @@ float BMP280Sensor::getPressure() {
   return _pressure;
 }
 
-float BMP280Sensor::getAltitude() {
+float BMP280Sensor::getApproximateAltitude() {
   return _altitude;
 }
 
@@ -56,7 +56,7 @@ String BMP280Sensor::getValuesAsJson() {
   JsonObject &json = jsonBuffer.createObject();
   json["temperature"] = getTemperature();
   json["pressure"] = getPressure();
-  json["altitude"] = getAltitude();
+  json["altitude"] = getApproximateAltitude();
   
   return esp8266utils::toString(json);
 }

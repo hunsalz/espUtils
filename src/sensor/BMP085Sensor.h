@@ -24,7 +24,7 @@ public:
 
   float getPressure(); // unit is Pascal, Pa
 
-  float getAltitude(); // unit in Meter, m
+  float getApproximateAltitude(); // unit in Meter, m
 
   String getValuesAsJson();
 

@@ -36,7 +36,7 @@ public:
 
   bool update(bool mock = false);
 
-  float getTemperature(); // unit in Celsius, °C
+  float getTemperature(); // unit is Celsius, °C
 
   float getHumidity(); // unit in percent, %
 

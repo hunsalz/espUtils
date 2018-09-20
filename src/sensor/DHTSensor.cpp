@@ -55,14 +55,14 @@ bool DHTSensor::update(bool mock) {
     getDHT().temperature().getEvent(&event);
     if (isnan(event.temperature)) {
       LOG.error(F("Error reading temperature"));
-      _temperature = 999;
+      _temperature = 999; // FIXME -> NAN
     } else {
       _temperature = event.temperature;
     }
     getDHT().humidity().getEvent(&event);
     if (isnan(event.relative_humidity)) {
       LOG.error(F("Error reading humidity"));
-      _humidity = 999;
+      _humidity = 999; // FIXME -> NAN
     } else {
       _humidity = event.relative_humidity;
     }
@@ -87,6 +87,7 @@ String DHTSensor::getValuesAsJson() {
   json["temperature"] = getTemperature();
   json["humidity"] = getHumidity();
 
+  // TODO remove debugging
   //return String("{\"temperature\": ") + getTemperature() + String(",\"humidity\":") + getHumidity() + String("}");
 
   return esp8266utils::toString(json);
