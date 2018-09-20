@@ -21,20 +21,17 @@ Adafruit_BMP280 &BMP280Sensor::getBMP280() {
 
 bool BMP280Sensor::update(bool mock) {
   
-  bool update = false;
   if (_bmp280 && !mock) {
     _temperature = _bmp280->readTemperature();  // unit is Celsius, °C
     _pressure = _bmp280->readPressure();  // unit is Pascal (Pa) - // https://en.wikipedia.org/wiki/Pascal_(unit)
     _altitude = _bmp280->readAltitude(1013.25);  // use standard baseline - // https://en.wikipedia.org/wiki/Pressure_altitude
-    update = true;
+    return true;
   } else {
     _temperature = random(180, 310) / 10.0;
     _pressure = random(10000, 12000);
     _altitude = random(100, 120);
-    update = true;
+    return true;
   }
-
-  return update;
 }
 
 float BMP280Sensor::getTemperature() {

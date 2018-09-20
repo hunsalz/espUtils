@@ -31,30 +31,26 @@ Adafruit_BME680 &BME680Sensor::getBME680() {
 
 bool BME680Sensor::update(bool mock) {
   
-  bool update = false;
   if (_bme680 && !mock) {
-    
     if (!_bme680->performReading()) {
-      Serial.println("Failed to perform reading :(");
+      LOG.error(F("Perform reading BMP680 values failed."));
       return false;
+    } else {
+      _temperature = _bme680->readTemperature();  // unit is Celsius, °C
+      _humidity = _bme680->readHumidity();  // unit in percent, %
+      _pressure = _bme680->readPressure();  // unit is Pascal (Pa) - // https://en.wikipedia.org/wiki/Pascal_(unit)
+      _gas = _bme680->readGas(); // unit is Ohm, Ω
+      _altitude = _bme680->readAltitude(1013.25);  // use standard baseline - // https://en.wikipedia.org/wiki/Pressure_altitude
+      return true;
     }
-    
-    _temperature = _bme680->readTemperature();  // unit is Celsius, °C
-    _humidity = _bme680->readHumidity();  // unit in percent, %
-    _pressure = _bme680->readPressure();  // unit is Pascal (Pa) - // https://en.wikipedia.org/wiki/Pascal_(unit)
-    _gas = _bme680->readGas(); // unit is Ohm, Ω
-    _altitude = _bme680->readAltitude(1013.25);  // use standard baseline - // https://en.wikipedia.org/wiki/Pressure_altitude
-    update = true;
   } else {
     _temperature = random(180, 310) / 10.0;
     _humidity = random(50, 150) / 10.0;
     _pressure = random(10000, 12000);
     _gas = random(5000, 12000);
     _altitude = random(100, 120);
-    update = true;
+    return true;
   }
-
-  return update;
 }
 
 float BME680Sensor::getTemperature() {

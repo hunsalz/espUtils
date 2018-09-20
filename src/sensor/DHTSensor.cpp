@@ -49,7 +49,6 @@ DHT_Unified &DHTSensor::getDHT() { return *_dht; }
 
 bool DHTSensor::update(bool mock) {
 
-  bool update = false;
   if (_dht && !mock) {
     sensors_event_t event;
     getDHT().temperature().getEvent(&event);
@@ -66,14 +65,12 @@ bool DHTSensor::update(bool mock) {
     } else {
       _humidity = event.relative_humidity;
     }
-    update = true;
+    return true;
   } else {
     _temperature = random(180, 310) / 10.0;
     _humidity = random(50, 150) / 10.0;
-    update = true;
+    return true;
   }
-
-  return update;
 }
 
 float DHTSensor::getTemperature() { return _temperature; }

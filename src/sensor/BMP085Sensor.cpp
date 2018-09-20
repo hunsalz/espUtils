@@ -22,22 +22,19 @@ Adafruit_BMP085_Unified &BMP085Sensor::getBMP085() {
 
 bool BMP085Sensor::update(bool mock) {
   
-  bool update = false;
   if (_bmp085 && !mock) {
     sensors_event_t event;
     _bmp085->getEvent(&event);
     _pressure = event.pressure; // unit is Pascal (Pa) - // https://en.wikipedia.org/wiki/Pascal_(unit)
     _bmp085->getTemperature(&_temperature); // unit is Celsius, °C
     _altitude = _bmp085->pressureToAltitude(getSeaLevelPressure(), event.pressure); // use standard baseline - // https://en.wikipedia.org/wiki/Pressure_altitude
-    update = true;
+    return true;
   } else {
     _temperature = random(180, 310) / 10.0;
     _pressure = random(10000, 12000);
     _altitude = random(100, 120);
-    update = true;
+    return true;
   }
-
-  return update;
 }
 
 float BMP085Sensor::getSeaLevelPressure() {

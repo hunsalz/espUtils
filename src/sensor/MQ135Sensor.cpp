@@ -43,20 +43,17 @@ MQ135 &MQ135Sensor::getMQ135() { return *_mq135; }
 
 bool MQ135Sensor::update(bool mock) {
   
-  bool update = false;
   if (_mq135 && !mock) {
     int value = analogRead(_config.pin);
     // LOG.verbose(F("Raw analog data = %d"), value);
     // float rzero = _mq135->getRZero(); // the specific resistance at atmospheric CO2 level of your sensor
     // LOG.verbose(F("RZero = %D"), rzero);
     _ppm = _mq135->getPPM(); // parts per million - https://en.wikipedia.org/wiki/Carbon_dioxide_in_Earth%27s_atmosphere
-    update = true;
+    return true;
   } else {
     _ppm = random(5000, 6000) / 10.0;
-    update = true;
+    return true;
   }
-
-  return update;
 }
 
 float MQ135Sensor::getPPM() { return _ppm; }
