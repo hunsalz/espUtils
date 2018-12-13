@@ -2,7 +2,9 @@
 
 namespace esp8266utils {
 
-bool BME680Sensor::begin(uint8_t i2cAddr) {
+bool BME680Sensor::begin(uint8_t i2cAddr, const char *device) {
+  
+  _device = device;
   _bme680 = new Adafruit_BME680();
   if (_bme680->begin(i2cAddr)) {
     // set up oversampling and filter initialization
@@ -73,6 +75,10 @@ float BME680Sensor::getApproximateAltitude() {
   return _altitude;
 }
 
+const char *BME680Sensor::getDevice() {
+  return _device;
+}
+
 String BME680Sensor::getValuesAsJson() {
   
   const size_t bufferSize = JSON_OBJECT_SIZE(3);
@@ -83,6 +89,7 @@ String BME680Sensor::getValuesAsJson() {
   json["pressure"] = getPressure();
   json["gas"] = getGasResistance();
   json["altitude"] = getApproximateAltitude();
+  json["device"] = getDevice();
   
   return esp8266utils::toString(json);
 }

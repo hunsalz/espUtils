@@ -10,7 +10,7 @@ namespace esp8266utils {
 class BME280Sensor : public Configurable {
 
 public:
-  bool begin(uint8_t i2cAddr = BME280_ADDRESS);
+  bool begin(uint8_t i2cAddr = BME280_ADDRESS, const char *device = "DefaultDevice");
 
   String getConfigAsJson();
 
@@ -26,6 +26,8 @@ public:
 
   float getApproximateAltitude(); // unit in Meter, m
 
+  const char *getDevice();
+
   String getValuesAsJson();
 
 private:
@@ -35,6 +37,7 @@ private:
   float _humidity = NAN;
   float _pressure = NAN;
   float _altitude = NAN;
+  const char *_device = NULL;
 };
 } // namespace esp8266utils
 

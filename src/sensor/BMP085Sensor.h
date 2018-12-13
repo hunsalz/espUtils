@@ -10,7 +10,7 @@ namespace esp8266utils {
 class BMP085Sensor : public Configurable {
 
 public:
-  bool begin(float seaLevelPressure = 1013.25);
+  bool begin(float seaLevelPressure = 1013.25, const char *device = "DefaultDevice");
 
   String getConfigAsJson();
 
@@ -26,6 +26,8 @@ public:
 
   float getApproximateAltitude(); // unit in Meter, m
 
+  const char *getDevice();
+
   String getValuesAsJson();
 
 private:
@@ -35,6 +37,7 @@ private:
   float _temperature = NAN;
   float _pressure = NAN;
   float _altitude = NAN;
+  const char *_device = NULL;
 };
 } // namespace esp8266utils
 

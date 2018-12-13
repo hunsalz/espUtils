@@ -2,7 +2,9 @@
 
 namespace esp8266utils {
 
-bool BMP085Sensor::begin(float seaLevelPressure) {
+bool BMP085Sensor::begin(float seaLevelPressure, const char *device) {
+  
+  _device = device;
   _seaLevelPressure = seaLevelPressure;
   _bmp085 = new Adafruit_BMP085_Unified();
   return _bmp085->begin();
@@ -53,6 +55,10 @@ float BMP085Sensor::getApproximateAltitude() {
   return _altitude;
 }
 
+const char *BMP085Sensor::getDevice() {
+  return _device;
+}
+
 String BMP085Sensor::getValuesAsJson() {
   
   const size_t bufferSize = JSON_OBJECT_SIZE(3);
@@ -61,6 +67,7 @@ String BMP085Sensor::getValuesAsJson() {
   json["temperature"] = getTemperature();
   json["pressure"] = getPressure();
   json["altitude"] = getApproximateAltitude();
+  json["device"] = getDevice();
   
   return esp8266utils::toString(json);
 }

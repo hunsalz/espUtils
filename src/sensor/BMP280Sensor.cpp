@@ -2,7 +2,9 @@
 
 namespace esp8266utils {
 
-bool BMP280Sensor::begin(uint8_t i2cAddr, uint8_t chipId) {
+bool BMP280Sensor::begin(uint8_t i2cAddr, uint8_t chipId, const char *device) {
+  
+  _device = device;
   _bmp280 = new Adafruit_BMP280();
   return _bmp280->begin(i2cAddr, chipId);
 }
@@ -46,6 +48,10 @@ float BMP280Sensor::getApproximateAltitude() {
   return _altitude;
 }
 
+const char *BMP280Sensor::getDevice() {
+  return _device;
+}
+
 String BMP280Sensor::getValuesAsJson() {
   
   const size_t bufferSize = JSON_OBJECT_SIZE(3);
@@ -54,6 +60,7 @@ String BMP280Sensor::getValuesAsJson() {
   json["temperature"] = getTemperature();
   json["pressure"] = getPressure();
   json["altitude"] = getApproximateAltitude();
+  json["device"] = getDevice();
   
   return esp8266utils::toString(json);
 }
