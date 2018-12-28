@@ -9,18 +9,18 @@
 // #include <vector>
 
 #include <ESPAsyncWebServer.h>  // https://github.com/me-no-dev/ESPAsyncWebServer
-#include <Log4Esp.h>            // https://github.com/hunsalz/log4Esp
-#include <StreamString.h>       // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
+
+#include <StreamString.h>  // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
+
+#include "Logging.h"
+#include "polyfills/Json2String.h"
 
 #include <ArduinoJson.h>  // https://github.com/bblanchon/ArduinoJson
-
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
 class WebService {
  public:
-
   WebService(uint16_t port = 80);
 
   bool begin();
@@ -43,7 +43,8 @@ class WebService {
                               ArBodyHandlerFunction onBody,
                               ArUploadHandlerFunction onUpload);
 
-  void send(AsyncWebServerRequest *request, const char* type, const String& response);
+  void send(AsyncWebServerRequest *request, const char *type,
+            const String &response);
 
   void send(AsyncWebServerRequest *request, JsonVariant &json);
 

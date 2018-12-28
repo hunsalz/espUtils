@@ -43,7 +43,7 @@ void WebSocketListener::onEvent(AsyncWebSocket *ws, AsyncWebSocketClient *client
     }
   } break;
   default:
-    LOG.error(F("ws[%s][%u] - Unexpected type definition"), ws->url(), client->id());
+    ERROR_MSG_P(F("ws[%s][%u] - Unexpected type definition"), ws->url(), client->id());
     // TODO send an error response to the client
     break;
   }
@@ -54,7 +54,7 @@ void WebSocketListener::handleConnectEvent(AsyncWebSocket *ws, AsyncWebSocketCli
   if (_connectWSEventHandler) {
     _connectWSEventHandler(ws, client, type, info, data, len);
   } else {
-    LOG.verbose(F("ws[%s][%u] connected"), ws->url(), client->id());
+    VERBOSE_MSG_P(F("ws[%s][%u] connected"), ws->url(), client->id());
   }
 }
 
@@ -63,7 +63,7 @@ void WebSocketListener::handleDisconnectEvent(AsyncWebSocket *ws, AsyncWebSocket
   if (_disconnectWSEventHandler) {
     _disconnectWSEventHandler(ws, client, type, info, data, len);
   } else {
-    LOG.verbose(F("ws[%s][%u] disconnected: %u"), ws->url(), client->id());
+    VERBOSE_MSG_P(F("ws[%s][%u] disconnected: %u"), ws->url(), client->id());
   }
 }
 
@@ -72,7 +72,7 @@ void WebSocketListener::handleErrorEvent(AsyncWebSocket *ws, AsyncWebSocketClien
   if (_errorWSEventHandler) {
     _errorWSEventHandler(ws, client, type, arg, data, len);
   } else {
-    LOG.error(F("ws[%s][%u] error(%u): %s"), ws->url(), client->id(), arg, (char *)data);
+    ERROR_MSG_P(F("ws[%s][%u] error(%u): %s"), ws->url(), client->id(), arg, (char *)data);
   }
 }
 
@@ -81,7 +81,7 @@ void WebSocketListener::handlePongEvent(AsyncWebSocket *ws, AsyncWebSocketClient
   if (_pongWSEventHandler) {
     _pongWSEventHandler(ws, client, type, info, data, len);
   } else {
-    LOG.verbose(F("ws[%s][%u] pong[%u]: %s"), ws->url(), client->id(), len, (len) ? (char *)data : "");
+    VERBOSE_MSG_P(F("ws[%s][%u] pong[%u]: %s"), ws->url(), client->id(), len, (len) ? (char *)data : "");
   }
 }
 
@@ -90,8 +90,7 @@ void WebSocketListener::handleTextMessageEvent(AsyncWebSocket *ws, AsyncWebSocke
   if (_textWSEventHandler) {
     _textWSEventHandler(ws, client, type, info, data, len);
   } else {
-    // TODO test verbose message
-    LOG.verbose(F("ws[%s][%u] received : %s"), ws->url(), client->id(), (char *)data);
+    VERBOSE_MSG_P(F("ws[%s][%u] received : %s"), ws->url(), client->id(), (char *)data);
   }
 }
 
@@ -100,7 +99,7 @@ void WebSocketListener::handleBinaryMessageEvent(AsyncWebSocket *ws, AsyncWebSoc
   if (_binaryWSEventHandler) {
     _binaryWSEventHandler(ws, client, type, info, data, len);
   } else {
-    LOG.verbose(F("ws[%s][%u] received : %d bytes"), ws->url(), client->id(), len);
+    VERBOSE_MSG_P(F("ws[%s][%u] received : %d bytes"), ws->url(), client->id(), len);
   }
 }
 } // namespace esp8266utils

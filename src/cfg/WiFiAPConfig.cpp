@@ -12,22 +12,22 @@ bool WiFiAPConfig::begin(const char *ssid, const char *passphrase, int channel, 
   // add default verbose callback handlers if no handler is set
   if (!_softAPModeStationConnectedHandler) {
     onSoftAPModeStationConnected([&](const WiFiEventSoftAPModeStationConnected &event) {
-      LOG.verbose(F("MAC address [%s] joined AP."), macAddress(event.mac).c_str());
+      VERBOSE_MSG_P(F("MAC address [%s] joined AP."), macAddress(event.mac).c_str());
     });
   }
   if (!_softAPModeStationDisconnectedHandler) {
     onSoftAPModeStationDisconnected([&](const WiFiEventSoftAPModeStationDisconnected &event) {
-      LOG.verbose(F("MAC address [%s] disappeared from AP."), macAddress(event.mac).c_str());
+      VERBOSE_MSG_P(F("MAC address [%s] disappeared from AP."), macAddress(event.mac).c_str());
     });
   }
   if (!_softAPModeProbeRequestReceivedHandler) {
     onSoftAPModeProbeRequestReceived([&](const WiFiEventSoftAPModeProbeRequestReceived &event) {
-      LOG.trace(F("RSSI is [%d]"), event.rssi);
+      TRACE_MSG_P(F("RSSI is [%d]"), event.rssi);
     });
   }
   // enable AP
   if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
-    LOG.verbose(F("Soft AP established successful. IP address of AP is: %s"), WiFi.softAPIP().toString().c_str());
+    VERBOSE_MSG_P(F("Soft AP established successful. IP address of AP is: %s"), WiFi.softAPIP().toString().c_str());
   }
 
   return WiFi.isConnected();
@@ -54,15 +54,6 @@ WiFiEventHandler WiFiAPConfig::onSoftAPModeProbeRequestReceived(std::function<vo
   _softAPModeProbeRequestReceivedHandler = WiFi.onSoftAPModeProbeRequestReceived(f);
 
   return _softAPModeProbeRequestReceivedHandler;
-}
-
-String WiFiAPConfig::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  // TODO
-
-  return esp8266utils::toString(json);
 }
 
 String WiFiAPConfig::getDetails() {

@@ -6,9 +6,9 @@ bool FileSystem::begin() {
 
   bool available = SPIFFS.begin();
   if (available) {
-    LOG.verbose(F("File system mounted."));
+    VERBOSE_MSG_P(F("File system mounted."));
   } else {
-    LOG.warning(F("Mounting file system failed."));
+    WARNING_MSG_P(F("Mounting file system failed."));
   }
 
   return available;
@@ -17,7 +17,7 @@ bool FileSystem::begin() {
 void FileSystem::end() {
 
   SPIFFS.end();
-  LOG.verbose(F("File system unmounted."));
+  VERBOSE_MSG_P(F("File system unmounted."));
 }
 
 String FileSystem::getStorageDetails() {
@@ -49,7 +49,7 @@ String FileSystem::getFileListing() {
     JsonObject &entry = json.createNestedObject();
     entry[F("name")] = name;
     entry[F("size")] = size;
-    LOG.verbose(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
+    VERBOSE_MSG_P(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
   }
 
   return esp8266utils::toString(json);

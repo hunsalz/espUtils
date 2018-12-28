@@ -9,11 +9,14 @@ extern "C" {
 
 #include <ESP.h>     // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
 
-#include "Configurable.h"
+#include "../Logging.h"
+#include "polyfills/Json2String.h"
+
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 namespace esp8266utils {
 
-class SysConfig : public Configurable {
+class SysConfig {
 
 public:
   long unsigned getRemainingLoopInterval();
@@ -24,21 +27,14 @@ public:
 
   void setLoopInterval(uint16_t milliseconds);
 
-  void deepSleep();
-
-  int getDeepSleepInterval();
-  void setDeepSleepInterval(uint16_t milliseconds);
-
-  String getConfigAsJson();
-
   String getDetails();
 
 private:
-  uint16_t _loopInterval = 5000;              // milliseconds
-  const int MIN_LOOP_INTERVAL = 500;          // milliseconds
-  unsigned long _lastLoopInterval = millis(); // milliseconds
-  uint16_t _deepSleepInterval = 60000;        // milliseconds
-  const int MIN_SLEEP_INTERVAL = 30000;       // milliseconds
+  uint16_t _loopInterval = 5000;              // milli seconds
+  const int MIN_LOOP_INTERVAL = 500;          // milli seconds
+  unsigned long _lastLoopInterval = millis(); // milli seconds
+  uint16_t _deepSleepInterval = 60000;        // milli seconds
+  const int MIN_SLEEP_INTERVAL = 30000;       // milli seconds
 };
 } // namespace esp8266utils
 

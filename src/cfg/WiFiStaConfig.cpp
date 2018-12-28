@@ -4,7 +4,6 @@ namespace esp8266utils {
 
 bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
 
-  // TODO
   bool line_feed = true;
   uint8_t i = retries;
   // general settings
@@ -18,7 +17,7 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
         line_feed = false;
         Serial.println();
       }
-      LOG.verbose(F("Connected with WiFi station after [%d] attempts"), retries - i);
+      VERBOSE_MSG_P(F("Connected with WiFi station after [%d] attempts"), retries - i);
     });
   }
   if (!_stationModeDisconnectedHandler) {
@@ -27,7 +26,7 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
         line_feed = false;
         Serial.println();
       }
-      LOG.verbose(F("WiFi connection [%s] dropped. Reason: %d"), event.ssid.c_str(), event.reason);
+      VERBOSE_MSG_P(F("WiFi connection [%s] dropped. Reason: %d"), event.ssid.c_str(), event.reason);
     });
   }
   if (!_stationModeAuthModeChangedHandler) {
@@ -36,7 +35,7 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
         line_feed = false;
         Serial.println();
       }
-      LOG.verbose(F("WiFi authentication mode changed."));
+      VERBOSE_MSG_P(F("WiFi authentication mode changed."));
     });
   }
   if (!_stationModeGotIPHandler) {
@@ -45,7 +44,7 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
         line_feed = false;
         Serial.println();
       }
-      LOG.verbose(F("Received IP [%s] from WiFi station."), event.ip.toString().c_str());
+      VERBOSE_MSG_P(F("Received IP [%s] from WiFi station."), event.ip.toString().c_str());
     });
   }
   if (!_stationModeDHCPTimeoutHandler) {
@@ -54,11 +53,11 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
         line_feed = false;
         Serial.println();
       }
-      LOG.verbose(F("Received DHCP timeout from WiFi station."));
+      VERBOSE_MSG_P(F("Received DHCP timeout from WiFi station."));
     });
   }
   // try to connect
-  LOG.verbose(F("Connecting to WiFi network"));
+  VERBOSE_MSG_P(F("Connecting to WiFi network"));
   while (_wifiMulti.run() != WL_CONNECTED && i-- > 0) { // try to connect for given amount of retries
     Serial.print(F("."));
     delay(300);
@@ -68,7 +67,7 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
     Serial.println();
   }
   if (retries <= 0) {
-    LOG.error(F("Couldn't establish any WiFi connection."));
+    ERROR_MSG_P(F("Couldn't establish any WiFi connection."));
   }
   // // log WiFi connection result
   // if (i > 0) {
@@ -76,9 +75,9 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
   //   if (MDNS_SERVICE.available()) {
   //     MDNS_SERVICE.getMDNSResponder().update();
   //   }
-  //   LOG.verbose(F("WiFi successful connected with IP: %s"), WiFi.localIP().toString().c_str());
+  //   VERBOSE_MSG_P(F("WiFi successful connected with IP: %s"), WiFi.localIP().toString().c_str());
   // } else {
-  //   LOG.error(F("Coudn't establish any WiFi connection."));
+  //   ERROR_MSG_P(F("Coudn't establish any WiFi connection."));
   // }
 
   return WiFi.status();
@@ -86,7 +85,7 @@ bool WiFiStaConfig::begin(uint8_t retries, bool autoConnect, bool persistent) {
 
 void end() {
   // TODO
-  //WiFi.stopAll();
+  // WiFi.stopAll();
 }
 
 bool WiFiStaConfig::addAP(const char *ssid, const char *passphrase) { return _wifiMulti.addAP(ssid, passphrase); }
@@ -124,15 +123,6 @@ WiFiEventHandler WiFiStaConfig::onStationModeDHCPTimeout(std::function<void(void
   _stationModeDHCPTimeoutHandler = WiFi.onStationModeDHCPTimeout(f);
 
   return _stationModeDHCPTimeoutHandler;
-}
-
-String WiFiStaConfig::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  // TODO
-
-  return esp8266utils::toString(json);
 }
 
 String WiFiStaConfig::getDetails() {

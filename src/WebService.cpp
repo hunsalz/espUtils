@@ -11,7 +11,7 @@ bool WebService::begin() {
   });
   // add default 404 handler
   getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
-    LOG.verbose(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
+    VERBOSE_MSG_P(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
 
     // request->send(404, "text/plain", F("404 error - Page not found."));
 
@@ -53,7 +53,7 @@ bool WebService::begin() {
   // start web server
   _webServer.begin();
 
-  LOG.verbose(F("WebServer started."));
+  VERBOSE_MSG_P(F("WebServer started."));
 
   return true;  // TODO
 }
@@ -73,10 +73,8 @@ AsyncCallbackWebHandler &WebService::on(const char *uri,
   // (Caution) overwrites & disables "catchAllHandler" for onRequestBody(...) in
   // ESPAsyncWebServer; maybe rework again
   on(uri, method, onRequest,
-     [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index,
-        size_t total) {},
-     [](AsyncWebServerRequest *request, const String &filename, size_t index,
-        uint8_t *data, size_t len, bool final) {});
+     [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {},
+     [](AsyncWebServerRequest *request, const String &filename, size_t index, uint8_t *data, size_t len, bool final) {});
 }
 
 AsyncCallbackWebHandler &WebService::on(const char *uri,
@@ -84,8 +82,7 @@ AsyncCallbackWebHandler &WebService::on(const char *uri,
                                         ArRequestHandlerFunction onRequest,
                                         ArBodyHandlerFunction onBody) {
   on(uri, method, onRequest, onBody,
-     [](AsyncWebServerRequest *request, const String &filename, size_t index,
-        uint8_t *data, size_t len, bool final) {});
+     [](AsyncWebServerRequest *request, const String &filename, size_t index, uint8_t *data, size_t len, bool final) {});
 }
 
 AsyncCallbackWebHandler &WebService::on(const char *uri,
@@ -101,14 +98,14 @@ AsyncCallbackWebHandler &WebService::on(const char *uri,
 
 void WebService::send(AsyncWebServerRequest *request, const char* type, const String& response) {
 
-  LOG.verbose(F("Send %s response: %s"), type, response.c_str());
+  VERBOSE_MSG_P(F("Send %s response: %s"), type, response.c_str());
   request->send(new AsyncBasicResponse(200, "text/json", response));
 }
 
 void WebService::send(AsyncWebServerRequest *request, JsonVariant &json) {
   
   String response = esp8266utils::toString(json);
-  LOG.verbose(F("Send text/json response: %s"), response.c_str());
+  VERBOSE_MSG_P(F("Send text/json response: %s"), response.c_str());
   request->send(new AsyncBasicResponse(200, "text/json", response));
 }
 

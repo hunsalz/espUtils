@@ -23,35 +23,11 @@ void SysConfig::setLoopInterval(uint16_t milliseconds) {
 
   if (milliseconds < MIN_LOOP_INTERVAL) {
     milliseconds = MIN_LOOP_INTERVAL;
-    LOG.warning(F("Loop interval limited to %d milliseconds."), milliseconds);
+    WARNING_MSG_P(F("Loop interval limited to %d milliseconds."), milliseconds);
   } else {
-    LOG.verbose(F("Loop interval set to %d milliseconds."), milliseconds);
+    VERBOSE_MSG_P(F("Loop interval set to %d milliseconds."), milliseconds);
   }
   _loopInterval = milliseconds;
-}
-
-void SysConfig::deepSleep() { ESP.deepSleep(getDeepSleepInterval()); }
-
-int SysConfig::getDeepSleepInterval() { return _deepSleepInterval; }
-
-void SysConfig::setDeepSleepInterval(uint16_t milliseconds) {
-
-  if (milliseconds < MIN_SLEEP_INTERVAL) {
-    milliseconds = MIN_SLEEP_INTERVAL;
-    LOG.warning(F("Deep sleep interval limited to %d milliseconds."), milliseconds);
-  } else {
-    LOG.verbose(F("Deep sleep interval set to %d milliseconds."), milliseconds);
-  }
-  _deepSleepInterval = milliseconds;
-}
-
-String SysConfig::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  // TODO
-
-  return esp8266utils::toString(json);
 }
 
 String SysConfig::getDetails() {
@@ -81,7 +57,6 @@ String SysConfig::getDetails() {
   json[F("uptime")] = millis();
   json[F("loopInterval")] = getLoopInterval();
   json[F("remainingLoopInterval")] = getRemainingLoopInterval();
-  json[F("deepSleepInterval")] = getDeepSleepInterval();
 
   return esp8266utils::toString(json);
 }

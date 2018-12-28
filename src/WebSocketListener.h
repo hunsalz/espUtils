@@ -2,7 +2,8 @@
 #define WEB_SOCKET_LISTENER_H
 
 #include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer
-#include <Log4Esp.h>        // https://github.com/hunsalz/log4Esp
+
+#include "Logging.h"
 
 namespace esp8266utils {
 

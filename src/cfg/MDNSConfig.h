@@ -3,11 +3,14 @@
 
 #include <ESP8266mDNS.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/ESP8266mDNS.h
 
-#include "Configurable.h"
+#include "../Logging.h"
+#include "polyfills/Json2String.h"
+
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 namespace esp8266utils {
 
-class MDNSConfig : public Configurable {
+class MDNSConfig {
 
 public:
 
@@ -16,8 +19,6 @@ public:
   void end();
 
   const char* getDomainName();
-
-  String getConfigAsJson();
 
   String getDetails();
 

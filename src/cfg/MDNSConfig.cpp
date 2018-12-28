@@ -7,21 +7,14 @@ bool MDNSConfig::begin(const char *domainName) {
   _domainName = domainName;
   bool available = MDNS.begin(getDomainName());
   if (available) {
-    LOG.verbose(F("MDNS enabled to http://%s.local"), getDomainName());
+    VERBOSE_MSG_P(F("MDNS enabled to http://%s.local"), getDomainName());
   } else {
-    LOG.error(F("MDNS failed for http://%s.local"), getDomainName());
+    ERROR_MSG_P(F("MDNS failed for http://%s.local"), getDomainName());
   }
 }
 
-const char* MDNSConfig::getDomainName() { return _domainName; }
-
-String MDNSConfig::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  // TODO
-
-  return esp8266utils::toString(json);
+const char* MDNSConfig::getDomainName() { 
+  return _domainName; 
 }
 
 String MDNSConfig::getDetails() {

@@ -4,11 +4,14 @@
 #include <ESP8266WiFi.h>      // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 #include <ESP8266WiFiMulti.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
 
-#include "Configurable.h"
+#include "../Logging.h"
+#include "polyfills/Json2String.h"
+
+#include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
 
 namespace esp8266utils {
 
-class WiFiStaConfig : public Configurable {
+class WiFiStaConfig {
 
 public:
 
@@ -27,8 +30,6 @@ public:
   WiFiEventHandler onStationModeGotIP(std::function<void(const WiFiEventStationModeGotIP &)> f);
 
   WiFiEventHandler onStationModeDHCPTimeout(std::function<void(void)> f);
-
-  String getConfigAsJson();
 
   String getDetails();
 
