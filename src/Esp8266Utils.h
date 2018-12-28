@@ -21,6 +21,7 @@
 
 #include <Configurable.h>
 #include <FileSystem.h>
+#include <Logging.h>
 #include <WebService.h>
 #include <WebSocketListener.h>
 
