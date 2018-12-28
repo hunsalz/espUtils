@@ -13,7 +13,7 @@ bool MQ135Sensor::begin(config_t config) {
   
   _config = config;
   if (!_config.pin) {
-    LOG.error(F("Missing pin declaration."));
+    ERROR_MSG_P(F("Missing pin declaration."));
   }
   _mq135 = new MQ135(config.pin);
 
@@ -45,9 +45,9 @@ bool MQ135Sensor::update(bool mock) {
   
   if (_mq135 && !mock) {
     int value = analogRead(_config.pin);
-    // LOG.verbose(F("Raw analog data = %d"), value);
+    // VERBOSE_MSG_P(F("Raw analog data = %d"), value);
     // float rzero = _mq135->getRZero(); // the specific resistance at atmospheric CO2 level of your sensor
-    // LOG.verbose(F("RZero = %D"), rzero);
+    // VERBOSE_MSG_P(F("RZero = %D"), rzero);
     _ppm = _mq135->getPPM(); // parts per million - https://en.wikipedia.org/wiki/Carbon_dioxide_in_Earth%27s_atmosphere
     return true;
   } else {

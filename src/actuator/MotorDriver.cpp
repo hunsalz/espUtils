@@ -15,7 +15,7 @@ bool MotorDriver::begin(config_t config) {
   _config = config;
   pinMode(_config.pinPWM, OUTPUT);
   pinMode(_config.pinDir, OUTPUT);
-  LOG.verbose(F("Setup motor done : PWM pin = %d and direction pin = %d"), _config.pinPWM, _config.pinDir);
+  VERBOSE_MSG_P(F("Setup motor done : PWM pin = %d and direction pin = %d"), _config.pinPWM, _config.pinDir);
 
   return true;
 }
@@ -44,7 +44,7 @@ void MotorDriver::setSpeed(int speed) {
   } else if (speed < -getPWMRange()) {
     speed = -getPWMRange();
   }
-  LOG.verbose(F("Write speed = %d"), speed);
+  VERBOSE_MSG_P(F("Write speed = %d"), speed);
   // write speed to PWM
   analogWrite(_config.pinPWM, abs(speed));
   // change direction accordingly to original signed speed to HIGH or LOW
@@ -52,7 +52,7 @@ void MotorDriver::setSpeed(int speed) {
   // save new speed value
   _speed = speed;
 
-  LOG.verbose(F("Write speed = %d - DONE"), _speed);
+  VERBOSE_MSG_P(F("Write speed = %d - DONE"), _speed);
 }
 
 void MotorDriver::applySpeed(int speed) { setSpeed(getSpeed() + speed); }

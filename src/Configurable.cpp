@@ -10,9 +10,9 @@ JsonVariant Configurable::read(const char *path) {
     DynamicJsonBuffer buffer;
     json = buffer.parse(file);
     if (json.success()) {
-      LOG.verbose(F("Loaded json config from file [%s]"), path);
+      VERBOSE_MSG_P(F("Loaded json config from file [%s]"), path);
     } else {
-      LOG.error(F("Malformed json config file [%s]"), path);
+      ERROR_MSG_P(F("Malformed json config file [%s]"), path);
     }
     file.close();
   }
@@ -28,6 +28,6 @@ void Configurable::write(const char *path) {
   file.flush();
   file.close();
 
-  LOG.verbose(F("Saved config to file [%s]"), path);
+  VERBOSE_MSG_P(F("Saved config to file [%s]"), path);
 }
 } // namespace esp8266utils

@@ -14,10 +14,10 @@ bool DHTSensor::begin(config_t config) {
 
   _config = config;
   if (!_config.pin) {
-    LOG.error(F("Missing pin declaration."));
+    ERROR_MSG_P(F("Missing pin declaration."));
   }
   if (!_config.type) {
-    LOG.error(F("Missing type declaration."));
+    ERROR_MSG_P(F("Missing type declaration."));
   }
   _dht = new DHT_Unified(config.pin, config.type);
 
@@ -53,14 +53,14 @@ bool DHTSensor::update(bool mock) {
     sensors_event_t event;
     getDHT().temperature().getEvent(&event);
     if (isnan(event.temperature)) {
-      LOG.error(F("Error reading temperature"));
+      ERROR_MSG_P(F("Error reading temperature"));
       _temperature = 999; // FIXME -> NAN
     } else {
       _temperature = event.temperature;
     }
     getDHT().humidity().getEvent(&event);
     if (isnan(event.relative_humidity)) {
-      LOG.error(F("Error reading humidity"));
+      ERROR_MSG_P(F("Error reading humidity"));
       _humidity = 999; // FIXME -> NAN
     } else {
       _humidity = event.relative_humidity;

@@ -10,6 +10,6 @@ void Driver::setPWMRange(uint16_t pwmRange) {
   
   PWM_RANGE = pwmRange;
   analogWriteRange(PWM_RANGE);
-  LOG.verbose(F("Set PWM range to %d"), PWM_RANGE);
+  VERBOSE_MSG_P(F("Set PWM range to %d"), PWM_RANGE);
 }
 } // namespace esp8266utils

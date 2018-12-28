@@ -35,7 +35,7 @@ bool BME680Sensor::update(bool mock) {
   
   if (_bme680 && !mock) {
     if (!_bme680->performReading()) {
-      LOG.error(F("Perform reading BMP680 values failed."));
+      ERROR_MSG_P(F("Perform reading BMP680 values failed."));
       return false;
     } else {
       _temperature = _bme680->readTemperature();  // unit is Celsius, °C
