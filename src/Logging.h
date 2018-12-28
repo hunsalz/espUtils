@@ -51,14 +51,25 @@ inline void Logging::log(const __FlashStringHelper *prefix, const char *format, 
 inline void Logging::log_P(const __FlashStringHelper *prefix, const __FlashStringHelper *format, ...) {
   
   // copy PGM_P into a char*
-  char *buffer = new char[strlen_P((PGM_P)format) + 1];
-  strcpy_P(buffer, (PGM_P)format);
+  char *formatBuffer = new char[strlen_P((PGM_P)format) + 1];
+  strcpy_P(formatBuffer, (PGM_P)format);
 
-  // proceed by using the standard function
   va_list args;
   va_start(args, format);
-  Logging::log(prefix, buffer, args);
+  // determine buffer length for formatted data
+  size_t length = vsnprintf(NULL, 0, formatBuffer, args) + 1;
+  char buffer[length];
+  // write formatted data to buffer
+  vsnprintf(buffer, length, formatBuffer, args);
   va_end(args);
+
+  DEBUG_ESP_PORT.print(prefix);
+  DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+  DEBUG_ESP_PORT.print(millis());
+  DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+  DEBUG_ESP_PORT.print(ESP.getFreeHeap());
+  DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+  DEBUG_ESP_PORT.println(buffer);
 }
 
 } // namespace esp8266utils
