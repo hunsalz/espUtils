@@ -3,37 +3,46 @@
 
 #include <Arduino.h>
 
-namespace esp8266utils {
-
 #define LOG_SEPARATOR '|'
+#define LOG_LEVEL 3
 
-#ifdef DEBUG_ESP_PORT
-
+#if defined DEBUG_ESP_PORT && LOG_LEVEL >= 1
 #define INFO_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::INFO), format, ##__VA_ARGS__)
 #define INFO_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::INFO), format, ##__VA_ARGS__)
+#else
+#define INFO_MSG(...)
+#define INFO_MSG_P(...)
+#endif
+
+#if defined DEBUG_ESP_PORT && LOG_LEVEL >= 2
 #define VERBOSE_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::VERBOSE), format, ##__VA_ARGS__)
 #define VERBOSE_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::VERBOSE), format, ##__VA_ARGS__)
+#else
+#define VERBOSE_MSG(...)
+#define VERBOSE_MSG_P(...)
+#endif
+
+#if defined DEBUG_ESP_PORT && LOG_LEVEL >= 3
 #define TRACE_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::TRACE), format, ##__VA_ARGS__)
 #define TRACE_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::TRACE), format, ##__VA_ARGS__)
+#else
+#define TRACE_MSG(...)
+#define TRACE_MSG_P(...)
+#endif
+
+#ifdef DEBUG_ESP_PORT
 #define WARNING_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
 #define WARNING_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
 #define ERROR_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
 #define ERROR_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
-
 #else
-
-#define INFO_MSG(...)
-#define INFO_MSG_P(...)
-#define VERBOSE_MSG(...)
-#define VERBOSE_MSG_P(...)
-#define TRACE_MSG(...)
-#define TRACE_MSG_P(...)
 #define WARNING_MSG(...)
 #define WARNING_MSG_P(...)
 #define ERROR_MSG(...)
 #define ERROR_MSG_P(...)
-
 #endif
+
+namespace esp8266utils {
 
 static const char INFO[] PROGMEM = "INFO";
 static const char VERBOSE[] PROGMEM = "VERBOSE";
