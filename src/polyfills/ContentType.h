@@ -1,5 +1,4 @@
-#ifndef CONTENT_TYPE_H
-#define CONTENT_TYPE_H
+#pragma once
 
 namespace esp8266utils {
 
@@ -19,5 +18,3 @@ const char* IMG_PNG = "image/png";
 const char* IMG_SVG = "image/svg+xml";
 
 } // namespace esp8266utils
-
-#endif // CONTENT_TYPE_H

@@ -1,5 +1,4 @@
-#ifndef LOGGING_H
-#define LOGGING_H
+#pragma once
 
 #include <Arduino.h>
 
@@ -60,11 +59,13 @@ class Logging {
 
 inline void Logging::init(unsigned long baud) {
   
+  #ifdef DEBUG_ESP_PORT
   DEBUG_ESP_PORT.begin(baud);
   DEBUG_ESP_PORT.setDebugOutput(false);
   while (!DEBUG_ESP_PORT && !DEBUG_ESP_PORT.available()) {
   };
   DEBUG_ESP_PORT.println();
+  #endif
 }
 
 inline void Logging::log(const __FlashStringHelper *prefix, const char *format, ...) {
@@ -78,6 +79,7 @@ inline void Logging::log(const __FlashStringHelper *prefix, const char *format, 
   vsnprintf(buffer, length, format, args);
   va_end(args);
 
+  #ifdef DEBUG_ESP_PORT
   DEBUG_ESP_PORT.print(prefix);
   DEBUG_ESP_PORT.print(LOG_SEPARATOR);
   DEBUG_ESP_PORT.print(millis());
@@ -85,6 +87,7 @@ inline void Logging::log(const __FlashStringHelper *prefix, const char *format, 
   DEBUG_ESP_PORT.print(ESP.getFreeHeap());
   DEBUG_ESP_PORT.print(LOG_SEPARATOR);
   DEBUG_ESP_PORT.println(buffer);
+  #endif
 }
 
 inline void Logging::log_P(const __FlashStringHelper *prefix, const __FlashStringHelper *format, ...) {
@@ -102,6 +105,7 @@ inline void Logging::log_P(const __FlashStringHelper *prefix, const __FlashStrin
   vsnprintf(buffer, length, formatBuffer, args);
   va_end(args);
 
+  #ifdef DEBUG_ESP_PORT
   DEBUG_ESP_PORT.print(prefix);
   DEBUG_ESP_PORT.print(LOG_SEPARATOR);
   DEBUG_ESP_PORT.print(millis());
@@ -109,8 +113,7 @@ inline void Logging::log_P(const __FlashStringHelper *prefix, const __FlashStrin
   DEBUG_ESP_PORT.print(ESP.getFreeHeap());
   DEBUG_ESP_PORT.print(LOG_SEPARATOR);
   DEBUG_ESP_PORT.println(buffer);
+  #endif
 }
 
 } // namespace esp8266utils
-
-#endif  // LOGGING_H

@@ -8,7 +8,6 @@ namespace esp8266utils {
 class Sensor {
  
  public:
- 
   String getDeviceName() {
     return "ESP-" + String(ESP.getChipId());
   }

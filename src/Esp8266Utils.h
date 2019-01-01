@@ -1,28 +1,25 @@
-#ifndef ESP8266UTILS_H
-#define ESP8266UTILS_H
+#pragma once
 
-#include <actuator/Driver.h>
-#include <actuator/MotorDriver.h>
+#include <actuator/Driver.hpp>
+#include <actuator/MotorDriver.hpp>
 
-#include <cfg/MDNSConfig.h>
-#include <cfg/SysConfig.h>
-#include <cfg/WiFiAPConfig.h>
+#include <cfg/MDNSConfig.hpp>
+#include <cfg/SysConfig.hpp>
+#include <cfg/WiFiAPConfig.hpp>
 #include <cfg/WiFiStaConfig.h>
 
 #include <polyfills/ContentType.h>
 #include <polyfills/Json2String.h>
 
-#include <sensor/BME280Sensor.h>
-#include <sensor/BME680Sensor.h>
-#include <sensor/BMP085Sensor.h>
-#include <sensor/BMP280Sensor.h>
-#include <sensor/DHTSensor.h>
-#include <sensor/MQ135Sensor.h>
+#include <sensor/BME280Sensor.hpp>
+#include <sensor/BME680Sensor.hpp>
+#include <sensor/BMP085Sensor.hpp>
+#include <sensor/BMP280Sensor.hpp>
+#include <sensor/DHTSensor.hpp>
+#include <sensor/MQ135Sensor.hpp>
 #include <sensor/Sensor.hpp>
 
-#include <FileSystem.h>
+#include <FileSystem.hpp>
 #include <Logging.hpp>
-#include <WebService.h>
-#include <WebSocketListener.h>
-
-#endif // ESP8266UTILS_H
+#include <WebService.hpp>
+#include <WebSocketListener.hpp>

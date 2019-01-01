@@ -1,5 +1,4 @@
-#ifndef JSON_2_STRING_H
-#define JSON_2_STRING_H
+#pragma once
 
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
@@ -13,7 +12,4 @@ inline String toString(const JsonVariant &json) {
   return output;
 }
 
-
 } // namespace esp8266utils
-
-#endif // JSON_2_STRING_H
