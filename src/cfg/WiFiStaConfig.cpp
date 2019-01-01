@@ -127,27 +127,27 @@ WiFiEventHandler WiFiStaConfig::onStationModeDHCPTimeout(std::function<void(void
 
 String WiFiStaConfig::getDetails() {
 
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  json[F("isConnected")] = WiFi.isConnected();
-  json[F("autoConnect")] = WiFi.getAutoConnect();
-  json[F("localIP")] = WiFi.localIP().toString();
-  json[F("macAddress")] = WiFi.macAddress();
-  json[F("subnetMask")] = WiFi.subnetMask().toString();
-  json[F("gatewayIP")] = WiFi.gatewayIP().toString();
-  json[F("dnsIP")] = WiFi.dnsIP().toString();
-  json[F("hostname")] = WiFi.hostname();
-  json[F("status")] = WiFi.status();
-  json[F("ssid")] = WiFi.SSID();
-  json[F("psk")] = WiFi.psk();
-  json[F("bssId")] = WiFi.BSSIDstr();
-  json[F("rssi")] = WiFi.RSSI();
-  json[F("channel")] = WiFi.channel();
-  json[F("sleepMode")] = WiFi.getSleepMode();
-  json[F("phyMode")] = WiFi.getPhyMode();
-  json[F("wiFiMode")] = WiFi.getMode();
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object[F("isConnected")] = WiFi.isConnected();
+  object[F("autoConnect")] = WiFi.getAutoConnect();
+  object[F("localIP")] = WiFi.localIP().toString();
+  object[F("macAddress")] = WiFi.macAddress();
+  object[F("subnetMask")] = WiFi.subnetMask().toString();
+  object[F("gatewayIP")] = WiFi.gatewayIP().toString();
+  object[F("dnsIP")] = WiFi.dnsIP().toString();
+  object[F("hostname")] = WiFi.hostname();
+  object[F("status")] = WiFi.status();
+  object[F("ssid")] = WiFi.SSID();
+  object[F("psk")] = WiFi.psk();
+  object[F("bssId")] = WiFi.BSSIDstr();
+  object[F("rssi")] = WiFi.RSSI();
+  object[F("channel")] = WiFi.channel();
+  object[F("sleepMode")] = WiFi.getSleepMode();
+  object[F("phyMode")] = WiFi.getPhyMode();
+  object[F("wiFiMode")] = WiFi.getMode();
 
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 } // namespace esp8266utils
 

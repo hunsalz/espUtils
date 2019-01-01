@@ -18,10 +18,10 @@
 #include <sensor/BMP280Sensor.h>
 #include <sensor/DHTSensor.h>
 #include <sensor/MQ135Sensor.h>
+#include <sensor/Sensor.hpp>
 
-#include <Configurable.h>
 #include <FileSystem.h>
-#include <Logging.h>
+#include <Logging.hpp>
 #include <WebService.h>
 #include <WebSocketListener.h>
 

@@ -19,11 +19,11 @@ const char* MDNSConfig::getDomainName() {
 
 String MDNSConfig::getDetails() {
   
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  json[F("domainName")] = getDomainName();
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object[F("domainName")] = getDomainName();
 
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 } // namespace esp8266utils
 

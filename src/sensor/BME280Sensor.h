@@ -1,18 +1,19 @@
 #ifndef BME280_SENSOR_H
 #define BME280_SENSOR_H
 
-#include <Adafruit_BME280.h> // https://github.com/adafruit/Adafruit_BME280_Library
+#include <Adafruit_BME280.h>  // https://github.com/adafruit/Adafruit_BME280_Library
+#include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
 
-#include "Configurable.h"
+#include "Logging.hpp"
+#include "polyfills/Json2String.h"
+#include "Sensor.hpp"
 
 namespace esp8266utils {
 
-class BME280Sensor : public Configurable {
+class BME280Sensor : public Sensor {
 
 public:
-  bool begin(uint8_t i2cAddr = BME280_ADDRESS, const char *device = "DefaultDevice");
-
-  String getConfigAsJson();
+  bool begin(uint8_t i2cAddr = BME280_ADDRESS);
 
   Adafruit_BME280 &getBME280();
 
@@ -26,8 +27,6 @@ public:
 
   float getApproximateAltitude(); // unit in Meter, m
 
-  const char *getDevice();
-
   String getValuesAsJson();
 
 private:
@@ -37,7 +36,6 @@ private:
   float _humidity = NAN;
   float _pressure = NAN;
   float _altitude = NAN;
-  const char *_device = NULL;
 };
 } // namespace esp8266utils
 

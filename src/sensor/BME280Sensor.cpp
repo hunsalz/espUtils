@@ -2,19 +2,10 @@
 
 namespace esp8266utils {
 
-bool BME280Sensor::begin(uint8_t i2cAddr, const char *device) {
+bool BME280Sensor::begin(uint8_t i2cAddr) {
   
-  _device = device;
   _bme280 = new Adafruit_BME280();
   return _bme280->begin(i2cAddr);
-}
-
-String BME280Sensor::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-
-  return esp8266utils::toString(json);
 }
 
 Adafruit_BME280 &BME280Sensor::getBME280() {
@@ -54,21 +45,16 @@ float BME280Sensor::getApproximateAltitude() {
   return _altitude;
 }
 
-const char *BME280Sensor::getDevice() {
-  return _device;
-}
-
 String BME280Sensor::getValuesAsJson() {
   
-  const size_t bufferSize = JSON_OBJECT_SIZE(3);
-  DynamicJsonBuffer jsonBuffer(bufferSize);
-  JsonObject &json = jsonBuffer.createObject();
-  json["temperature"] = getTemperature();
-  json["humidity"] = getHumidity();
-  json["pressure"] = getPressure();
-  json["altitude"] = getApproximateAltitude();
-  json["device"] = getDevice();
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object["temperature"] = getTemperature();
+  object["humidity"] = getHumidity();
+  object["pressure"] = getPressure();
+  object["altitude"] = getApproximateAltitude();
+  object["device"] = getDeviceName();
   
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 }  // namespace esp8266utils

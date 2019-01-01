@@ -1,7 +1,10 @@
 #ifndef MOTOR_DRIVER_H
 #define MOTOR_DRIVER_H
 
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+
 #include "Driver.h"
+#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 

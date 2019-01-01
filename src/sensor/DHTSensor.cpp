@@ -24,25 +24,17 @@ bool DHTSensor::begin(config_t config) {
   return true;
 }
 
-bool DHTSensor::begin(JsonObject &json) {
+bool DHTSensor::begin(JsonObject &object) {
 
   config_t config;
-  config.pin = json["pin"];
-  config.type = json["type"];
+  config.pin = object["pin"];
+  config.type = object["type"];
 
   return begin(config);
 }
 
-DHTSensor::config_t DHTSensor::getConfig() { return _config; }
-
-String DHTSensor::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  json["pin"] = _config.pin;
-  json["type"] = _config.type;
-
-  return esp8266utils::toString(json);
+DHTSensor::config_t DHTSensor::getConfig() { 
+  return _config; 
 }
 
 DHT_Unified &DHTSensor::getDHT() { return *_dht; }
@@ -73,20 +65,21 @@ bool DHTSensor::update(bool mock) {
   }
 }
 
-float DHTSensor::getTemperature() { return _temperature; }
+float DHTSensor::getTemperature() { 
+  return _temperature; 
+}
 
-float DHTSensor::getHumidity() { return _humidity; }
+float DHTSensor::getHumidity() { 
+  return _humidity; 
+}
 
 String DHTSensor::getValuesAsJson() {
 
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  json["temperature"] = getTemperature();
-  json["humidity"] = getHumidity();
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object["temperature"] = getTemperature();
+  object["humidity"] = getHumidity();
 
-  // TODO remove debugging
-  //return String("{\"temperature\": ") + getTemperature() + String(",\"humidity\":") + getHumidity() + String("}");
-
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 } // namespace esp8266utils

@@ -15,9 +15,13 @@ long unsigned SysConfig::getRemainingLoopInterval() {
   }
 }
 
-bool SysConfig::nextLoopInterval() { return !getRemainingLoopInterval(); }
+bool SysConfig::nextLoopInterval() { 
+  return !getRemainingLoopInterval(); 
+}
 
-int SysConfig::getLoopInterval() { return _loopInterval; }
+int SysConfig::getLoopInterval() { 
+  return _loopInterval; 
+}
 
 void SysConfig::setLoopInterval(uint16_t milliseconds) {
 
@@ -32,33 +36,33 @@ void SysConfig::setLoopInterval(uint16_t milliseconds) {
 
 String SysConfig::getDetails() {
 
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  json[F("vcc")] = ESP.getVcc();
-  json[F("heap")] = ESP.getFreeHeap();
-  json[F("chipId")] = ESP.getChipId();
-  json[F("sdkVersion")] = ESP.getSdkVersion();
-  json[F("coreVersion")] = ESP.getCoreVersion();
-  json[F("bootVersion")] = ESP.getBootVersion();
-  json[F("bootMode")] = ESP.getBootMode();
-  json[F("cpuFreqMHz")] = ESP.getCpuFreqMHz();
-  json[F("flashChipId")] = ESP.getFlashChipId();
-  json[F("flashChipRealSize")] = ESP.getFlashChipRealSize();
-  json[F("flashChipSize")] = ESP.getFlashChipSize();
-  json[F("flashChipSpeed")] = ESP.getFlashChipSpeed();
-  json[F("flashChipMode")] = ESP.getFlashChipMode();
-  json[F("flashChipSizeByChipId")] = ESP.getFlashChipSizeByChipId();
-  json[F("sketchSize")] = ESP.getSketchSize();
-  json[F("sketchMD5")] = ESP.getSketchMD5();
-  json[F("freeSketchSpace")] = ESP.getFreeSketchSpace();
-  json[F("resetReason")] = ESP.getResetReason();
-  json[F("resetInfo")] = ESP.getResetInfo();
-  json[F("cycleCount")] = ESP.getCycleCount();
-  json[F("uptime")] = millis();
-  json[F("loopInterval")] = getLoopInterval();
-  json[F("remainingLoopInterval")] = getRemainingLoopInterval();
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object[F("vcc")] = ESP.getVcc();
+  object[F("heap")] = ESP.getFreeHeap();
+  object[F("chipId")] = ESP.getChipId();
+  object[F("sdkVersion")] = ESP.getSdkVersion();
+  object[F("coreVersion")] = ESP.getCoreVersion();
+  object[F("bootVersion")] = ESP.getBootVersion();
+  object[F("bootMode")] = ESP.getBootMode();
+  object[F("cpuFreqMHz")] = ESP.getCpuFreqMHz();
+  object[F("flashChipId")] = ESP.getFlashChipId();
+  object[F("flashChipRealSize")] = ESP.getFlashChipRealSize();
+  object[F("flashChipSize")] = ESP.getFlashChipSize();
+  object[F("flashChipSpeed")] = ESP.getFlashChipSpeed();
+  object[F("flashChipMode")] = ESP.getFlashChipMode();
+  object[F("flashChipSizeByChipId")] = ESP.getFlashChipSizeByChipId();
+  object[F("sketchSize")] = ESP.getSketchSize();
+  object[F("sketchMD5")] = ESP.getSketchMD5();
+  object[F("freeSketchSpace")] = ESP.getFreeSketchSpace();
+  object[F("resetReason")] = ESP.getResetReason();
+  object[F("resetInfo")] = ESP.getResetInfo();
+  object[F("cycleCount")] = ESP.getCycleCount();
+  object[F("uptime")] = millis();
+  object[F("loopInterval")] = getLoopInterval();
+  object[F("remainingLoopInterval")] = getRemainingLoopInterval();
 
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 } // namespace esp8266utils
 

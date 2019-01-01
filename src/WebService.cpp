@@ -111,13 +111,13 @@ void WebService::send(AsyncWebServerRequest *request, JsonVariant &json) {
 
 String WebService::getServices() {
   
-  DynamicJsonBuffer jsonBuffer;
-  JsonArray &json = jsonBuffer.createArray();
+  DynamicJsonDocument doc;
+  JsonArray array = doc.to<JsonArray>();
   for (std::vector<String>::iterator i = _services.begin(); i != _services.end(); ++i) {
-    json.add(*i);
+    array.add(*i);
   }
 
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(array);
 }
 }  // namespace esp8266utils
 

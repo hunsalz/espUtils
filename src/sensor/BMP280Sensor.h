@@ -1,18 +1,19 @@
 #ifndef BMP280_SENSOR_H
 #define BMP280_SENSOR_H
 
-#include <Adafruit_BMP280.h> // https://github.com/adafruit/Adafruit_BMP280_Library
+#include <Adafruit_BMP280.h>  // https://github.com/adafruit/Adafruit_BMP280_Library
+#include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
 
-#include "Configurable.h"
+#include "Logging.hpp"
+#include "polyfills/Json2String.h"
+#include "Sensor.hpp"
 
 namespace esp8266utils {
 
-class BMP280Sensor : public Configurable {
+class BMP280Sensor : public Sensor {
 
 public:
   bool begin(uint8_t i2cAddr = BMP280_ADDRESS, uint8_t chipId = BMP280_CHIPID, const char *device = "DefaultDevice");
-
-  String getConfigAsJson();
 
   Adafruit_BMP280 &getBMP280();
 

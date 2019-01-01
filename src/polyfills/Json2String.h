@@ -7,10 +7,10 @@ namespace esp8266utils {
 
 inline String toString(const JsonVariant &json) {
 
-  String buffer;
-  json.printTo(buffer);
+  String output;
+  serializeJson(json, output);
 
-  return buffer;
+  return output;
 }
 
 

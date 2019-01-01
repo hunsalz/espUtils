@@ -3,7 +3,7 @@
 
 #include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer
 
-#include "Logging.h"
+#include "Logging.hpp"
 
 namespace esp8266utils {
 

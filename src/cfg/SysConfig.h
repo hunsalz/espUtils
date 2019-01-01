@@ -7,12 +7,11 @@ extern "C" {
 }
 #endif
 
-#include <ESP.h>     // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
+#include <ArduinoJson.h>    // https://github.com/bblanchon/ArduinoJson
+#include <ESP.h>            // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
 
-#include "../Logging.h"
+#include "../Logging.hpp"
 #include "polyfills/Json2String.h"
-
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 namespace esp8266utils {
 

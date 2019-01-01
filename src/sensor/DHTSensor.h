@@ -1,14 +1,17 @@
 #ifndef DHT_SENSOR_H
 #define DHT_SENSOR_H
 
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <DHT.h>         // https://github.com/adafruit/DHT-sensor-library
 #include <DHT_U.h>       // https://github.com/adafruit/DHT-sensor-library
 
-#include "Configurable.h"
+#include "Logging.hpp"
+#include "polyfills/Json2String.h"
+#include "Sensor.hpp"
 
 namespace esp8266utils {
 
-class DHTSensor : public Configurable {
+class DHTSensor : public Sensor {
 
 public:
   struct config_t {
@@ -29,8 +32,6 @@ public:
   bool begin(JsonObject &json);
 
   config_t getConfig();
-
-  String getConfigAsJson();
 
   DHT_Unified &getDHT();
 

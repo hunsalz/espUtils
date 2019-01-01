@@ -10,14 +10,6 @@ bool BMP085Sensor::begin(float seaLevelPressure, const char *device) {
   return _bmp085->begin();
 }
 
-String BMP085Sensor::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-
-  return esp8266utils::toString(json);
-}
-
 Adafruit_BMP085_Unified &BMP085Sensor::getBMP085() {
   return *_bmp085;
 }
@@ -61,14 +53,13 @@ const char *BMP085Sensor::getDevice() {
 
 String BMP085Sensor::getValuesAsJson() {
   
-  const size_t bufferSize = JSON_OBJECT_SIZE(3);
-  DynamicJsonBuffer jsonBuffer(bufferSize);
-  JsonObject &json = jsonBuffer.createObject();
-  json["temperature"] = getTemperature();
-  json["pressure"] = getPressure();
-  json["altitude"] = getApproximateAltitude();
-  json["device"] = getDevice();
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object["temperature"] = getTemperature();
+  object["pressure"] = getPressure();
+  object["altitude"] = getApproximateAltitude();
+  object["device"] = getDevice();
   
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 }  // namespace esp8266utils

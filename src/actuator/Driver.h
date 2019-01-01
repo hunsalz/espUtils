@@ -1,11 +1,11 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
-#include "Configurable.h"
+#include "Logging.hpp"
 
 namespace esp8266utils {
 
-class Driver : public Configurable {
+class Driver {
 
 public:
   static uint16_t getPWMRange();

@@ -1,18 +1,19 @@
 #ifndef BMP085_SENSOR_H
 #define BMP085_SENSOR_H
 
-#include <Adafruit_BMP085_U.h> // https://github.com/adafruit/Adafruit_BMP085_Unified
+#include <Adafruit_BMP085_U.h>  // https://github.com/adafruit/Adafruit_BMP085_Unified
+#include <ArduinoJson.h>        // https://github.com/bblanchon/ArduinoJson
 
-#include "Configurable.h"
+#include "Logging.hpp"
+#include "polyfills/Json2String.h"
+#include "Sensor.hpp"
 
 namespace esp8266utils {
 
-class BMP085Sensor : public Configurable {
+class BMP085Sensor : public Sensor {
 
 public:
   bool begin(float seaLevelPressure = 1013.25, const char *device = "DefaultDevice");
-
-  String getConfigAsJson();
 
   Adafruit_BMP085_Unified &getBMP085();
 

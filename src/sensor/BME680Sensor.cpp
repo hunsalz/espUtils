@@ -19,14 +19,6 @@ bool BME680Sensor::begin(uint8_t i2cAddr, const char *device) {
   }
 }
 
-String BME680Sensor::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-
-  return esp8266utils::toString(json);
-}
-
 Adafruit_BME680 &BME680Sensor::getBME680() {
   return *_bme680;
 }
@@ -81,16 +73,15 @@ const char *BME680Sensor::getDevice() {
 
 String BME680Sensor::getValuesAsJson() {
   
-  const size_t bufferSize = JSON_OBJECT_SIZE(3);
-  DynamicJsonBuffer jsonBuffer(bufferSize);
-  JsonObject &json = jsonBuffer.createObject();
-  json["temperature"] = getTemperature();
-  json["humidity"] = getHumidity();
-  json["pressure"] = getPressure();
-  json["gas"] = getGasResistance();
-  json["altitude"] = getApproximateAltitude();
-  json["device"] = getDevice();
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object["temperature"] = getTemperature();
+  object["humidity"] = getHumidity();
+  object["pressure"] = getPressure();
+  object["gas"] = getGasResistance();
+  object["altitude"] = getApproximateAltitude();
+  object["device"] = getDevice();
   
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 }  // namespace esp8266utils

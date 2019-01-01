@@ -1,13 +1,12 @@
 #ifndef WIFI_STA_CONFIG_H
 #define WIFI_STA_CONFIG_H
 
+#include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
 #include <ESP8266WiFi.h>      // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 #include <ESP8266WiFiMulti.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
 
-#include "../Logging.h"
+#include "../Logging.hpp"
 #include "polyfills/Json2String.h"
-
-#include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
 
 namespace esp8266utils {
 

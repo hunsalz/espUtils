@@ -1,18 +1,19 @@
 #ifndef BME680_SENSOR_H
 #define BME680_SENSOR_H
 
-#include <Adafruit_BME680.h> // https://github.com/adafruit/Adafruit_BME680
+#include <Adafruit_BME680.h>  // https://github.com/adafruit/Adafruit_BME680
+#include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
 
-#include "Configurable.h"
+#include "Logging.hpp"
+#include "polyfills/Json2String.h"
+#include "Sensor.hpp"
 
 namespace esp8266utils {
 
-class BME680Sensor : public Configurable {
+class BME680Sensor : public Sensor {
 
 public:
   bool begin(uint8_t i2cAddr = BME680_DEFAULT_ADDRESS, const char *device = "DefaultDevice");
-
-  String getConfigAsJson();
 
   Adafruit_BME680 &getBME680();
 

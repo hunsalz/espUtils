@@ -25,34 +25,34 @@ String FileSystem::getStorageDetails() {
   FSInfo fs_info;
   SPIFFS.info(fs_info);
 
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-  json[F("totalBytes")] = fs_info.totalBytes;
-  json[F("usedBytes")] = fs_info.usedBytes;
-  json[F("blockSize")] = fs_info.blockSize;
-  json[F("pageSize")] = fs_info.pageSize;
-  json[F("maxOpenFiles")] = fs_info.maxOpenFiles;
-  json[F("maxPathLength")] = fs_info.maxPathLength;
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object[F("totalBytes")] = fs_info.totalBytes;
+  object[F("usedBytes")] = fs_info.usedBytes;
+  object[F("blockSize")] = fs_info.blockSize;
+  object[F("pageSize")] = fs_info.pageSize;
+  object[F("maxOpenFiles")] = fs_info.maxOpenFiles;
+  object[F("maxPathLength")] = fs_info.maxPathLength;
 
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 
 String FileSystem::getFileListing() {
 
-  DynamicJsonBuffer jsonBuffer;
-  JsonArray &json = jsonBuffer.createArray();
+  DynamicJsonDocument doc;
+  JsonArray array = doc.to<JsonArray>();
   // enumerate files
   Dir dir = SPIFFS.openDir("/");
   while (dir.next()) {
     String name = dir.fileName();
     String size = formatBytes(dir.fileSize());
-    JsonObject &entry = json.createNestedObject();
+    JsonObject entry = array.createNestedObject();
     entry[F("name")] = name;
     entry[F("size")] = size;
     VERBOSE_MSG_P(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
   }
 
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(array);
 }
 
 String FileSystem::formatBytes(size_t bytes) {

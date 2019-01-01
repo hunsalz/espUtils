@@ -1,12 +1,11 @@
 #ifndef WIFI_AP_SERVICE_H
 #define WIFI_AP_SERVICE_H
 
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <ESP8266WiFi.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 
-#include "../Logging.h"
+#include "../Logging.hpp"
 #include "polyfills/Json2String.h"
-
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 namespace esp8266utils {
 

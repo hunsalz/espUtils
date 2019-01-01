@@ -9,14 +9,6 @@ bool BMP280Sensor::begin(uint8_t i2cAddr, uint8_t chipId, const char *device) {
   return _bmp280->begin(i2cAddr, chipId);
 }
 
-String BMP280Sensor::getConfigAsJson() {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject &json = jsonBuffer.createObject();
-
-  return esp8266utils::toString(json);
-}
-
 Adafruit_BMP280 &BMP280Sensor::getBMP280() {
   return *_bmp280;
 }
@@ -54,14 +46,13 @@ const char *BMP280Sensor::getDevice() {
 
 String BMP280Sensor::getValuesAsJson() {
   
-  const size_t bufferSize = JSON_OBJECT_SIZE(3);
-  DynamicJsonBuffer jsonBuffer(bufferSize);
-  JsonObject &json = jsonBuffer.createObject();
-  json["temperature"] = getTemperature();
-  json["pressure"] = getPressure();
-  json["altitude"] = getApproximateAltitude();
-  json["device"] = getDevice();
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object["temperature"] = getTemperature();
+  object["pressure"] = getPressure();
+  object["altitude"] = getApproximateAltitude();
+  object["device"] = getDevice();
   
-  return esp8266utils::toString(json);
+  return esp8266utils::toString(object);
 }
 }  // namespace esp8266utils
