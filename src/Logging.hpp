@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Arduino.h>
+#include <Arduino.h> // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Arduino.h
 
 #define LOG_SEPARATOR '|'
 #define LOG_LEVEL 3
