@@ -6,7 +6,6 @@
 #include <cfg/MDNSConfig.hpp>
 #include <cfg/SysConfig.hpp>
 #include <cfg/WiFiAPConfig.hpp>
-#include <cfg/WiFiStaConfig.h>
 
 #include <polyfills/ContentType.h>
 #include <polyfills/Json2String.h>
@@ -18,6 +17,8 @@
 #include <sensor/DHTSensor.hpp>
 #include <sensor/MQ135Sensor.hpp>
 #include <sensor/Sensor.hpp>
+
+#include <util/WiFiStaUtil.h>
 
 #include <FileSystem.hpp>
 #include <Logging.hpp>
