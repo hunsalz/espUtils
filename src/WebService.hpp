@@ -1,19 +1,19 @@
 #pragma once
 
-// #ifdef Arduino_h
-// // Arduino is not compatible with std::vector
-// #undef min
-// #undef max
-// #endif
-// #include <vector>
+#ifdef Arduino_h
+// Arduino is not compatible with std::vector
+#undef min
+#undef max
+#endif
 
 #include <ArduinoJson.h>        // https://github.com/bblanchon/ArduinoJson
+#include <ESPAsyncTCP.h>        // https://github.com/me-no-dev/ESPAsyncTCP
 #include <ESPAsyncWebServer.h>  // https://github.com/me-no-dev/ESPAsyncWebServer
+#include <StreamString.h>       // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 
-#include <StreamString.h>  // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
+#include <vector>
 
 #include "Logging.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -21,15 +21,27 @@ class WebService {
  
  public:
   
+  WebService(uint8_t port) {
+    _port = port;
+  }
+
   bool begin() {
     
+    _webServer = new AsyncWebServer(80);
+
     // add generic services registry resource
-    on("/services", HTTP_GET, [this](AsyncWebServerRequest *request) {
-      send(request, "text/json", getServices());
+    on("/resources", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      
+      AsyncResponseStream *response = request->beginResponseStream("application/json");  
+      StreamString* payload = new StreamString();
+      size_t size = serializeResources(*payload);
+      response->print(*payload); 
+      request->send(response);
+      delete payload;
     });
     // add default 404 handler
     getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
-      VERBOSE_MSG_P(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
+      VERBOSE_FP(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
 
       // request->send(404, "text/plain", F("404 error - Page not found."));
 
@@ -70,15 +82,14 @@ class WebService {
     // getWebServer().beginSecure("/server.cer", "/server.key", NULL);
 
     // start web server
-    _webServer.begin();
+    _webServer->begin();
 
-    VERBOSE_MSG_P(F("WebServer started."));
+    VERBOSE_FP(F("WebServer started."));
     return true;  // TODO
   }
 
   AsyncWebServer& getWebServer() {
-    // FIXME
-    return _webServer;
+    return *_webServer;
   }
 
   uint8_t getPort() {
@@ -100,46 +111,34 @@ class WebService {
 
   AsyncCallbackWebHandler& on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload) {
     
-    // add uri to service listing
-    _services.push_back(String(uri));
+    // add uri to resource listing
+    _resources.push_back(String(uri));
     // add to web server
     getWebServer().on(uri, method, onRequest, onUpload, onBody);
   }
 
-  void send(AsyncWebServerRequest *request, const char *type, const String &response) {
+  size_t serializeResources(String& output) {
     
-    VERBOSE_MSG_P(F("Send %s response: %s"), type, response.c_str());
-    request->send(new AsyncBasicResponse(200, "text/json", response));
-  }
-
-  void send(AsyncWebServerRequest *request, JsonVariant &json) {
-    
-    String response = esp8266utils::toString(json);
-    VERBOSE_MSG_P(F("Send text/json response: %s"), response.c_str());
-    request->send(new AsyncBasicResponse(200, "text/json", response));
-  }
-
-  String getServices() {
-    
+    // FIXME
     DynamicJsonDocument doc;
-    JsonArray array = doc.to<JsonArray>();
-    for (std::vector<String>::iterator i = _services.begin();
-         i != _services.end(); ++i) {
-      array.add(*i);
+    JsonArray json = doc.to<JsonArray>();
+    for (std::vector<String>::iterator i = _resources.begin(); i != _resources.end(); ++i) {
+      json.add(*i);
     }
-    return esp8266utils::toString(array);
+    serializeJson(json, output);
+    return measureJson(json);
   }
 
  private:
   
-  AsyncWebServer _webServer;
+  AsyncWebServer* _webServer;
 
-  uint8_t _port = 80;
+  uint8_t _port;
 
-  std::vector<String> _services;
+  std::vector<String> _resources;
 };
 }  // namespace esp8266utils
 
 #if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266utils::WebService SERVER;
+extern esp8266utils::WebService WEBSERVICE;
 #endif  // NO_GLOBAL_INSTANCES

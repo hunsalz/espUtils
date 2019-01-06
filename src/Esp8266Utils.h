@@ -4,11 +4,9 @@
 #include <actuator/MotorDriver.hpp>
 
 #include <cfg/MDNSConfig.hpp>
-#include <cfg/SysConfig.hpp>
 #include <cfg/WiFiAPConfig.hpp>
 
 #include <polyfills/ContentType.h>
-#include <polyfills/Json2String.h>
 
 #include <sensor/BME280Sensor.hpp>
 #include <sensor/BME680Sensor.hpp>
@@ -18,9 +16,9 @@
 #include <sensor/MQ135Sensor.hpp>
 #include <sensor/Sensor.hpp>
 
-#include <util/WiFiStaUtil.h>
-
+#include <ESPUtil.h>
 #include <FileSystem.hpp>
 #include <Logging.hpp>
 #include <WebService.hpp>
 #include <WebSocketListener.hpp>
+#include <WiFiStaUtil.h>

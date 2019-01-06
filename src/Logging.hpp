@@ -6,39 +6,49 @@
 #define LOG_LEVEL 3
 
 #if defined DEBUG_ESP_PORT && LOG_LEVEL >= 1
-#define INFO_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::INFO), format, ##__VA_ARGS__)
-#define INFO_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::INFO), format, ##__VA_ARGS__)
+#define INFO(output) esp8266utils::Logging::log(FPSTR(esp8266utils::INFO), output)
+#define INFO_F(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::INFO), format, ##__VA_ARGS__)
+#define INFO_FP(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::INFO), format, ##__VA_ARGS__)
 #else
-#define INFO_MSG(...)
-#define INFO_MSG_P(...)
+#define INFO(...)
+#define INFO_F(...)
+#define INFO_FP(...)
 #endif
 
 #if defined DEBUG_ESP_PORT && LOG_LEVEL >= 2
-#define VERBOSE_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::VERBOSE), format, ##__VA_ARGS__)
-#define VERBOSE_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::VERBOSE), format, ##__VA_ARGS__)
+#define VERBOSE(output) esp8266utils::Logging::log(FPSTR(esp8266utils::VERBOSE), output)
+#define VERBOSE_F(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::VERBOSE), format, ##__VA_ARGS__)
+#define VERBOSE_FP(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::VERBOSE), format, ##__VA_ARGS__)
 #else
-#define VERBOSE_MSG(...)
-#define VERBOSE_MSG_P(...)
+#define VERBOSE(...)
+#define VERBOSE_F(...)
+#define VERBOSE_FP(...)
 #endif
 
 #if defined DEBUG_ESP_PORT && LOG_LEVEL >= 3
-#define TRACE_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::TRACE), format, ##__VA_ARGS__)
-#define TRACE_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::TRACE), format, ##__VA_ARGS__)
+#define TRACE(output) esp8266utils::Logging::log(FPSTR(esp8266utils::TRACE), output)
+#define TRACE_F(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::TRACE), format, ##__VA_ARGS__)
+#define TRACE_FP(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::TRACE), format, ##__VA_ARGS__)
 #else
-#define TRACE_MSG(...)
-#define TRACE_MSG_P(...)
+#define TRACE(...)
+#define TRACE_F(...)
+#define TRACE_FP(...)
 #endif
 
 #ifdef DEBUG_ESP_PORT
-#define WARNING_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
-#define WARNING_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
-#define ERROR_MSG(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
-#define ERROR_MSG_P(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
+#define WARNING(output) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), output)
+#define WARNING_F(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
+#define WARNING_FP(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
+#define ERROR(output) esp8266utils::Logging::log(FPSTR(esp8266utils::ERROR), output)
+#define ERROR_F(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
+#define ERROR_FP(format, ...) esp8266utils::Logging::log_P(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
 #else
-#define WARNING_MSG(...)
-#define WARNING_MSG_P(...)
-#define ERROR_MSG(...)
-#define ERROR_MSG_P(...)
+#define WARNING(...)
+#define WARNING_F(...)
+#define WARNING_FP(...)
+#define ERROR(...)
+#define ERROR_F(...)
+#define ERROR_FP(...)
 #endif
 
 namespace esp8266utils {
@@ -53,6 +63,7 @@ class Logging {
 
   public:
     static void init(unsigned long baud);
+    static void log(const __FlashStringHelper *prefix, String& output);
     static void log(const __FlashStringHelper *prefix, const char *format, ...);
     static void log_P(const __FlashStringHelper *prefix, const __FlashStringHelper *format, ...);
 };
@@ -65,6 +76,19 @@ inline void Logging::init(unsigned long baud) {
   while (!DEBUG_ESP_PORT && !DEBUG_ESP_PORT.available()) {
   };
   DEBUG_ESP_PORT.println();
+  #endif
+}
+
+inline void Logging::log(const __FlashStringHelper *prefix, String& output) {
+
+  #ifdef DEBUG_ESP_PORT
+  DEBUG_ESP_PORT.print(prefix);
+  DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+  DEBUG_ESP_PORT.print(millis());
+  DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+  DEBUG_ESP_PORT.print(ESP.getFreeHeap());
+  DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+  DEBUG_ESP_PORT.println(output);
   #endif
 }
 

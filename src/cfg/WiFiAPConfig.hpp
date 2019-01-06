@@ -4,7 +4,6 @@
 #include <ESP8266WiFi.h>  // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 
 #include "../Logging.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -28,22 +27,22 @@ class WiFiAPConfig {
     // add default verbose callback handlers if no handler is set
     if (!_softAPModeStationConnectedHandler) {
       onSoftAPModeStationConnected([&](const WiFiEventSoftAPModeStationConnected &event) {
-        VERBOSE_MSG_P(F("MAC address [%s] joined AP."), macAddress(event.mac).c_str());
+        VERBOSE_FP(F("MAC address [%s] joined AP."), macAddress(event.mac).c_str());
       });
     }
     if (!_softAPModeStationDisconnectedHandler) {
       onSoftAPModeStationDisconnected([&](const WiFiEventSoftAPModeStationDisconnected &event) {
-        VERBOSE_MSG_P(F("MAC address [%s] disappeared from AP."), macAddress(event.mac).c_str());
+        VERBOSE_FP(F("MAC address [%s] disappeared from AP."), macAddress(event.mac).c_str());
       });
     }
     if (!_softAPModeProbeRequestReceivedHandler) {
       onSoftAPModeProbeRequestReceived([&](const WiFiEventSoftAPModeProbeRequestReceived &event) {
-        TRACE_MSG_P(F("RSSI is [%d]"), event.rssi);
+        TRACE_FP(F("RSSI is [%d]"), event.rssi);
       });
     }
     // enable AP
     if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
-      VERBOSE_MSG_P(F("Soft AP established successful. IP address of AP is: %s"), WiFi.softAPIP().toString().c_str());
+      VERBOSE_FP(F("Soft AP established successful. IP address of AP is: %s"), WiFi.softAPIP().toString().c_str());
     }
 
     return WiFi.isConnected();
@@ -71,14 +70,15 @@ class WiFiAPConfig {
     return _softAPModeProbeRequestReceivedHandler;
   }
 
-  String getDetails() {
-    
+  size_t serialize(String& output) {
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object[F("softAPgetStationNum")] = WiFi.softAPgetStationNum();
     object[F("softAPIP")] = WiFi.softAPIP().toString();
     object[F("softAPmacAddress")] = WiFi.softAPmacAddress();
-    return esp8266utils::toString(object);
+    serializeJson(object, output);
+    return measureJson(object);
   }
 
  private:

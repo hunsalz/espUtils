@@ -6,7 +6,6 @@
 
 #include "Logging.hpp"
 #include "Sensor.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -37,10 +36,10 @@ class DHTSensor : public Sensor {
     
     _config = config;
     if (!_config.pin) {
-      ERROR_MSG_P(F("Missing pin declaration."));
+      ERROR_FP(F("Missing pin declaration."));
     }
     if (!_config.type) {
-      ERROR_MSG_P(F("Missing type declaration."));
+      ERROR_FP(F("Missing type declaration."));
     }
     _dht = new DHT_Unified(config.pin, config.type);
     return true;
@@ -68,14 +67,14 @@ class DHTSensor : public Sensor {
       sensors_event_t event;
       getDHT().temperature().getEvent(&event);
       if (isnan(event.temperature)) {
-        ERROR_MSG_P(F("Error reading temperature"));
+        ERROR_FP(F("Error reading temperature"));
         _temperature = 999;  // FIXME -> NAN
       } else {
         _temperature = event.temperature;
       }
       getDHT().humidity().getEvent(&event);
       if (isnan(event.relative_humidity)) {
-        ERROR_MSG_P(F("Error reading humidity"));
+        ERROR_FP(F("Error reading humidity"));
         _humidity = 999;  // FIXME -> NAN
       } else {
         _humidity = event.relative_humidity;
@@ -96,13 +95,14 @@ class DHTSensor : public Sensor {
     return _humidity;
   }
 
-  String getValuesAsJson() {
-    
+  size_t serialize(String& output) {
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object["temperature"] = getTemperature();
     object["humidity"] = getHumidity();
-    return esp8266utils::toString(object);
+    serializeJson(object, output);
+    return measureJson(object);
   }
 
  private:

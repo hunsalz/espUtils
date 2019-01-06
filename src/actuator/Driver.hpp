@@ -16,7 +16,7 @@ class Driver {
     
     _pwmRange = pwmRange;
     analogWriteRange(_pwmRange);
-    VERBOSE_MSG_P(F("Set PWM range to %d"), _pwmRange);
+    VERBOSE_FP(F("Set PWM range to %d"), _pwmRange);
   }
 
   // TODO add analogWriteFreq(...) analog to setPWMRange(...)

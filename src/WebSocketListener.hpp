@@ -67,7 +67,7 @@ class WebSocketListener {
         }
       } break;
       default:
-        ERROR_MSG_P(F("ws[%s][%u] - Unexpected type definition"), ws->url(), client->id());
+        ERROR_FP(F("ws[%s][%u] - Unexpected type definition"), ws->url(), client->id());
         // TODO send an error response to the client
         break;
     }
@@ -87,7 +87,7 @@ class WebSocketListener {
     if (_connectWSEventHandler) {
       _connectWSEventHandler(ws, client, type, info, data, len);
     } else {
-      VERBOSE_MSG_P(F("ws[%s][%u] connected"), ws->url(), client->id());
+      VERBOSE_FP(F("ws[%s][%u] connected"), ws->url(), client->id());
     }
   }
 
@@ -96,7 +96,7 @@ class WebSocketListener {
     if (_disconnectWSEventHandler) {
       _disconnectWSEventHandler(ws, client, type, info, data, len);
     } else {
-      VERBOSE_MSG_P(F("ws[%s][%u] disconnected: %u"), ws->url(), client->id());
+      VERBOSE_FP(F("ws[%s][%u] disconnected: %u"), ws->url(), client->id());
     }
   }
 
@@ -105,7 +105,7 @@ class WebSocketListener {
     if (_errorWSEventHandler) {
       _errorWSEventHandler(ws, client, type, arg, data, len);
     } else {
-      ERROR_MSG_P(F("ws[%s][%u] error(%u): %s"), ws->url(), client->id(), arg, (char *)data);
+      ERROR_FP(F("ws[%s][%u] error(%u): %s"), ws->url(), client->id(), arg, (char *)data);
     }
   }
 
@@ -114,7 +114,7 @@ class WebSocketListener {
     if (_pongWSEventHandler) {
       _pongWSEventHandler(ws, client, type, info, data, len);
     } else {
-      VERBOSE_MSG_P(F("ws[%s][%u] pong[%u]: %s"), ws->url(), client->id(), len, (len) ? (char *)data : "");
+      VERBOSE_FP(F("ws[%s][%u] pong[%u]: %s"), ws->url(), client->id(), len, (len) ? (char *)data : "");
     }
   }
 
@@ -123,7 +123,7 @@ class WebSocketListener {
     if (_textWSEventHandler) {
       _textWSEventHandler(ws, client, type, info, data, len);
     } else {
-      VERBOSE_MSG_P(F("ws[%s][%u] received : %s"), ws->url(), client->id(), (char *)data);
+      VERBOSE_FP(F("ws[%s][%u] received : %s"), ws->url(), client->id(), (char *)data);
     }
   }
 
@@ -132,7 +132,7 @@ class WebSocketListener {
     if (_binaryWSEventHandler) {
       _binaryWSEventHandler(ws, client, type, info, data, len);
     } else {
-      VERBOSE_MSG_P(F("ws[%s][%u] received : %d bytes"), ws->url(), client->id(), len);
+      VERBOSE_FP(F("ws[%s][%u] received : %d bytes"), ws->url(), client->id(), len);
     }
   }
 };

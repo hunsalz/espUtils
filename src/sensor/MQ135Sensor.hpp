@@ -5,7 +5,6 @@
 
 #include "Logging.hpp"
 #include "Sensor.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -28,7 +27,7 @@ class MQ135Sensor : public Sensor {
     
     _config = config;
     if (!_config.pin) {
-      ERROR_MSG_P(F("Missing pin declaration."));
+      ERROR_FP(F("Missing pin declaration."));
     }
     _mq135 = new MQ135(config.pin);
 
@@ -55,9 +54,9 @@ class MQ135Sensor : public Sensor {
     
     if (_mq135 && !mock) {
       int value = analogRead(_config.pin);
-      // VERBOSE_MSG_P(F("Raw analog data = %d"), value);
+      // VERBOSE_FP(F("Raw analog data = %d"), value);
       // float rzero = _mq135->getRZero(); // the specific resistance at
-      // atmospheric CO2 level of your sensor VERBOSE_MSG_P(F("RZero = %D"),
+      // atmospheric CO2 level of your sensor VERBOSE_FP(F("RZero = %D"),
       // rzero);
       _ppm = _mq135->getPPM();  // parts per million - https://en.wikipedia.org/wiki/Carbon_dioxide_in_Earth%27s_atmosphere
       return true;
@@ -71,12 +70,13 @@ class MQ135Sensor : public Sensor {
     return _ppm;
   }
 
-  String getValuesAsJson() {
-    
+  size_t serialize(String& output) {
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object["ppm"] = getPPM();
-    return esp8266utils::toString(object);
+    serializeJson(object, output);
+    return measureJson(object);
   }
 
  private:

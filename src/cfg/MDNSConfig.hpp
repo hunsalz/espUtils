@@ -4,7 +4,6 @@
 #include <ESP8266mDNS.h>  // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/ESP8266mDNS.h
 
 #include "../Logging.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -17,9 +16,9 @@ class MDNSConfig {
     _hostName = hostName;
     bool available = MDNS.begin(getHostName());
     if (available) {
-      VERBOSE_MSG_P(F("MDNS enabled to http://%s.local"), getHostName());
+      VERBOSE_FP(F("MDNS enabled to http://%s.local"), getHostName());
     } else {
-      ERROR_MSG_P(F("MDNS failed for http://%s.local"), getHostName());
+      ERROR_FP(F("MDNS failed for http://%s.local"), getHostName());
     }
   }
 
@@ -27,15 +26,18 @@ class MDNSConfig {
     return _hostName;
   }
 
-  String getDetails() {
-    
+  size_t serialize(String& output) {
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object[F("hostName")] = getHostName();
-    return esp8266utils::toString(object);
+    serializeJson(object, output);
+    return measureJson(object);
   }
 
+
  private:
+
   const char* _hostName;
 };
 }  // namespace esp8266utils

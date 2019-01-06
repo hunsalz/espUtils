@@ -5,7 +5,6 @@
 
 #include "Logging.hpp"
 #include "Sensor.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -29,14 +28,9 @@ class BMP085Sensor : public Sensor {
     if (_bmp085 && !mock) {
       sensors_event_t event;
       _bmp085->getEvent(&event);
-      _pressure =
-          event.pressure;  // unit is Pascal (Pa) - //
-                           // https://en.wikipedia.org/wiki/Pascal_(unit)
+      _pressure = event.pressure;  // unit is Pascal (Pa) - https://en.wikipedia.org/wiki/Pascal_(unit)
       _bmp085->getTemperature(&_temperature);  // unit is Celsius, °C
-      _altitude = _bmp085->pressureToAltitude(
-          getSeaLevelPressure(),
-          event.pressure);  // use standard baseline - //
-                            // https://en.wikipedia.org/wiki/Pressure_altitude
+      _altitude = _bmp085->pressureToAltitude(getSeaLevelPressure(), event.pressure);  // use standard baseline - https://en.wikipedia.org/wiki/Pressure_altitude
       return true;
     } else {
       _temperature = random(180, 310) / 10.0;
@@ -62,15 +56,16 @@ class BMP085Sensor : public Sensor {
     return _altitude;
   }
 
-  String getValuesAsJson() {
-    
+  size_t serialize(String& output) {
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object["temperature"] = getTemperature();
     object["pressure"] = getPressure();
     object["altitude"] = getApproximateAltitude();
     object["device"] = getDeviceName();
-    return esp8266utils::toString(object);
+    serializeJson(object, output);
+    return measureJson(object);
   }
 
  private:

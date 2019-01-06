@@ -5,6 +5,8 @@
 #include <ESP8266WiFi.h>      // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 #include <ESP8266WiFiMulti.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
 
+#include "Logging.hpp"
+
 namespace esp8266utils {
 
 inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
@@ -26,15 +28,15 @@ inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, uint8_t retries = 32, bool
   #endif
   // output WiFi status
   if (retries <= 0) {
-    ERROR_MSG_P(F("Couldn't establish any WiFi connection."));
+    ERROR_FP(F("Couldn't establish any WiFi connection."));
   } else {
-    VERBOSE_MSG_P(F("WiFi successful connected with IP: %s"), WiFi.localIP().toString().c_str());
+    VERBOSE_FP(F("WiFi successful connected with IP: %s"), WiFi.localIP().toString().c_str());
   }
 
   return WiFi.status();
 }
 
-inline String getWiFiStaDetails() {
+inline size_t serializeWiFiSta(String& output) {
 
   DynamicJsonDocument doc;
   JsonObject object = doc.to<JsonObject>();
@@ -55,8 +57,8 @@ inline String getWiFiStaDetails() {
   object[F("sleepMode")] = WiFi.getSleepMode();
   object[F("phyMode")] = WiFi.getPhyMode();
   object[F("wiFiMode")] = WiFi.getMode();
-
-  return esp8266utils::toString(object);
+  serializeJson(object, output);
+  return measureJson(object);
 }
 
 } // namespace esp8266utils

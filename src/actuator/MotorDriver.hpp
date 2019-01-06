@@ -3,7 +3,6 @@
 #include <ArduinoJson.h>  // https://github.com/bblanchon/ArduinoJson
 
 #include "Driver.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -29,21 +28,12 @@ class MotorDriver : public Driver {
     _config = config;
     pinMode(_config.pinPWM, OUTPUT);
     pinMode(_config.pinDir, OUTPUT);
-    VERBOSE_MSG_P(F("Setup motor done : PWM pin = %d and direction pin = %d"), _config.pinPWM, _config.pinDir);
+    VERBOSE_FP(F("Setup motor done : PWM pin = %d and direction pin = %d"), _config.pinPWM, _config.pinDir);
     return true;
   }
 
   config_t getConfig() {
     return _config;
-  }
-
-  String getConfigAsJson() {
-    
-    DynamicJsonDocument doc;
-    JsonObject object = doc.to<JsonObject>();
-    object["pinPWM"] = _config.pinPWM;
-    object["pinDir"] = _config.pinDir;
-    return esp8266utils::toString(object);
   }
 
   uint8_t getDirection() {
@@ -62,29 +52,30 @@ class MotorDriver : public Driver {
     } else if (speed < -getPWMRange()) {
       speed = -getPWMRange();
     }
-    VERBOSE_MSG_P(F("Write speed = %d"), speed);
+    VERBOSE_FP(F("Write speed = %d"), speed);
     // write speed to PWM
     analogWrite(_config.pinPWM, abs(speed));
     // change direction accordingly to original signed speed to HIGH or LOW
     digitalWrite(_config.pinDir, getDirection());
     // save new speed value
     _speed = speed;
-    VERBOSE_MSG_P(F("Write speed = %d - DONE"), _speed);
+    VERBOSE_FP(F("Write speed = %d - DONE"), _speed);
   }
 
   void applySpeed(int speed) {
     setSpeed(getSpeed() + speed);
   }
 
-  String getDetails() {
-    
+  size_t serialize(String& output) {
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object[F("pinPWM")] = _config.pinPWM;
     object[F("pinDir")] = _config.pinDir;
     object[F("pwmRange")] = getPWMRange();
     object[F("speed")] = getSpeed();
-    return esp8266utils::toString(object);
+    serializeJson(object, output);
+    return measureJson(object);
   }
 
  private:

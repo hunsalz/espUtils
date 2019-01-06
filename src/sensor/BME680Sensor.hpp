@@ -5,7 +5,6 @@
 
 #include "Logging.hpp"
 #include "Sensor.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -37,7 +36,7 @@ class BME680Sensor : public Sensor {
     
     if (_bme680 && !mock) {
       if (!_bme680->performReading()) {
-        ERROR_MSG_P(F("Perform reading BMP680 values failed."));
+        ERROR_FP(F("Perform reading BMP680 values failed."));
         return false;
       } else {
         _temperature = _bme680->readTemperature();  // unit is Celsius, °C
@@ -77,8 +76,8 @@ class BME680Sensor : public Sensor {
     return _altitude;
   }
 
-  String getValuesAsJson() {
-    
+  size_t serialize(String& output) {
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object["temperature"] = getTemperature();
@@ -87,7 +86,8 @@ class BME680Sensor : public Sensor {
     object["gas"] = getGasResistance();
     object["altitude"] = getApproximateAltitude();
     object["device"] = getDeviceName();
-    return esp8266utils::toString(object);
+    serializeJson(object, output);
+    return measureJson(object);
   }
 
  private:

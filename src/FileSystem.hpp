@@ -4,7 +4,6 @@
 #include <FS.h>  // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 
 #include "Logging.hpp"
-#include "polyfills/Json2String.h"
 
 namespace esp8266utils {
 
@@ -16,9 +15,9 @@ class FileSystem {
     
     bool available = SPIFFS.begin();
     if (available) {
-      VERBOSE_MSG_P(F("File system mounted."));
+      VERBOSE_FP(F("File system mounted."));
     } else {
-      WARNING_MSG_P(F("Mounting file system failed."));
+      WARNING_FP(F("Mounting file system failed."));
     }
     return available;
   }
@@ -26,11 +25,11 @@ class FileSystem {
   void end() {
     
     SPIFFS.end();
-    VERBOSE_MSG_P(F("File system unmounted."));
+    VERBOSE_FP(F("File system unmounted."));
   }
 
-  String getStorageDetails() {
-    
+  size_t serializeInfo(String& output) {
+
     FSInfo fs_info;
     SPIFFS.info(fs_info);
 
@@ -42,10 +41,11 @@ class FileSystem {
     object[F("pageSize")] = fs_info.pageSize;
     object[F("maxOpenFiles")] = fs_info.maxOpenFiles;
     object[F("maxPathLength")] = fs_info.maxPathLength;
-    return esp8266utils::toString(object);
+    serializeJson(object, output);
+    return measureJson(object);
   }
 
-  String getFileListing() {
+  size_t serializeListing(String& output) {
     
     DynamicJsonDocument doc;
     JsonArray array = doc.to<JsonArray>();
@@ -57,9 +57,10 @@ class FileSystem {
       JsonObject entry = array.createNestedObject();
       entry[F("name")] = name;
       entry[F("size")] = size;
-      VERBOSE_MSG_P(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
+      VERBOSE_FP(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
     }
-    return esp8266utils::toString(array);
+    serializeJson(array, output);
+    return measureJson(array);
   }
 
   String formatBytes(size_t bytes) {
