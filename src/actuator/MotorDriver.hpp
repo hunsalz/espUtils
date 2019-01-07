@@ -52,14 +52,14 @@ class MotorDriver : public Driver {
     } else if (speed < -getPWMRange()) {
       speed = -getPWMRange();
     }
-    VERBOSE_FP(F("Write speed = %d"), speed);
+    TRACE_FP(F("Write speed = %d"), speed);
     // write speed to PWM
     analogWrite(_config.pinPWM, abs(speed));
     // change direction accordingly to original signed speed to HIGH or LOW
     digitalWrite(_config.pinDir, getDirection());
     // save new speed value
     _speed = speed;
-    VERBOSE_FP(F("Write speed = %d - DONE"), _speed);
+    TRACE_FP(F("Write speed = %d - DONE"), _speed);
   }
 
   void applySpeed(int speed) {
