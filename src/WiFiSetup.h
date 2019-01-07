@@ -12,7 +12,7 @@ namespace esp8266utils {
 inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
 
   // general settings
-  WiFi.mode(WIFI_STA);
+  //WiFi.mode(WIFI_STA);
   WiFi.enableSTA(true);
   WiFi.setAutoConnect(autoConnect);
   WiFi.persistent(persistent);
@@ -36,6 +36,22 @@ inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, uint8_t retries = 32, bool
   return WiFi.status();
 }
 
+inline bool setupWiFiAp(const char *ssid, const char *passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false) {
+    
+    WiFi.enableAP(true);
+    WiFi.setAutoConnect(true);
+    WiFi.persistent(false);
+    WiFi.softAPdisconnect();
+    // try to enable AP
+    if (WiFi.softAP(ssid, passphrase, channel, ssid_hidden, max_connection)) {
+      VERBOSE_FP(F("Soft AP established successful. IP address of AP is: %s"), WiFi.softAPIP().toString().c_str());
+    } else {
+      ERROR_FP(F("Couldn't establish a WiFi AP."));
+    }
+
+    return WiFi.isConnected();
+  }
+
 inline size_t serializeWiFiSta(String& output) {
 
   DynamicJsonDocument doc;
@@ -57,6 +73,17 @@ inline size_t serializeWiFiSta(String& output) {
   object[F("sleepMode")] = WiFi.getSleepMode();
   object[F("phyMode")] = WiFi.getPhyMode();
   object[F("wiFiMode")] = WiFi.getMode();
+  serializeJson(object, output);
+  return measureJson(object);
+}
+
+inline size_t serializeWiFiAp(String &output) {
+    
+  DynamicJsonDocument doc;
+  JsonObject object = doc.to<JsonObject>();
+  object[F("softAPgetStationNum")] = WiFi.softAPgetStationNum();
+  object[F("softAPIP")] = WiFi.softAPIP().toString();
+  object[F("softAPmacAddress")] = WiFi.softAPmacAddress();
   serializeJson(object, output);
   return measureJson(object);
 }
