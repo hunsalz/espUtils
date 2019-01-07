@@ -3,9 +3,6 @@
 #include <actuator/Driver.hpp>
 #include <actuator/MotorDriver.hpp>
 
-#include <cfg/MDNSConfig.hpp>
-#include <cfg/WiFiAPConfig.hpp>
-
 #include <polyfills/ContentType.h>
 
 #include <sensor/BME280Sensor.hpp>
@@ -21,4 +18,4 @@
 #include <Logging.hpp>
 #include <WebService.hpp>
 #include <WebSocketListener.hpp>
-#include <WiFiStaUtil.h>
+#include <WiFiSetup.h>
