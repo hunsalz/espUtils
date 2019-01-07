@@ -12,7 +12,7 @@ class Driver {
     return _pwmRange;
   }
 
-  void setPWMRange(uint16_t pwmRange) {
+  void setPWMRange(uint16_t pwmRange = 1023) {
     
     _pwmRange = pwmRange;
     analogWriteRange(_pwmRange);
