@@ -9,10 +9,10 @@
 
 namespace esp8266utils {
 
-inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
+inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
 
   // general settings
-  //WiFi.mode(WIFI_STA);
+  WiFi.mode(mode);
   WiFi.enableSTA(true);
   WiFi.setAutoConnect(autoConnect);
   WiFi.persistent(persistent);
@@ -36,8 +36,10 @@ inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, uint8_t retries = 32, bool
   return WiFi.status();
 }
 
-inline bool setupWiFiAp(const char *ssid, const char *passphrase, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false) {
+inline bool setupWiFiAp(const char *ssid, const char *passphrase, WiFiMode_t mode = WIFI_AP, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false) {
     
+    // general settings
+    WiFi.mode(mode);
     WiFi.enableAP(true);
     WiFi.setAutoConnect(true);
     WiFi.persistent(false);
