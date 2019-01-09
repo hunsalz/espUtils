@@ -1,6 +1,5 @@
 #pragma once
 
-#include <actuator/Driver.hpp>
 #include <actuator/MotorDriver.hpp>
 
 #include <polyfills/ContentType.h>

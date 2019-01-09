@@ -2,24 +2,26 @@
 
 #include <ArduinoJson.h>  // https://github.com/bblanchon/ArduinoJson
 
-#include "Driver.hpp"
+#include "../Logging.hpp"
 
 namespace esp8266utils {
 
-class MotorDriver : public Driver {
+class MotorDriver {
  
  public:
   
   struct config_t {
     uint8_t pinPWM;
     uint8_t pinDir;
+    uint8_t pwmRange;
   };
 
-  bool begin(uint8_t pinPWM, uint8_t pinDir) {
+  bool begin(uint8_t pinPWM, uint8_t pinDir, uint8_t pwmRange) {
     
     config_t config;
     config.pinPWM = pinPWM;
     config.pinDir = pinDir;
+    config.pwmRange = pwmRange;
     begin(config);
   }
 
@@ -47,10 +49,10 @@ class MotorDriver : public Driver {
   void setSpeed(int speed) {
     
     // limit speed to max. PWM range +/-
-    if (speed > getPWMRange()) {
-      speed = getPWMRange();
-    } else if (speed < -getPWMRange()) {
-      speed = -getPWMRange();
+    if (speed > _config.pwmRange) {
+      speed = _config.pwmRange;
+    } else if (speed < -_config.pwmRange) {
+      speed = -_config.pwmRange;
     }
     TRACE_FP(F("Write speed = %d"), speed);
     // write speed to PWM
@@ -72,10 +74,16 @@ class MotorDriver : public Driver {
     JsonObject object = doc.to<JsonObject>();
     object[F("pinPWM")] = _config.pinPWM;
     object[F("pinDir")] = _config.pinDir;
-    object[F("pwmRange")] = getPWMRange();
+    object[F("pwmRange")] = _config.pwmRange;
     object[F("speed")] = getSpeed();
     serializeJson(object, output);
     return measureJson(object);
+  }
+
+  static void applyPWMRange(uint16_t pwmRange = 255) {
+    
+    analogWriteRange(pwmRange);
+    VERBOSE_FP(F("Set PWM range to %d"), pwmRange);
   }
 
  private:
