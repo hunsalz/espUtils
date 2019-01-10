@@ -6,13 +6,6 @@
 namespace esp8266utils {
 
 class Sensor {
- 
- public:
-  
-  const char* getDeviceName() {
 
-    String str = "ESP-" + String(ESP.getChipId());
-    return str.c_str();
-  }
 };
 }  // namespace esp8266utils

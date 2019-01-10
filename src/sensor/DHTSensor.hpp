@@ -101,7 +101,7 @@ class DHTSensor : public Sensor {
     JsonObject object = doc.to<JsonObject>();
     object["temperature"] = getTemperature();
     object["humidity"] = getHumidity();
-    object["device"] = getDeviceName();
+    object["device"] = "ESP-" + String(ESP.getChipId());
     serializeJson(object, output);
     return measureJson(object);
   }

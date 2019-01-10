@@ -85,7 +85,7 @@ class BME680Sensor : public Sensor {
     object["pressure"] = getPressure();
     object["gas"] = getGasResistance();
     object["altitude"] = getApproximateAltitude();
-    object["device"] = getDeviceName();
+    object["device"] = "ESP-" + String(ESP.getChipId());
     serializeJson(object, output);
     return measureJson(object);
   }

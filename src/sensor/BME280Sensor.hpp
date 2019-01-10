@@ -11,7 +11,7 @@ namespace esp8266utils {
 class BME280Sensor : public Sensor {
  
  public:
-  
+
   bool begin(uint8_t i2cAddr) {
     
     _bme280 = new Adafruit_BME280();
@@ -63,7 +63,7 @@ class BME280Sensor : public Sensor {
     object["humidity"] = getHumidity();
     object["pressure"] = getPressure();
     object["altitude"] = getApproximateAltitude();
-    object["device"] = getDeviceName();
+    object["device"] = "ESP-" + String(ESP.getChipId());
     serializeJson(object, output);
     return measureJson(object);
   }

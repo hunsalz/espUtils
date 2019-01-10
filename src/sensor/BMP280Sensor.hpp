@@ -56,7 +56,7 @@ class BMP280Sensor : public Sensor {
     object["temperature"] = getTemperature();
     object["pressure"] = getPressure();
     object["altitude"] = getApproximateAltitude();
-    object["device"] = getDeviceName();
+    object["device"] = "ESP-" + String(ESP.getChipId());
     serializeJson(object, output);
     return measureJson(object);
   }

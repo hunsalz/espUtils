@@ -75,7 +75,7 @@ class MQ135Sensor : public Sensor {
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object["ppm"] = getPPM();
-    object["device"] = getDeviceName();
+    object["device"] = "ESP-" + String(ESP.getChipId());
     serializeJson(object, output);
     return measureJson(object);
   }
