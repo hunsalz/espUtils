@@ -79,11 +79,11 @@ class Logging {
 
   public:
 
-    static void init(unsigned long baud) {
+    static void init(unsigned long baud, bool debug = false) {
   
       #ifdef DEBUG_ESP_PORT
       DEBUG_ESP_PORT.begin(baud);
-      DEBUG_ESP_PORT.setDebugOutput(false);
+      DEBUG_ESP_PORT.setDebugOutput(debug);
       while (!DEBUG_ESP_PORT && !DEBUG_ESP_PORT.available()) {
       };
       DEBUG_ESP_PORT.println();
