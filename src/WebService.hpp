@@ -1,17 +1,9 @@
 #pragma once
 
-#ifdef Arduino_h
-// Arduino is not compatible with std::vector
-#undef min
-#undef max
-#endif
-
 #include <ArduinoJson.h>        // https://github.com/bblanchon/ArduinoJson
 #include <ESPAsyncTCP.h>        // https://github.com/me-no-dev/ESPAsyncTCP
 #include <ESPAsyncWebServer.h>  // https://github.com/me-no-dev/ESPAsyncWebServer
 #include <StreamString.h>       // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
-
-#include <vector>
 
 #include "Logging.hpp"
 
@@ -21,8 +13,26 @@ class WebService {
  
  public:
   
+  struct Resource {
+    const char* uri;
+    Resource* next;
+  };
+
   WebService(uint8_t port) {
     _port = port;
+  }
+
+  ~WebService() {
+
+    // TODO cleaup any WebServer resources?
+
+    // clean up linked resource list
+    Resource* node;
+    while (_resourceRoot) {
+      node = _resourceRoot;
+		  _resourceRoot = _resourceRoot->next;
+      delete node; 
+    }
   }
 
   bool begin() {
@@ -55,32 +65,6 @@ class WebService {
       request->send(404, "text/plain", F(" _  _    ___  _  _\n| || |  / _ \\| || |\n| || |_| | | | || |_\n|__   _| | | |__   _|\n   | | | |_| |  | |\n   |_|  \\___/   |_| page not found"));
     });
 
-    // TODO SSL/TLS example:
-    // https://github.com/me-no-dev/ESPAsyncWebServer/issues/75 Works, but isn't
-    // reliable:
-    // https://github.com/esp8266/Arduino/issues/2733#issuecomment-264710234
-    // getWebServer().onSslFileRequest([](void * arg, const char *filename,
-    // uint8_t **buf) -> int {
-    //   File file = SPIFFS.open(filename, "r");
-    //   if (file) {
-    //     Serial.printf("SSL file found: %s\n", filename);
-    //     size_t size = file.size();
-    //     uint8_t * nbuf = (uint8_t*)malloc(size);
-    //     if (nbuf) {
-    //       size = file.read(nbuf, size);
-    //       file.close();
-    //       *buf = nbuf;
-    //       return size;
-    //     }
-    //     file.close();
-    //   } else {
-    //     Serial.printf("SSL file not found: %s\n", filename);
-    //   }
-    //   *buf = 0;
-    //   return 0;
-    // }, NULL);
-    // getWebServer().beginSecure("/server.cer", "/server.key", NULL);
-
     // start web server
     _webServer->begin();
 
@@ -111,19 +95,41 @@ class WebService {
 
   AsyncCallbackWebHandler& on(const char *uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArBodyHandlerFunction onBody, ArUploadHandlerFunction onUpload) {
     
-    // add uri to resource listing
-    _resources.push_back(String(uri));
-    // add to web server
-    getWebServer().on(uri, method, onRequest, onUpload, onBody);
+    // find last leaf of linked resource list
+    Resource* node = _resourceRoot;
+    Resource* nextNode = _resourceRoot;
+    while (nextNode) {
+      // verify for duplicate resources
+      if (strcmp(uri, nextNode->uri) == 0) {
+        WARNING_FP(F("Duplicate resource uri detected: %s"), uri);
+      }
+      // keep current node and follow next
+      node = nextNode;
+      nextNode = node->next;
+    }
+    // create new leaf
+    Resource* tmp = new Resource();
+    tmp->uri = uri;
+    tmp->next = nullptr;
+    // add leaf at appropriate position
+    if (_resourceRoot == nullptr) {
+      _resourceRoot = tmp;
+    } else {
+      node->next = tmp;
+    }
+    // add handler to web server
+    return getWebServer().on(uri, method, onRequest, onUpload, onBody);
   }
 
   size_t serializeResources(String& output) {
     
-    // FIXME
     DynamicJsonDocument doc;
     JsonArray json = doc.to<JsonArray>();
-    for (std::vector<String>::iterator i = _resources.begin(); i != _resources.end(); ++i) {
-      json.add(*i);
+    // add linked list of resources to a json array
+    Resource* node = _resourceRoot;
+    while (node) {
+      json.add(node->uri);
+      node = node->next;
     }
     serializeJson(json, output);
     return measureJson(json);
@@ -135,7 +141,7 @@ class WebService {
 
   uint8_t _port;
 
-  std::vector<String> _resources;
+  Resource* _resourceRoot = nullptr;
 };
 }  // namespace esp8266utils
 
