@@ -51,7 +51,7 @@
 #define WARNING(output) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), output)
 #define WARNING_F(format, ...) esp8266utils::Logging::log_F(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
 #define WARNING_P(output) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), output)
-#define WARNING_FP(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
+#define WARNING_FP(format, ...) esp8266utils::Logging::log_FP(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
 #define ERROR(output) esp8266utils::Logging::log_F(FPSTR(esp8266utils::ERROR), output)
 #define ERROR_F(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
 #define ERROR_P(output) esp8266utils::Logging::log(FPSTR(esp8266utils::ERROR), output)
