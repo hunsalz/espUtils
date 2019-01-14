@@ -77,7 +77,3 @@ class FileSystem {
   }
 };
 }  // namespace esp8266utils
-
-#if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266utils::FileSystem FILESYSTEM;
-#endif  // NO_GLOBAL_INSTANCES
