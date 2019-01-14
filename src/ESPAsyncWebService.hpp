@@ -9,7 +9,7 @@
 
 namespace esp8266utils {
 
-class WebService {
+class ESPAsyncWebService {
  
  public:
   
@@ -18,11 +18,11 @@ class WebService {
     Resource* next;
   };
 
-  WebService(uint8_t port) {
+  ESPAsyncWebService(uint8_t port) {
     _port = port;
   }
 
-  ~WebService() {
+  ~ESPAsyncWebService() {
 
     // TODO cleaup any WebServer resources?
 
