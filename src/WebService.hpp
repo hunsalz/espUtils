@@ -37,7 +37,7 @@ class WebService {
 
   bool begin() {
     
-    _webServer = new AsyncWebServer(80);
+    _webServer = new AsyncWebServer(getPort());
 
     // add generic services registry resource
     on("/resources", HTTP_GET, [this](AsyncWebServerRequest *request) {
@@ -144,7 +144,3 @@ class WebService {
   Resource* _resourceRoot = nullptr;
 };
 }  // namespace esp8266utils
-
-#if !defined(NO_GLOBAL_INSTANCES)
-extern esp8266utils::WebService WEBSERVICE;
-#endif  // NO_GLOBAL_INSTANCES
