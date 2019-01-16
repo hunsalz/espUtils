@@ -13,9 +13,13 @@
 #include <sensor/Sensor.hpp>
 
 #include <ESPUtil.h>
-//#include <ESPAsyncWebService.hpp>
-//#include <ESPAsyncWebSocketListener.hpp>
 #include <FileSystem.hpp>
 #include <Logging.hpp>
-#include <WebSocketsServerListener.hpp>
 #include <WiFiUtil.h>
+
+#if defined USE_ESP_ASYNC
+#include <ESPAsyncWebService.hpp>
+#include <ESPAsyncWebSocketListener.hpp>
+#else
+#include <WebSocketsServerListener.hpp>
+#endif
