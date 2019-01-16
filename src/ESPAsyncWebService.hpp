@@ -35,14 +35,14 @@ class ESPAsyncWebService {
     }
   }
 
-  bool begin() {
+  void init() {
     
     _webServer = new AsyncWebServer(getPort());
 
     // add generic services registry resource
     on("/resources", HTTP_GET, [this](AsyncWebServerRequest *request) {
       
-      AsyncResponseStream *response = request->beginResponseStream("application/json");  
+      AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
       StreamString* payload = new StreamString();
       size_t size = serializeResources(*payload);
       response->print(*payload); 
@@ -51,25 +51,19 @@ class ESPAsyncWebService {
     });
     // add default 404 handler
     getWebServer().onNotFound([this](AsyncWebServerRequest *request) {
+      
       VERBOSE_FP(F("HTTP 404 : [http://%s%s] not found."), request->host().c_str(), request->url().c_str());
-
-      // request->send(404, "text/plain", F("404 error - Page not found."));
-
-      // _  _    ___  _  _
-      //| || |  / _ \| || |
-      //| || |_| | | | || |_
-      //|__   _| | | |__   _|
-      //   | | | |_| |  | |
-      //   |_|  \___/   |_| page not found
-
-      request->send(404, "text/plain", F(" _  _    ___  _  _\n| || |  / _ \\| || |\n| || |_| | | | || |_\n|__   _| | | |__   _|\n   | | | |_| |  | |\n   |_|  \\___/   |_| page not found"));
+      request->send(404, TEXT_PLAIN, F("404 error - Page not found."));
     });
 
-    // start web server
-    _webServer->begin();
+    VERBOSE_FP(F("WebServer initilized."));
+  }
 
+  void begin() {
+    
+    // start web server
+    getWebServer().begin();
     VERBOSE_FP(F("WebServer started."));
-    return true;  // TODO
   }
 
   AsyncWebServer& getWebServer() {
