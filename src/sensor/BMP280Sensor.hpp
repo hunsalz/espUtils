@@ -12,7 +12,7 @@ class BMP280Sensor : public Sensor {
  
  public:
   
-  bool begin(uint8_t i2cAddr, uint8_t chipId) {
+  bool begin(uint8_t i2cAddr, uint8_t chipId = BMP280_CHIPID) {
     
     _bmp280 = new Adafruit_BMP280();
     return _bmp280->begin(i2cAddr, chipId);
