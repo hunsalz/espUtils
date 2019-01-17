@@ -88,7 +88,7 @@ class Logging {
       DEBUG_ESP_PORT.println();
     }
 
-    static void log_F(const __FlashStringHelper *prefix, const char *format, ...) {
+    static void log_F(const __FlashStringHelper* prefix, const char* format, ...) {
   
       va_list args;
       va_start(args, format);
@@ -102,10 +102,10 @@ class Logging {
       log(prefix, buffer);
     }
 
-    static void log_FP(const __FlashStringHelper *prefix, const __FlashStringHelper *format, ...) {
+    static void log_FP(const __FlashStringHelper* prefix, const __FlashStringHelper* format, ...) {
   
       // copy PGM_P into a char*
-      char *formatBuffer = new char[strlen_P((PGM_P)format) + 1];
+      char* formatBuffer = new char[strlen_P((PGM_P)format) + 1];
       strcpy_P(formatBuffer, (PGM_P)format);
 
       va_list args;
@@ -120,7 +120,7 @@ class Logging {
       log(prefix, buffer);
     }
 
-    template<typename T> static void log(const __FlashStringHelper *prefix, T output) {
+    template<typename T> static void log(const __FlashStringHelper* prefix, T output) {
 
       DEBUG_ESP_PORT.print(prefix);
       DEBUG_ESP_PORT.print(LOG_SEPARATOR);
