@@ -2,19 +2,21 @@
 
 #include <Arduino.h> // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Arduino.h
 
+namespace esp8266utils {
+
 #define LOG_LEVEL 3
 
 #if defined DEBUG_ESP_PORT
-#define LOGGER(baud) esp8266utils::Logging::init(baud)
+#define LOGGER(baud) Logging::init(baud)
 #else
 #define LOGGER(baud)
 #endif
 
 #if defined DEBUG_ESP_PORT && LOG_LEVEL >= 1
-#define INFO(output) esp8266utils::Logging::log(FPSTR(esp8266utils::INFO), output)
-#define INFO_F(format, ...) esp8266utils::Logging::log_F(FPSTR(esp8266utils::INFO), format, ##__VA_ARGS__)
-#define INFO_P(output) esp8266utils::Logging::log(FPSTR(esp8266utils::INFO), output)
-#define INFO_FP(format, ...) esp8266utils::Logging::log_FP(FPSTR(esp8266utils::INFO), format, ##__VA_ARGS__)
+#define INFO(output) Logging::log(FPSTR(INFO), output)
+#define INFO_F(format, ...) Logging::log_F(FPSTR(INFO), format, ##__VA_ARGS__)
+#define INFO_P(output) Logging::log(FPSTR(INFO), output)
+#define INFO_FP(format, ...) Logging::log_FP(FPSTR(INFO), format, ##__VA_ARGS__)
 #else
 #define INFO(...)
 #define INFO_F(...)
@@ -23,10 +25,10 @@
 #endif
 
 #if defined DEBUG_ESP_PORT && LOG_LEVEL >= 2
-#define VERBOSE(output) esp8266utils::Logging::log(FPSTR(esp8266utils::VERBOSE), output)
-#define VERBOSE_F(format, ...) esp8266utils::Logging::log_F(FPSTR(esp8266utils::VERBOSE), format, ##__VA_ARGS__)
-#define VERBOSE_P(output) esp8266utils::Logging::log(FPSTR(esp8266utils::VERBOSE), output)
-#define VERBOSE_FP(format, ...) esp8266utils::Logging::log_FP(FPSTR(esp8266utils::VERBOSE), format, ##__VA_ARGS__)
+#define VERBOSE(output) Logging::log(FPSTR(VERBOSE), output)
+#define VERBOSE_F(format, ...) Logging::log_F(FPSTR(VERBOSE), format, ##__VA_ARGS__)
+#define VERBOSE_P(output) Logging::log(FPSTR(VERBOSE), output)
+#define VERBOSE_FP(format, ...) Logging::log_FP(FPSTR(VERBOSE), format, ##__VA_ARGS__)
 #else
 #define VERBOSE(...)
 #define VERBOSE_F(...)
@@ -35,10 +37,10 @@
 #endif
 
 #if defined DEBUG_ESP_PORT && LOG_LEVEL >= 3
-#define TRACE(output) esp8266utils::Logging::log(FPSTR(esp8266utils::TRACE), output)
-#define TRACE_F(format, ...) esp8266utils::Logging::log_F(FPSTR(esp8266utils::TRACE), format, ##__VA_ARGS__)
-#define TRACE_P(output) esp8266utils::Logging::log(FPSTR(esp8266utils::TRACE), output)
-#define TRACE_FP(format, ...) esp8266utils::Logging::log_FP(FPSTR(esp8266utils::TRACE), format, ##__VA_ARGS__)
+#define TRACE(output) Logging::log(FPSTR(TRACE), output)
+#define TRACE_F(format, ...) Logging::log_F(FPSTR(TRACE), format, ##__VA_ARGS__)
+#define TRACE_P(output) Logging::log(FPSTR(TRACE), output)
+#define TRACE_FP(format, ...) Logging::log_FP(FPSTR(TRACE), format, ##__VA_ARGS__)
 #else
 #define TRACE(...)
 #define TRACE_F(...)
@@ -47,14 +49,14 @@
 #endif
 
 #ifdef DEBUG_ESP_PORT
-#define WARNING(output) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), output)
-#define WARNING_F(format, ...) esp8266utils::Logging::log_F(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
-#define WARNING_P(output) esp8266utils::Logging::log(FPSTR(esp8266utils::WARNING), output)
-#define WARNING_FP(format, ...) esp8266utils::Logging::log_FP(FPSTR(esp8266utils::WARNING), format, ##__VA_ARGS__)
-#define ERROR(output) esp8266utils::Logging::log_F(FPSTR(esp8266utils::ERROR), output)
-#define ERROR_F(format, ...) esp8266utils::Logging::log(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
-#define ERROR_P(output) esp8266utils::Logging::log(FPSTR(esp8266utils::ERROR), output)
-#define ERROR_FP(format, ...) esp8266utils::Logging::log_FP(FPSTR(esp8266utils::ERROR), format, ##__VA_ARGS__)
+#define WARNING(output) Logging::log(FPSTR(WARNING), output)
+#define WARNING_F(format, ...) Logging::log_F(FPSTR(WARNING), format, ##__VA_ARGS__)
+#define WARNING_P(output) Logging::log(FPSTR(WARNING), output)
+#define WARNING_FP(format, ...) Logging::log_FP(FPSTR(WARNING), format, ##__VA_ARGS__)
+#define ERROR(output) Logging::log_F(FPSTR(ERROR), output)
+#define ERROR_F(format, ...) Logging::log(FPSTR(ERROR), format, ##__VA_ARGS__)
+#define ERROR_P(output) Logging::log(FPSTR(ERROR), output)
+#define ERROR_FP(format, ...) Logging::log_FP(FPSTR(ERROR), format, ##__VA_ARGS__)
 #else
 #define WARNING(...)
 #define WARNING_F(...)
@@ -65,8 +67,6 @@
 #define ERROR_P(...)
 #define ERROR_FP(...)
 #endif
-
-namespace esp8266utils {
 
 static const char INFO[] PROGMEM = "INFO";
 static const char VERBOSE[] PROGMEM = "VERBOSE";
