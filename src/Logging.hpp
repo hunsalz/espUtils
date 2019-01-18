@@ -2,7 +2,6 @@
 
 #include <Arduino.h> // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Arduino.h
 
-#define LOG_SEPARATOR '|'
 #define LOG_LEVEL 3
 
 #if defined DEBUG_ESP_PORT
@@ -74,6 +73,8 @@ static const char VERBOSE[] PROGMEM = "VERBOSE";
 static const char TRACE[] PROGMEM = "TRACE";
 static const char WARNING[] PROGMEM = "WARNING";
 static const char ERROR[] PROGMEM = "ERROR";
+
+static char LOG_SEPARATOR = '|';
 
 class Logging {
 
