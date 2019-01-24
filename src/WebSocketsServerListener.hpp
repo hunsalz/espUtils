@@ -4,7 +4,7 @@
 
 #include "Logging.hpp"
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 class WebSocketsServerListener {
  
@@ -107,4 +107,4 @@ class WebSocketsServerListener {
     }
   }
 };
-}  // namespace esp8266utils
+}  // namespace ESPUtils

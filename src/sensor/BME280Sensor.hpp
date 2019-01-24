@@ -6,7 +6,7 @@
 #include "Logging.hpp"
 #include "Sensor.hpp"
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 class BME280Sensor : public Sensor {
  
@@ -77,4 +77,4 @@ class BME280Sensor : public Sensor {
   float _pressure = NAN;
   float _altitude = NAN;
 };
-}  // namespace esp8266utils
+}  // namespace ESPUtils

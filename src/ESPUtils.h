@@ -12,7 +12,7 @@
 #include <sensor/MQ135Sensor.hpp>
 #include <sensor/Sensor.hpp>
 
-#include <ESPUtil.h>
+#include <ESPInfo.h>
 #include <FileSystem.hpp>
 #include <Logging.hpp>
 #include <WiFiUtil.h>

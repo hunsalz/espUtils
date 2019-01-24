@@ -6,7 +6,7 @@
 #include "Logging.hpp"
 #include "Sensor.hpp"
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 class MQ135Sensor : public Sensor {
  
@@ -87,4 +87,4 @@ class MQ135Sensor : public Sensor {
 
   float _ppm = NAN;
 };
-}  // namespace esp8266utils
+}  // namespace ESPUtils

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 const char* TEXT_CSS = "text/css";
 const char* TEXT_HTML = "text/html";
@@ -17,4 +17,4 @@ const char* IMAGE_JPG = "image/jpeg";
 const char* IMAGE_PNG = "image/png";
 const char* IMAGE_SVG = "image/svg+xml";
 
-}  // namespace esp8266utils
+}  // namespace ESPUtils

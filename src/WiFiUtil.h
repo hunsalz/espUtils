@@ -2,12 +2,16 @@
 
 #include <Arduino.h>          // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Arduino.h
 #include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
+
+#ifdef ESP32
+#include <WiFi.h>             // https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/src/WiFi.h
+#else
 #include <ESP8266WiFi.h>      // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
-#include <ESP8266WiFiMulti.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
+#endif
 
 #include "Logging.hpp"
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
 
@@ -90,4 +94,4 @@ inline size_t serializeWiFiAp(String &output) {
   return measureJson(object);
 }
 
-} // namespace esp8266utils
+} // namespace ESPUtils

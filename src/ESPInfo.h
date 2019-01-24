@@ -9,7 +9,7 @@ extern "C" {
 #include <ArduinoJson.h>  // https://github.com/bblanchon/ArduinoJson
 #include <ESP.h>  // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 inline size_t serializeESP(String& output) {
 
@@ -40,4 +40,4 @@ inline size_t serializeESP(String& output) {
     return measureJson(object);
   }
 
-}  // namespace esp8266utils
+}  // namespace ESPUtils

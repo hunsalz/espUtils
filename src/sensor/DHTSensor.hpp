@@ -7,7 +7,7 @@
 #include "Logging.hpp"
 #include "Sensor.hpp"
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 class DHTSensor : public Sensor {
  
@@ -114,4 +114,4 @@ class DHTSensor : public Sensor {
   float _temperature = NAN;
   float _humidity = NAN;
 };
-}  // namespace esp8266utils
+}  // namespace ESPUtils

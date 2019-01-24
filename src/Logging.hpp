@@ -2,7 +2,7 @@
 
 #include <Arduino.h> // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Arduino.h
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 #define LOG_LEVEL 3
 
@@ -132,4 +132,4 @@ class Logging {
       DEBUG_ESP_PORT.println(output);
     }
 };
-} // namespace esp8266utils
+} // namespace ESPUtils

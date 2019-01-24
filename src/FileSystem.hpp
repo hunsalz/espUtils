@@ -5,7 +5,7 @@
 
 #include "Logging.hpp"
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 class FileSystem {
  
@@ -76,4 +76,4 @@ class FileSystem {
     }
   }
 };
-}  // namespace esp8266utils
+}  // namespace ESPUtils

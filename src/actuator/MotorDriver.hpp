@@ -4,7 +4,7 @@
 
 #include "../Logging.hpp"
 
-namespace esp8266utils {
+namespace ESPUtils {
 
 class MotorDriver {
  
@@ -91,4 +91,4 @@ class MotorDriver {
   config_t _config;
   int _speed;
 };
-}  // namespace esp8266utils
+}  // namespace ESPUtils
