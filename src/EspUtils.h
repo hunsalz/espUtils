@@ -16,13 +16,15 @@
 #include <sensor/Sensor.hpp>
 
 #include <EspInfo.h>
-#include <FileSystem.hpp>
+#ifdef ESP8266
+  #include <ESP8266FS.hpp>
+#endif
 #include <Logging.hpp>
 #include <WiFiUtil.h>
 
-#if defined USE_ESP_ASYNC
-#include <ESPAsyncWebService.hpp>
-#include <ESPAsyncWebSocketListener.hpp>
+#ifdef USE_ESP_ASYNC
+  #include <ESPAsyncWebService.hpp>
+  #include <ESPAsyncWebSocketListener.hpp>
 #else
-#include <WebSocketsServerListener.hpp>
+  #include <WebSocketsServerListener.hpp>
 #endif

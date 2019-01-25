@@ -1,57 +1,38 @@
 #pragma once
 
 #include <ArduinoJson.h>  // https://github.com/bblanchon/ArduinoJson
-#include <FS.h>           // https://github.com/espressif/arduino-esp32/blob/master/libraries/FS/src/FS.h
-                          // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
+#include <FS.h>           // https://github.com/esp8266/Arduino/tree/master/cores/esp8266/FS.h
 
 #include "Logging.hpp"
 
 namespace espUtils {
 
-class FileSystem {
+class ESP8266FS {
  
  public:
   
   bool begin() {
-    
-    #ifdef ESP32
 
-    // TODO ESP32
-    bool available = false;
-
-    #else
     bool available = SPIFFS.begin();
     if (available) {
       VERBOSE_FP(F("File system mounted."));
     } else {
       WARNING_FP(F("Mounting file system failed."));
     }
-    #endif
 
     return available;
   }
 
   void end() {
     
-    #ifdef ESP32
-
-    // TODO ESP32
-
-    #else
     SPIFFS.end();
     VERBOSE_FP(F("File system unmounted."));
-    #endif
   }
 
   size_t serializeInfo(String& output) {
 
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
-    #ifdef ESP32
-
-    // TODO ESP32
-
-    #else
     FSInfo fs_info;
     SPIFFS.info(fs_info);
     object[F("totalBytes")] = fs_info.totalBytes;
@@ -60,8 +41,6 @@ class FileSystem {
     object[F("pageSize")] = fs_info.pageSize;
     object[F("maxOpenFiles")] = fs_info.maxOpenFiles;
     object[F("maxPathLength")] = fs_info.maxPathLength;
-    #endif
-    
     serializeJson(object, output);
     return measureJson(object);
   }
@@ -70,12 +49,6 @@ class FileSystem {
     
     DynamicJsonDocument doc;
     JsonArray array = doc.to<JsonArray>();
-    #ifdef ESP32
-
-    // TODO ESP32
-
-    #else
-    // enumerate files
     Dir dir = SPIFFS.openDir("/");
     while (dir.next()) {
       String name = dir.fileName();
@@ -85,8 +58,6 @@ class FileSystem {
       entry[F("size")] = size;
       VERBOSE_FP(F("Found file: name=%s, size=%s"), name.c_str(), size.c_str());
     }
-    #endif
-    
     serializeJson(array, output);
     return measureJson(array);
   }
