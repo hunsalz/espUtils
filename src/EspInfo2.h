@@ -94,5 +94,4 @@ inline size_t serializeESP(String& output) {
     serializeJson(object, output);
     return measureJson(object);
   }
-
 }  // namespace espUtils
