@@ -1,14 +1,14 @@
 #pragma once
 
 #ifdef ESP8266
-extern "C" {
-#include "user_interface.h"  // Expressif ESP8266 Non-OS API
-}
+  extern "C" {
+    #include "user_interface.h"  // Expressif ESP8266 Non-OS API
+  }
 #endif
 
-#include <ArduinoJson.h>  // https://github.com/bblanchon/ArduinoJson
-#include <ESP.h>          // https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/Esp.h
-                          // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
+#include <ArduinoJson.h>         // https://github.com/bblanchon/ArduinoJson
+#include <ESP.h>                 // https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/Esp.h
+                                 // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
 
 namespace espUtils {
 
