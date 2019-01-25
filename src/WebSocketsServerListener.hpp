@@ -4,7 +4,7 @@
 
 #include "Logging.hpp"
 
-namespace ESPUtils {
+namespace espUtils {
 
 class WebSocketsServerListener {
  
@@ -107,4 +107,4 @@ class WebSocketsServerListener {
     }
   }
 };
-}  // namespace ESPUtils
+}  // namespace espUtils

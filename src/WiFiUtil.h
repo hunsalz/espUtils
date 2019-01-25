@@ -1,19 +1,24 @@
 #pragma once
 
-#include <Arduino.h>          // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Arduino.h
-#include <ArduinoJson.h>      // https://github.com/bblanchon/ArduinoJson
+#include <ArduinoJson.h>        // https://github.com/bblanchon/ArduinoJson
 
 #ifdef ESP32
-#include <WiFi.h>             // https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/src/WiFi.h
+  #include <WiFi.h>             // https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/src/WiFi.h
+  #include <WiFiMulti.h>        // https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/src/WiFiMulti.h
 #else
-#include <ESP8266WiFi.h>      // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
+  #include <ESP8266WiFi.h>      // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
+  #include <ESP8266WiFiMulti.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
 #endif
 
 #include "Logging.hpp"
 
-namespace ESPUtils {
+namespace espUtils {
 
+#ifdef ESP32
+inline bool setupWiFiSta(WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
+#else
 inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
+#endif
 
   // general settings
   WiFi.mode(mode);
@@ -23,12 +28,12 @@ inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA
   // try to connect for given amount of retries
   while (wifiMulti.run() != WL_CONNECTED && retries-- > 0) { 
     #ifdef DEBUG_ESP_PORT
-    DEBUG_ESP_PORT.print(F("."));
+      DEBUG_ESP_PORT.print(F("."));
     #endif
     delay(300);
   }
   #ifdef DEBUG_ESP_PORT
-  DEBUG_ESP_PORT.println();
+    DEBUG_ESP_PORT.println();
   #endif
   // output WiFi status
   if (retries <= 0) {
@@ -69,16 +74,24 @@ inline size_t serializeWiFiSta(String& output) {
   object[F("subnetMask")] = WiFi.subnetMask().toString();
   object[F("gatewayIP")] = WiFi.gatewayIP().toString();
   object[F("dnsIP")] = WiFi.dnsIP().toString();
-  object[F("hostname")] = WiFi.hostname();
   object[F("status")] = WiFi.status();
   object[F("ssid")] = WiFi.SSID();
   object[F("psk")] = WiFi.psk();
   object[F("bssId")] = WiFi.BSSIDstr();
   object[F("rssi")] = WiFi.RSSI();
   object[F("channel")] = WiFi.channel();
-  object[F("sleepMode")] = WiFi.getSleepMode();
-  object[F("phyMode")] = WiFi.getPhyMode();
   object[F("wiFiMode")] = WiFi.getMode();
+  #ifdef ESP32
+    object[F("hostname")] = WiFi.getHostname();
+    object[F("statusBits")] = WiFi.getStatusBits();
+    object[F("txtPower")] = WiFi.getTxPower();
+  #else
+    object[F("hostname")] = WiFi.hostname();
+    object[F("sleepMode")] = WiFi.getSleepMode();
+    object[F("lsitenInterval")] = WiFi.getListenInterval();
+    object[F("isSleepLevelMax")] = WiFi.isSleepLevelMax();
+    object[F("phyMode")] = WiFi.getPhyMode();
+  #endif
   serializeJson(object, output);
   return measureJson(object);
 }
@@ -89,9 +102,12 @@ inline size_t serializeWiFiAp(String &output) {
   JsonObject object = doc.to<JsonObject>();
   object[F("softAPgetStationNum")] = WiFi.softAPgetStationNum();
   object[F("softAPIP")] = WiFi.softAPIP().toString();
-  object[F("softAPmacAddress")] = WiFi.softAPmacAddress();
+  #ifdef ESP32
+    object[F("softAPIPv6")] = WiFi.softAPIPv6().toString();
+  #endif
+    object[F("softAPmacAddress")] = WiFi.softAPmacAddress();
   serializeJson(object, output);
   return measureJson(object);
 }
 
-} // namespace ESPUtils
+} // namespace espUtils

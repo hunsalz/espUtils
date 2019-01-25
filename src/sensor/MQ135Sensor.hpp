@@ -6,7 +6,7 @@
 #include "Logging.hpp"
 #include "Sensor.hpp"
 
-namespace ESPUtils {
+namespace espUtils {
 
 class MQ135Sensor : public Sensor {
  
@@ -72,10 +72,13 @@ class MQ135Sensor : public Sensor {
 
   size_t serialize(String& output) {
 
+    char device[15];
+    int size = getDevice(device);
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object["ppm"] = getPPM();
-    object["device"] = "ESP-" + String(ESP.getChipId());
+    object["device"] = device;
     serializeJson(object, output);
     return measureJson(object);
   }
@@ -87,4 +90,4 @@ class MQ135Sensor : public Sensor {
 
   float _ppm = NAN;
 };
-}  // namespace ESPUtils
+}  // namespace espUtils

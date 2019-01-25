@@ -7,7 +7,7 @@
 #include "Logging.hpp"
 #include "Sensor.hpp"
 
-namespace ESPUtils {
+namespace espUtils {
 
 class DHTSensor : public Sensor {
  
@@ -97,11 +97,14 @@ class DHTSensor : public Sensor {
 
   size_t serialize(String& output) {
 
+    char device[15];
+    int size = getDevice(device);
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object["temperature"] = getTemperature();
     object["humidity"] = getHumidity();
-    object["device"] = "ESP-" + String(ESP.getChipId());
+    object["device"] = device;
     serializeJson(object, output);
     return measureJson(object);
   }
@@ -114,4 +117,4 @@ class DHTSensor : public Sensor {
   float _temperature = NAN;
   float _humidity = NAN;
 };
-}  // namespace ESPUtils
+}  // namespace espUtils

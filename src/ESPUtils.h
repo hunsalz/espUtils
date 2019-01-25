@@ -1,5 +1,8 @@
 #pragma once
 
+#include <Arduino.h>      // https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/Arduino.h
+                          // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Arduino.h
+
 #include <actuator/MotorDriver.hpp>
 
 #include <polyfills/ContentType.h>
@@ -12,7 +15,7 @@
 #include <sensor/MQ135Sensor.hpp>
 #include <sensor/Sensor.hpp>
 
-#include <ESPInfo.h>
+#include <EspInfo.h>
 #include <FileSystem.hpp>
 #include <Logging.hpp>
 #include <WiFiUtil.h>

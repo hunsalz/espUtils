@@ -6,7 +6,7 @@
 #include "Logging.hpp"
 #include "Sensor.hpp"
 
-namespace ESPUtils {
+namespace espUtils {
 
 class BMP085Sensor : public Sensor {
  
@@ -58,12 +58,15 @@ class BMP085Sensor : public Sensor {
 
   size_t serialize(String& output) {
 
+    char device[15];
+    int size = getDevice(device);
+
     DynamicJsonDocument doc;
     JsonObject object = doc.to<JsonObject>();
     object["temperature"] = getTemperature();
     object["pressure"] = getPressure();
     object["altitude"] = getApproximateAltitude();
-    object["device"] = "ESP-" + String(ESP.getChipId());
+    object["device"] = device;
     serializeJson(object, output);
     return measureJson(object);
   }
@@ -77,4 +80,4 @@ class BMP085Sensor : public Sensor {
   float _pressure = NAN;
   float _altitude = NAN;
 };
-}  // namespace ESPUtils
+}  // namespace espUtils

@@ -7,7 +7,7 @@
 
 #include "Logging.hpp"
 
-namespace ESPUtils {
+namespace espUtils {
 
 class ESPAsyncWebService {
  
@@ -137,4 +137,4 @@ class ESPAsyncWebService {
 
   Resource* _resourceRoot = nullptr;
 };
-}  // namespace ESPUtils
+}  // namespace espUtils

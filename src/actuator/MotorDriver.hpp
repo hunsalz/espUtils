@@ -4,7 +4,7 @@
 
 #include "../Logging.hpp"
 
-namespace ESPUtils {
+namespace espUtils {
 
 class MotorDriver {
  
@@ -56,7 +56,14 @@ class MotorDriver {
     }
     TRACE_FP(F("Write speed = %d"), speed);
     // write speed to PWM
-    analogWrite(_config.pinPWM, abs(speed));
+    #ifdef ESP32
+      // TODO ESP32
+      // https://github.com/espressif/arduino-esp32/issues/4
+      // https://github.com/ERROPiX/ESP32_AnalogWrite
+      WARNING_P(F("analogWrite() not implemented."));
+    #else
+      analogWrite(_config.pinPWM, abs(speed));
+    #endif
     // change direction accordingly to original signed speed to HIGH or LOW
     digitalWrite(_config.pinDir, getDirection());
     // save new speed value
@@ -82,8 +89,15 @@ class MotorDriver {
 
   static void applyPWMRange(uint16_t pwmRange = 255) {
     
-    analogWriteRange(pwmRange);
-    VERBOSE_FP(F("Set PWM range to %d"), pwmRange);
+    #ifdef ESP32
+    // TODO ESP32
+    // https://github.com/espressif/arduino-esp32/issues/4
+    // https://github.com/ERROPiX/ESP32_AnalogWrite
+      WARNING_P(F("applyPWMRange() not implemented."));
+    #else
+      analogWriteRange(pwmRange);
+      VERBOSE_FP(F("Set PWM range to %d"), pwmRange);
+    #endif
   }
 
  private:
@@ -91,4 +105,4 @@ class MotorDriver {
   config_t _config;
   int _speed;
 };
-}  // namespace ESPUtils
+}  // namespace espUtils

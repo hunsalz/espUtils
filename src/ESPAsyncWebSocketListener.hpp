@@ -4,7 +4,7 @@
 
 #include "Logging.hpp"
 
-namespace ESPUtils {
+namespace espUtils {
 
 typedef std::function<void(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len)> WSEventHandler;
 typedef std::function<void(AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, uint16_t *arg, uint8_t *data, size_t len)> WSErrorHandler;
@@ -136,4 +136,4 @@ class ESPAsyncWebSocketListener {
     }
   }
 };
-}  // namespace ESPUtils
+}  // namespace espUtils
