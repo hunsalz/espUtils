@@ -25,21 +25,14 @@ class MQ135Sensor : public Sensor {
 
   bool begin(config_t config) {
     
-    _config = config;
-    if (!_config.pin) {
+    if (_config.pin) {
+      _config = config;
+      _mq135 = new MQ135(config.pin);
+    } else {
       ERROR_FP(F("Missing pin declaration."));
     }
-    _mq135 = new MQ135(config.pin);
 
     return true;
-  }
-
-  bool begin(JsonObject &object) {
-    
-    config_t config;
-    config.pin = object["pin"];
-
-    return begin(config);
   }
 
   config_t getConfig() {
@@ -51,19 +44,27 @@ class MQ135Sensor : public Sensor {
   }
 
   bool update(bool mock) {
-    
-    if (_mq135 && !mock) {
-      int value = analogRead(_config.pin);
-      // VERBOSE_FP(F("Raw analog data = %d"), value);
-      // float rzero = _mq135->getRZero(); // the specific resistance at
-      // atmospheric CO2 level of your sensor VERBOSE_FP(F("RZero = %D"),
-      // rzero);
-      _ppm = _mq135->getPPM();  // parts per million - https://en.wikipedia.org/wiki/Carbon_dioxide_in_Earth%27s_atmosphere
-      return true;
-    } else {
+
+    if (mock) {
       _ppm = random(5000, 6000) / 10.0;
       return true;
     }
+
+    if (isReady()) {
+      int value = analogRead(getConfig().pin);
+      // VERBOSE_FP(F("Raw analog data = %d"), value);
+      // float rzero = _mq135->getRZero(); // the specific resistance at
+      // atmospheric CO2 level of your sensor VERBOSE_FP(F("RZero = %D"), rzero);
+      _ppm = _mq135->getPPM();  // parts per million - https://en.wikipedia.org/wiki/Carbon_dioxide_in_Earth%27s_atmosphere
+      return true;
+    } else {
+      _ppm = NAN;
+      return false;
+    }
+  }
+
+  bool isReady() {
+    return _ready;
   }
 
   float getPPM() {
@@ -87,6 +88,7 @@ class MQ135Sensor : public Sensor {
   
   MQ135 *_mq135 = NULL;
   config_t _config;
+  bool _ready = false;
 
   float _ppm = NAN;
 };

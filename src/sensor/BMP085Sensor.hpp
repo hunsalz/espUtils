@@ -16,7 +16,8 @@ class BMP085Sensor : public Sensor {
     
     _seaLevelPressure = seaLevelPressure;
     _bmp085 = new Adafruit_BMP085_Unified();
-    return _bmp085->begin();
+    _ready = _bmp085->begin();
+    return _ready;
   }
 
   Adafruit_BMP085_Unified& getBMP085() {
@@ -25,19 +26,30 @@ class BMP085Sensor : public Sensor {
 
   bool update(bool mock) {
     
-    if (_bmp085 && !mock) {
-      sensors_event_t event;
-      _bmp085->getEvent(&event);
-      _pressure = event.pressure;  // unit is Pascal (Pa) - https://en.wikipedia.org/wiki/Pascal_(unit)
-      _bmp085->getTemperature(&_temperature);  // unit is Celsius, °C
-      _altitude = _bmp085->pressureToAltitude(getSeaLevelPressure(), event.pressure);  // use standard baseline - https://en.wikipedia.org/wiki/Pressure_altitude
-      return true;
-    } else {
+    if (mock) {
       _temperature = random(180, 310) / 10.0;
       _pressure = random(10000, 12000);
       _altitude = random(100, 120);
       return true;
     }
+
+    if (isReady()) {
+      sensors_event_t event;
+      _bmp085->getEvent(&event);
+      _pressure = event.pressure;                                                      // unit is Pascal (Pa) - https://en.wikipedia.org/wiki/Pascal_(unit)
+      _bmp085->getTemperature(&_temperature);                                          // unit is Celsius, °C
+      _altitude = _bmp085->pressureToAltitude(getSeaLevelPressure(), event.pressure);  // use standard baseline - https://en.wikipedia.org/wiki/Pressure_altitude
+      return true;
+    } else {
+      _temperature = NAN;
+      _pressure = NAN;
+      _altitude = NAN;
+      return false;
+    }
+  }
+
+  bool isReady() {
+    return _ready;
   }
 
   float getSeaLevelPressure() {
@@ -74,6 +86,7 @@ class BMP085Sensor : public Sensor {
  private:
   
   Adafruit_BMP085_Unified *_bmp085 = NULL;
+  bool _ready = false;
 
   float _seaLevelPressure = 1013.25;
   float _temperature = NAN;

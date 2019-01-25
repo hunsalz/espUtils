@@ -15,7 +15,8 @@ class BMP280Sensor : public Sensor {
   bool begin(uint8_t i2cAddr, uint8_t chipId = BMP280_CHIPID) {
     
     _bmp280 = new Adafruit_BMP280();
-    return _bmp280->begin(i2cAddr, chipId);
+    _ready = _bmp280->begin(i2cAddr, chipId);
+    return _ready;
   }
 
   Adafruit_BMP280& getBMP280() {
@@ -24,17 +25,28 @@ class BMP280Sensor : public Sensor {
 
   bool update(bool mock) {
     
-    if (_bmp280 && !mock) {
-      _temperature = _bmp280->readTemperature();  // unit is Celsius, °C
-      _pressure = _bmp280->readPressure();        // unit is Pascal (Pa) - https://en.wikipedia.org/wiki/Pascal_(unit)
-      _altitude = _bmp280->readAltitude(1013.25); // use standard baseline - https://en.wikipedia.org/wiki/Pressure_altitude
-      return true;
-    } else {
+    if (mock) {
       _temperature = random(180, 310) / 10.0;
       _pressure = random(10000, 12000);
       _altitude = random(100, 120);
       return true;
     }
+
+    if (isReady()) {
+      _temperature = _bmp280->readTemperature();  // unit is Celsius, °C
+      _pressure = _bmp280->readPressure();        // unit is Pascal (Pa) - https://en.wikipedia.org/wiki/Pascal_(unit)
+      _altitude = _bmp280->readAltitude(1013.25); // use standard baseline - https://en.wikipedia.org/wiki/Pressure_altitude
+      return true;
+    } else {
+      _temperature = NAN;
+      _pressure = NAN;
+      _altitude = NAN;
+      return false;
+    }
+  }
+
+  bool isReady() {
+    return _ready;
   }
 
   float getTemperature() {
@@ -67,6 +79,7 @@ class BMP280Sensor : public Sensor {
  private:
   
   Adafruit_BMP280 *_bmp280 = NULL;
+  bool _ready = false;
 
   float _temperature = NAN;
   float _pressure = NAN;

@@ -34,23 +34,20 @@ class DHTSensor : public Sensor {
 
   bool begin(config_t config) {
     
-    _config = config;
-    if (!_config.pin) {
-      ERROR_FP(F("Missing pin declaration."));
+    if (config.pin && config.type) {
+      _config = config;
+      _dht = new DHT_Unified(config.pin, config.type);
+      _ready = true;
+    } else {
+      if (!config.pin) {
+        ERROR_FP(F("Missing pin declaration."));
+      }
+      if (!config.type) {
+        ERROR_FP(F("Missing type declaration."));
+      }
     }
-    if (!_config.type) {
-      ERROR_FP(F("Missing type declaration."));
-    }
-    _dht = new DHT_Unified(config.pin, config.type);
-    return true;
-  }
 
-  bool begin(JsonObject &object) {
-    
-    config_t config;
-    config.pin = object["pin"];
-    config.type = object["type"];
-    return begin(config);
+    return _ready;
   }
 
   config_t getConfig() {
@@ -63,28 +60,38 @@ class DHTSensor : public Sensor {
 
   bool update(bool mock) {
     
-    if (_dht && !mock) {
+    if (mock) {
+      _temperature = random(180, 310) / 10.0;
+      _humidity = random(50, 150) / 10.0;
+      return true;
+    }
+
+    if (isReady()) {
       sensors_event_t event;
       getDHT().temperature().getEvent(&event);
       if (isnan(event.temperature)) {
         ERROR_FP(F("Error reading temperature"));
-        _temperature = 999;  // FIXME -> NAN
+        _temperature = NAN;
       } else {
         _temperature = event.temperature;
       }
       getDHT().humidity().getEvent(&event);
       if (isnan(event.relative_humidity)) {
         ERROR_FP(F("Error reading humidity"));
-        _humidity = 999;  // FIXME -> NAN
+        _humidity = NAN;
       } else {
         _humidity = event.relative_humidity;
       }
       return true;
     } else {
-      _temperature = random(180, 310) / 10.0;
-      _humidity = random(50, 150) / 10.0;
-      return true;
+      _temperature = NAN;
+      _humidity = NAN;
+      return false;
     }
+  }
+
+  bool isReady() {
+    return _ready;
   }
 
   float getTemperature() {
@@ -113,6 +120,7 @@ class DHTSensor : public Sensor {
   
   DHT_Unified *_dht = NULL;
   config_t _config;
+  bool _ready = false;
 
   float _temperature = NAN;
   float _humidity = NAN;

@@ -22,10 +22,9 @@ class BME680Sensor : public Sensor {
       _bme680->setPressureOversampling(BME680_OS_4X);
       _bme680->setIIRFilterSize(BME680_FILTER_SIZE_3);
       _bme680->setGasHeater(320, 150);  // 320*C for 150 ms
-      return true;
-    } else {
-      return false;
+      _ready = true;
     }
+    return _ready;
   }
 
   Adafruit_BME680& getBME680() {
@@ -34,19 +33,7 @@ class BME680Sensor : public Sensor {
 
   bool update(bool mock) {
     
-    if (_bme680 && !mock) {
-      if (!_bme680->performReading()) {
-        ERROR_FP(F("Perform reading BMP680 values failed."));
-        return false;
-      } else {
-        _temperature = _bme680->readTemperature();  // unit is Celsius, °C
-        _humidity = _bme680->readHumidity();        // unit in percent, %
-        _pressure = _bme680->readPressure();        // unit is Pascal (Pa) - https://en.wikipedia.org/wiki/Pascal_(unit)
-        _gas = _bme680->readGas();                  // unit is Ohm, Ω
-        _altitude = _bme680->readAltitude(1013.25); // use standard baseline - https://en.wikipedia.org/wiki/Pressure_altitude
-        return true;
-      }
-    } else {
+    if (mock) {
       _temperature = random(180, 310) / 10.0;
       _humidity = random(50, 150) / 10.0;
       _pressure = random(10000, 12000);
@@ -54,6 +41,26 @@ class BME680Sensor : public Sensor {
       _altitude = random(100, 120);
       return true;
     }
+
+    if (isReady()) {
+      _temperature = _bme680->readTemperature();  // unit is Celsius, °C
+      _humidity = _bme680->readHumidity();        // unit in percent, %
+      _pressure = _bme680->readPressure();        // unit is Pascal (Pa) - https://en.wikipedia.org/wiki/Pascal_(unit)
+      _gas = _bme680->readGas();                  // unit is Ohm, Ω
+      _altitude = _bme680->readAltitude(1013.25); // use standard baseline - https://en.wikipedia.org/wiki/Pressure_altitude
+      return true;
+    } else {
+      _temperature = NAN;
+      _humidity = NAN;
+      _pressure = NAN;
+      _gas = 0;
+      _altitude = NAN;
+      return false;
+    }
+  }
+
+  bool isReady() {
+    return _ready;
   }
 
   float getTemperature() {
@@ -96,6 +103,7 @@ class BME680Sensor : public Sensor {
  private:
   
   Adafruit_BME680 *_bme680 = NULL;
+  bool _ready = false;
 
   float _temperature = NAN;
   float _humidity = NAN;
