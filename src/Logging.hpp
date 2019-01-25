@@ -17,7 +17,7 @@ namespace espUtils {
   #define LOGGER(baud)
 #endif
 
-#ifdef DEBUG_ESP_PORT && LOG_LEVEL >= 1
+#if defined DEBUG_ESP_PORT && LOG_LEVEL >= 1
   #define INFO(output) Logging::log(FPSTR(INFO), output)
   #define INFO_F(format, ...) Logging::log_F(FPSTR(INFO), format, ##__VA_ARGS__)
   #define INFO_P(output) Logging::log(FPSTR(INFO), output)
@@ -29,7 +29,7 @@ namespace espUtils {
   #define INFO_FP(...)
 #endif
 
-#ifdef DEBUG_ESP_PORT && LOG_LEVEL >= 2
+#if defined DEBUG_ESP_PORT && LOG_LEVEL >= 2
   #define VERBOSE(output) Logging::log(FPSTR(VERBOSE), output)
   #define VERBOSE_F(format, ...) Logging::log_F(FPSTR(VERBOSE), format, ##__VA_ARGS__)
   #define VERBOSE_P(output) Logging::log(FPSTR(VERBOSE), output)
@@ -41,7 +41,7 @@ namespace espUtils {
   #define VERBOSE_FP(...)
 #endif
 
-#ifdef DEBUG_ESP_PORT && LOG_LEVEL >= 3
+#if defined DEBUG_ESP_PORT && LOG_LEVEL >= 3
   #define TRACE(output) Logging::log(FPSTR(TRACE), output)
   #define TRACE_F(format, ...) Logging::log_F(FPSTR(TRACE), format, ##__VA_ARGS__)
   #define TRACE_P(output) Logging::log(FPSTR(TRACE), output)
