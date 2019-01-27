@@ -21,7 +21,15 @@ inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA
 #endif
 
   // general settings
-  WiFi.mode(mode);
+  #ifdef ESP32
+    // tackle unreliable WiFi connections with ESP32
+    WiFi.disconnect(true);
+    delay(300);
+    WiFi.mode(mode);
+    delay(300);
+  #else
+    WiFi.mode(mode);
+  #endif
   WiFi.enableSTA(true);
   WiFi.setAutoConnect(autoConnect);
   WiFi.persistent(persistent);
@@ -39,7 +47,7 @@ inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA
   if (retries <= 0) {
     ERROR_FP(F("Couldn't establish any WiFi connection."));
   } else {
-    VERBOSE_FP(F("WiFi successful connected with IP: %s"), WiFi.localIP().toString().c_str());
+    VERBOSE_FP(F("WiFi successful connected with IP: %s to %s"), WiFi.localIP().toString().c_str(), WiFi.SSID().c_str());
   }
 
   return WiFi.status();
