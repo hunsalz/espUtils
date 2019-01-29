@@ -15,9 +15,9 @@
 namespace espUtils {
 
 #ifdef ESP32
-inline bool setupWiFiSta(WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
+inline bool setupWiFiSta(WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA, uint8_t retries = 32, bool autoConnect = true, bool autoReConnect = true, bool persistent = false) {
 #else
-inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA, uint8_t retries = 32, bool autoConnect = true, bool persistent = false) {
+inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA, uint8_t retries = 32, bool autoConnect = true, bool autoReConnect = true, bool persistent = false) {
 #endif
 
   // general settings
@@ -32,6 +32,7 @@ inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA
   #endif
   WiFi.enableSTA(true);
   WiFi.setAutoConnect(autoConnect);
+  WiFi.setAutoReconnect(autoReConnect);
   WiFi.persistent(persistent);
   // try to connect for given amount of retries
   while (wifiMulti.run() != WL_CONNECTED && retries-- > 0) { 
@@ -50,7 +51,7 @@ inline bool setupWiFiSta(ESP8266WiFiMulti& wifiMulti, WiFiMode_t mode = WIFI_STA
     VERBOSE_FP(F("WiFi successful connected with IP: %s to %s"), WiFi.localIP().toString().c_str(), WiFi.SSID().c_str());
   }
 
-  return WiFi.status();
+  return WiFi.isConnected();
 }
 
 inline bool setupWiFiAp(const char *ssid, const char *passphrase, WiFiMode_t mode = WIFI_AP, int channel = 1, int ssid_hidden = 0, int max_connection = 5, bool autoConnect = true, bool persistent = false) {
