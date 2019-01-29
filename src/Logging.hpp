@@ -58,8 +58,8 @@ namespace espUtils {
   #define WARNING_F(format, ...) Logging::log_F(FPSTR(WARNING), format, ##__VA_ARGS__)
   #define WARNING_P(output) Logging::log(FPSTR(WARNING), output)
   #define WARNING_FP(format, ...) Logging::log_FP(FPSTR(WARNING), format, ##__VA_ARGS__)
-  #define ERROR(output) Logging::log_F(FPSTR(ERROR), output)
-  #define ERROR_F(format, ...) Logging::log(FPSTR(ERROR), format, ##__VA_ARGS__)
+  #define ERROR(output) Logging::log(FPSTR(ERROR), output)
+  #define ERROR_F(format, ...) Logging::log_F(FPSTR(ERROR), format, ##__VA_ARGS__)
   #define ERROR_P(output) Logging::log(FPSTR(ERROR), output)
   #define ERROR_FP(format, ...) Logging::log_FP(FPSTR(ERROR), format, ##__VA_ARGS__)
 #else
