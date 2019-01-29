@@ -9,7 +9,7 @@ class Sensor {
 
  public:
 
-  int getDevice(char* buffer) {
+  static int getDevice(char* buffer) {
   
     #ifdef ESP32
       return sprintf(buffer, "ESP-%010x", (uint32_t)ESP.getEfuseMac()); // use low 4 bytes
