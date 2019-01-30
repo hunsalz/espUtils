@@ -71,7 +71,7 @@ inline size_t serializeESP(String& output) {
       object[F("cpuFreqMHz")] = ESP.getCpuFreqMHz();
 
       object[F("flashChipId")] = ESP.getFlashChipId();
-      object[F("flashChipVendorId")] = ESP.getFlashChipVendorId();
+      //object[F("flashChipVendorId")] = ESP.getFlashChipVendorId();
 
       object[F("flashChipRealSize")] = ESP.getFlashChipRealSize();
       object[F("flashChipSize")] = ESP.getFlashChipSize();
