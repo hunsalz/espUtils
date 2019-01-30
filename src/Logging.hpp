@@ -5,7 +5,6 @@ namespace espUtils {
 #define LOG_LEVEL 3
 
 #ifdef ESP32
-  #define DEBUG_ESP_PORT Serial
   // https://github.com/espressif/arduino-esp32/issues/1371
   #undef FPSTR
   #define FPSTR(pstr_pointer) (reinterpret_cast<const __FlashStringHelper *>(pstr_pointer))
@@ -87,11 +86,12 @@ class Logging {
 
     static void init(unsigned long baud, bool debug = false) {
   
-      DEBUG_ESP_PORT.begin(baud);
-      DEBUG_ESP_PORT.setDebugOutput(debug);
-      while (!DEBUG_ESP_PORT && !DEBUG_ESP_PORT.available()) {
-      };
-      DEBUG_ESP_PORT.println();
+      #ifdef DEBUG_ESP_PORT
+        DEBUG_ESP_PORT.begin(baud);
+        DEBUG_ESP_PORT.setDebugOutput(debug);
+        while (!DEBUG_ESP_PORT && !DEBUG_ESP_PORT.available()) {};
+        DEBUG_ESP_PORT.println();
+      #endif 
     }
 
     static void log_F(const __FlashStringHelper* prefix, const char* format, ...) {
@@ -128,13 +128,15 @@ class Logging {
 
     template<typename T> static void log(const __FlashStringHelper* prefix, T output) {
 
-      DEBUG_ESP_PORT.print(prefix);
-      DEBUG_ESP_PORT.print(LOG_SEPARATOR);
-      DEBUG_ESP_PORT.print(millis());
-      DEBUG_ESP_PORT.print(LOG_SEPARATOR);
-      DEBUG_ESP_PORT.print(ESP.getFreeHeap());
-      DEBUG_ESP_PORT.print(LOG_SEPARATOR);
-      DEBUG_ESP_PORT.println(output);
+      #ifdef DEBUG_ESP_PORT
+        DEBUG_ESP_PORT.print(prefix);
+        DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+        DEBUG_ESP_PORT.print(millis());
+        DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+        DEBUG_ESP_PORT.print(ESP.getFreeHeap());
+        DEBUG_ESP_PORT.print(LOG_SEPARATOR);
+        DEBUG_ESP_PORT.println(output);
+      #endif
     }
 };
 } // namespace espUtils
