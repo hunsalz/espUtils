@@ -73,7 +73,8 @@ class BME280Sensor : public Sensor {
     char device[15];
     int size = getDevice(device);
 
-    DynamicJsonDocument doc;
+    const size_t CAPACITY = JSON_OBJECT_SIZE(5) + 70;
+    StaticJsonDocument<CAPACITY> doc;
     JsonObject object = doc.to<JsonObject>();
     object["temperature"] = getTemperature();
     object["humidity"] = getHumidity();

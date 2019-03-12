@@ -14,7 +14,8 @@ namespace espUtils {
 
 inline size_t serializeESP(String& output) {
 
-    DynamicJsonDocument doc;
+    const size_t CAPACITY = JSON_OBJECT_SIZE(25) + 270;
+    StaticJsonDocument<CAPACITY> doc;
     JsonObject object = doc.to<JsonObject>();
     
     #ifdef ESP32

@@ -31,7 +31,8 @@ class ESP8266FS {
 
   size_t serializeInfo(String& output) {
 
-    DynamicJsonDocument doc;
+    const size_t CAPACITY = JSON_OBJECT_SIZE(6) + 80;
+    StaticJsonDocument<CAPACITY> doc;
     JsonObject object = doc.to<JsonObject>();
     FSInfo fs_info;
     SPIFFS.info(fs_info);

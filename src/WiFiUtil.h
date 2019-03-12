@@ -74,7 +74,8 @@ inline bool setupWiFiAp(const char *ssid, const char *passphrase, WiFiMode_t mod
 
 inline size_t serializeWiFiSta(String& output) {
 
-  DynamicJsonDocument doc;
+  const size_t CAPACITY = JSON_OBJECT_SIZE(19) + 210;
+  StaticJsonDocument<CAPACITY> doc;
   JsonObject object = doc.to<JsonObject>();
   object[F("isConnected")] = WiFi.isConnected();
   object[F("autoConnect")] = WiFi.getAutoConnect();
@@ -107,14 +108,15 @@ inline size_t serializeWiFiSta(String& output) {
 
 inline size_t serializeWiFiAp(String &output) {
     
-  DynamicJsonDocument doc;
+  const size_t CAPACITY = JSON_OBJECT_SIZE(4);
+  StaticJsonDocument<CAPACITY> doc;
   JsonObject object = doc.to<JsonObject>();
   object[F("softAPgetStationNum")] = WiFi.softAPgetStationNum();
   object[F("softAPIP")] = WiFi.softAPIP().toString();
   #ifdef ESP32
     object[F("softAPIPv6")] = WiFi.softAPIPv6().toString();
   #endif
-    object[F("softAPmacAddress")] = WiFi.softAPmacAddress();
+  object[F("softAPmacAddress")] = WiFi.softAPmacAddress();
   serializeJson(object, output);
   return measureJson(object);
 }

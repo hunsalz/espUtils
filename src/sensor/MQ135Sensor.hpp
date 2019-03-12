@@ -76,7 +76,8 @@ class MQ135Sensor : public Sensor {
     char device[15];
     int size = getDevice(device);
 
-    DynamicJsonDocument doc;
+    const size_t CAPACITY = JSON_OBJECT_SIZE(2) + 40;
+    StaticJsonDocument<CAPACITY> doc;
     JsonObject object = doc.to<JsonObject>();
     object["ppm"] = getPPM();
     object["device"] = device;
